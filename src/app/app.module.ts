@@ -19,13 +19,18 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { ExpansionComponent } from './expansion/expansion.component';
+import { TableComponent } from './table/table.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashComponent,
     NavComponent,
-    ExpansionComponent
+    ExpansionComponent,
+    TableComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +46,10 @@ import { ExpansionComponent } from './expansion/expansion.component';
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]
