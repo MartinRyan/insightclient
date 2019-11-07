@@ -124,6 +124,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "dash"
+    }
+  },
+  "defaultProject": "dash",
+  "cli": {
+    "defaultCollection": "@ngxs/schematics"
+  }
 }
