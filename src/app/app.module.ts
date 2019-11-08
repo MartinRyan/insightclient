@@ -1,30 +1,33 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { LayoutModule } from '@angular/cdk/layout';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { DashComponent } from './dash/dash.component';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { LayoutModule } from '@angular/cdk/layout';
-import { from } from 'rxjs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NavComponent } from './nav/nav.component';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { ExpansionComponent } from './expansion/expansion.component';
-import { TableComponent } from './table/table.component';
-import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { DashComponent } from './components/dash/dash.component';
+import { ExpansionComponent } from './components/expansion/expansion.component';
+import { NavComponent } from './components/nav/nav.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { TableComponent } from './components/table/table.component';
 import { GraphQLModule } from './graphql.module';
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,9 @@ import { HttpClientModule } from '@angular/common/http';
     DashComponent,
     NavComponent,
     ExpansionComponent,
-    TableComponent
+    TableComponent,
+    SettingsComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +49,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatExpansionModule,
     MatMenuModule,
     MatIconModule,
+    MatInputModule,
     MatButtonModule,
     LayoutModule,
     MatToolbarModule,
@@ -53,7 +59,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatPaginatorModule,
     MatSortModule,
     GraphQLModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

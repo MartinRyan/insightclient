@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DashComponent } from './dash/dash.component';
-import { ExpansionComponent} from './expansion/expansion.component';
-import { TableComponent } from './table/table.component';
+import { DashComponent } from './components/dash/dash.component';
+import { ExpansionComponent} from './components/expansion/expansion.component';
+import { TableComponent } from './components/table/table.component';
 
 
 const routes: Routes = [
