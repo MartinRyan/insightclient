@@ -3,10 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { DashComponent } from './components/dash/dash.component';
 import { ExpansionComponent} from './components/expansion/expansion.component';
 import { TableComponent } from './components/table/table.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 const routes: Routes = [
-  { path: 'dashboard', component: DashComponent, pathMatch: 'full' },
+  // { path: 'dashboard', component: DashComponent, pathMatch: 'full' },
+  { path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
   { path: 'expansion', component: ExpansionComponent, pathMatch: 'full' },
   { path: 'table', component: TableComponent, pathMatch: 'full' },
   { path: '**', redirectTo: '', pathMatch: 'full' }

@@ -1,5 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
-import { HttpClientModule } from '@angular/common/http';
+import { GitLabApiInterceptor } from './services/gitlab-api/gitlab-api.interceptor';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -22,12 +23,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashComponent } from './components/dash/dash.component';
+import { DateFnsModule } from 'ngx-date-fns';
 import { ExpansionComponent } from './components/expansion/expansion.component';
 import { NavComponent } from './components/nav/nav.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { TableComponent } from './components/table/table.component';
 import { GraphQLModule } from './graphql.module';
+import { PipelinesComponent } from './components/pipelines/pipelines.component';
+import { MergeRequestsComponent } from './components/merge-requests/merge-requests.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { NotificationService } from './services/notification/notification.service';
+import { SettingsService } from './services/settings/settings.service';
+import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
 
 @NgModule({
   declarations: [
@@ -37,12 +45,16 @@ import { GraphQLModule } from './graphql.module';
     ExpansionComponent,
     TableComponent,
     SettingsComponent,
-    NotificationComponent
+    NotificationComponent,
+    PipelinesComponent,
+    MergeRequestsComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    DateFnsModule,
     MatFormFieldModule,
     MatGridListModule,
     MatCardModule,
@@ -63,7 +75,12 @@ import { GraphQLModule } from './graphql.module';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    NotificationService,
+    SettingsService,
+    GitlabApiService,
+    { provide: HTTP_INTERCEPTORS, useClass: GitLabApiInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

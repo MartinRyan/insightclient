@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, OnChanges, Output,
+  SimpleChanges, SimpleChange } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NotificationService } from './../../services/notification/notification.service';
@@ -17,9 +18,16 @@ export class SettingsComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private settingsService: SettingsService, private notificationService: NotificationService) { }
 
+  @Output() isVisibleChange = new EventEmitter();
+
   @Input()
   get isVisible() {
     return this._isVisible;
+  }
+
+  set isVisible(value: boolean) {
+    this._isVisible = value;
+    this.isVisibleChange.emit(this._isVisible);
   }
 
   ngOnInit() {
