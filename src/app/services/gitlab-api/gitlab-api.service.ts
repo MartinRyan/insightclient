@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { concat, delay, retryWhen, take, map } from 'rxjs/operators';
+import { Observable, throwError, concat} from 'rxjs';
+import { delay, retryWhen, take, map } from 'rxjs/operators';
 import { NotificationService } from './../notification/notification.service';
 import { SettingsService } from './../settings/settings.service';
 
@@ -20,14 +20,7 @@ export class GitlabApiService {
           return err.pipe(
             delay(5000),
             take(3),
-            // tslint:disable-next-line: deprecation
-            concat(
-              throwError(
-                new Error(
-                  'Something is going really wrong... Please review your settings!'
-                )
-              )
-            )
+            o => concat(o, throwError('Retries exceeded'))
           );
         })
       );
@@ -35,31 +28,24 @@ export class GitlabApiService {
 
   get projects() {
     return this.http
-      // .get<any[]>(
-      //   `projects?search=${
-      //   this.settingsService.settings.namespace
-      //   }&order_by=last_activity_at&per_page=100`
-      // )
-      // .pipe(map(projects => {
-      //   return projects.filter(
-      //     project =>
-      //       project.namespace.name === this.settingsService.settings.namespace
-      //   );
-      // }))
-      .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
+      .get<any[]>(
+        `projects?search=${
+        this.settingsService.settings.namespace
+        }&order_by=last_activity_at&per_page=100`
+      )
+      // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
+      .pipe(map(projects => {
+        return projects.filter(
+          project =>
+            project.namespace.name === this.settingsService.settings.namespace
+        );
+      }))
       .pipe(
         retryWhen(err => {
           return err.pipe(
             delay(5000),
             take(3),
-            // tslint:disable-next-line: deprecation
-            concat(
-              throwError(
-                new Error(
-                  'Something is going really wrong... Please review your settings!'
-                )
-              )
-            )
+            o => concat(o, throwError('Retries exceeded'))
           );
         })
       );
@@ -73,14 +59,7 @@ export class GitlabApiService {
           return err.pipe(
             delay(5000),
             take(3),
-            // tslint:disable-next-line: deprecation
-            concat(
-              throwError(
-                new Error(
-                  'Something is going really wrong... Please review your settings!'
-                )
-              )
-            )
+            o => concat(o, throwError('Retries exceeded'))
           );
         })
       );
@@ -89,19 +68,13 @@ export class GitlabApiService {
   fetchLastPipelineByRef(projectId: string, ref: string) {
     return this.http
       .get<any[]>(`projects/${projectId}/pipelines?ref=${ref}&per_page=1`)
+      // .pipe(map(resp => resp[0].status))
       .pipe(
         retryWhen(err => {
           return err.pipe(
             delay(5000),
             take(3),
-            // tslint:disable-next-line: deprecation
-            concat(
-              throwError(
-                new Error(
-                  'Something is going really wrong... Please review your settings!'
-                )
-              )
-            )
+            o => concat(o, throwError('Retries exceeded'))
           );
         })
       );
@@ -115,14 +88,7 @@ export class GitlabApiService {
           return err.pipe(
             delay(5000),
             take(3),
-            // tslint:disable-next-line: deprecation
-            concat(
-              throwError(
-                new Error(
-                  'Something is going really wrong... Please review your settings!'
-                )
-              )
-            )
+            o => concat(o, throwError('Retries exceeded'))
           );
         })
       );
@@ -134,14 +100,7 @@ export class GitlabApiService {
         return err.pipe(
           delay(5000),
           take(3),
-          // tslint:disable-next-line: deprecation
-          concat(
-            throwError(
-              new Error(
-                'Something is going really wrong... Please review your settings!'
-              )
-            )
-          )
+          o => concat(o, throwError('Retries exceeded'))
         );
       })
     );
