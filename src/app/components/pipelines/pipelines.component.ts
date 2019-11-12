@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
 import { compareDesc, differenceInWeeks} from 'date-fns';
 import { uniqBy } from 'lodash';
 
@@ -20,14 +20,16 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   constructor(
     private api: GitlabApiService,
     private notificationService: NotificationService,
-    private spinner: NgxSpinnerService) { }
+    private spinner: NgxSpinnerService,
+    private zone: NgZone) { }
 
   ngOnInit() {
-    this.doStuff();
-    setInterval(() => {
-      this.clearSubscriptions();
-      this.doStuff();
-    }, 30000);
+    this.zone.runOutsideAngular(() => {
+      setInterval(() => {
+        this.clearSubscriptions();
+        this.doStuff();
+      }, 30000);
+    });
   }
 
   ngOnDestroy() {

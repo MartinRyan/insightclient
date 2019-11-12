@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { NotificationService } from './../../services/notification/notification.service';
 import { SettingsService } from './../../services/settings/settings.service';
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
@@ -20,14 +20,17 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     private api: GitlabApiService,
     private settingsService: SettingsService,
     private notificationService: NotificationService,
-    private spinner: NgxSpinnerService) { }
+    private spinner: NgxSpinnerService,
+    private zone: NgZone) { }
 
   ngOnInit() {
     this.doStuff();
-    setInterval(() => {
-      this.clearSubscriptions();
-      this.doStuff();
-    }, 60000);
+    this.zone.runOutsideAngular(() => {
+      setInterval(() => {
+        this.clearSubscriptions();
+        this.doStuff();
+      }, 60000);
+    });
   }
 
   ngOnDestroy() {
