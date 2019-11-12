@@ -36,6 +36,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NotificationService } from './services/notification/notification.service';
 import { SettingsService } from './services/settings/settings.service';
 import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
+import { DateAgoPipe } from './pipes/date-ago.pipe';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -48,13 +50,15 @@ import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
     NotificationComponent,
     PipelinesComponent,
     MergeRequestsComponent,
-    DashboardComponent
+    DashboardComponent,
+    DateAgoPipe,
+
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    DateFnsModule,
+    DateFnsModule.forRoot(),
     MatFormFieldModule,
     MatGridListModule,
     MatCardModule,
@@ -73,7 +77,8 @@ import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
     GraphQLModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxSpinnerModule
   ],
   providers: [
     NotificationService,

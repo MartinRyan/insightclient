@@ -28,18 +28,18 @@ export class GitlabApiService {
 
   get projects() {
     return this.http
-      .get<any[]>(
-        `projects?search=${
-        this.settingsService.settings.namespace
-        }&order_by=last_activity_at&per_page=100`
-      )
-      // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
-      .pipe(map(projects => {
-        return projects.filter(
-          project =>
-            project.namespace.name === this.settingsService.settings.namespace
-        );
-      }))
+      // .get<any[]>(
+      //   `projects?search=${
+      //   this.settingsService.settings.namespace
+      //   }&order_by=last_activity_at&per_page=100`
+      // )
+      .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
+      // .pipe(map(projects => {
+      //   return projects.filter(
+      //     project =>
+      //       project.namespace.name === this.settingsService.settings.namespace
+      //   );
+      // }))
       .pipe(
         retryWhen(err => {
           return err.pipe(

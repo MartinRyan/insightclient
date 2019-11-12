@@ -60,6 +60,10 @@ export class SettingsComponent implements OnInit {
   }
 
   hide() {
-    this._isVisible = false;
+    this.isVisible = false;
+  }
+
+  onCancel() {
+    this.isVisible = false;
   }
 }

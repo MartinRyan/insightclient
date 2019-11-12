@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NotificationService } from './../../services/notification/notification.service';
 import { SettingsService } from './../../services/settings/settings.service';
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+ 
 
 @Component({
   selector: 'app-merge-requests',
@@ -17,7 +19,8 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
   constructor(
     private api: GitlabApiService,
     private settingsService: SettingsService,
-    private notificationService: NotificationService) { }
+    private notificationService: NotificationService,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.doStuff();
@@ -33,6 +36,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
 
   private doStuff() {
     this.isLoading = true;
+    this.spinner.show();
     const key = 'namespace';
     // tslint:disable-next-line:no-console
     console.debug('refreshing MRs');
@@ -57,6 +61,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
                   .subscribe(lastPipeline => {
                     this.notificationService.activeNotification.next(null);
                     this.isLoading = false;
+                    this.spinner.hide();
                     this.subscriptions.push(lastPipeline$);
                     this.mergeRequests.push({
                       ...mergeRequest,

@@ -4,6 +4,7 @@ import { uniqBy } from 'lodash';
 
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
 import { NotificationService } from './../../services/notification/notification.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-pipelines',
@@ -16,7 +17,10 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   public isLoading = false;
   private subscriptions: Array<any> = [];
 
-  constructor(private api: GitlabApiService, private notificationService: NotificationService) { }
+  constructor(
+    private api: GitlabApiService,
+    private notificationService: NotificationService,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.doStuff();
@@ -32,6 +36,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
   private doStuff() {
     this.isLoading = true;
+    this.spinner.show();
     // tslint:disable-next-line:no-console
     console.debug('refreshing pipelines');
     this.pipelines = [];
@@ -54,6 +59,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                     .subscribe(pipelineDetails => {
                       this.notificationService.activeNotification.next(null);
                       this.isLoading = false;
+                      this.spinner.hide();
                       this.subscriptions.push(pipeline$);
                       // only add the pipelines that have run in the last week
                       if (
@@ -72,7 +78,10 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                       }
                     });
                 });
-              }
+              } else {
+                // tslint:disable-next-line:no-console
+                console.debug('refreshing pipelines length zero ' + pipelines.length);
+            }
             });
         });
       },

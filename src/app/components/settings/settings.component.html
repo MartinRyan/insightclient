@@ -75,14 +75,16 @@
               Save
             </button>
           </p>
-          <!-- <p class="control">
+          <p class="control">
             <button type="cancel" class="button is-light" (click)='onCancel()'>
               Cancel
             </button>
-          </p> -->
+          </p>
         </div>
       </form>
       <!-- <p>Form value: {{ settingsForm.value | json }}</p> -->
     </div>
-    <button (click)="hide()" class="modal-close is-large" aria-label="close"></button>
+    <button mat-icon-button class="settings-button" aria-label="hide settings" (click)="hide()">
+        <mat-icon>settings_backup_restore</mat-icon>
+    </button>
   </div>
