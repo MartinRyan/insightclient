@@ -24,11 +24,11 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     private zone: NgZone) { }
 
   ngOnInit() {
-    this.doStuff();
+    this.fetchdata();
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        this.doStuff();
+        this.fetchdata();
       }, 60000);
     });
   }
@@ -37,7 +37,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     this.clearSubscriptions();
   }
 
-  private doStuff() {
+  private fetchdata() {
     this.isLoading = true;
     this.spinner.show();
     const key = 'namespace';

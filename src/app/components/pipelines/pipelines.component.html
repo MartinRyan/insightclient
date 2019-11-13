@@ -1,7 +1,7 @@
-<!-- <div class="content">
+<!-- <div class="content"> -->
     <h4>Pipelines</h4>
-  </div>
-  <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true"></ngx-spinner>
+  <!-- </div> -->
+  <!-- <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true"></ngx-spinner>
   <div class="columns is-multiline">
     <div class="column pipeline" [ngClass]="pipeline.status" *ngFor="let pipeline of pipelines">
       <div class="project">
@@ -30,41 +30,23 @@
   </div> -->
 
   <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true"></ngx-spinner>
-  <mat-grid-list cols="3" rowHeight="200px">
-      <mat-grid-tile [ngClass]="pipeline.status" *ngFor="let pipeline of pipelines" [colspan]="3">
+  <mat-grid-list cols="3" rowHeight="250px">
+      <mat-grid-tile [ngClass]="pipeline.detailed_status?.text" *ngFor="let pipeline of pipelines" [colspan]="3">
         <mat-card class="pipeline-card">
           <mat-card-header>
-            <mat-card-title>
-                {{pipeline.project?.name}}
-            </mat-card-title>
+            <mat-card-title>{{pipeline.project?.name}}</mat-card-title>
           </mat-card-header>
           <mat-card-content class="pipeline-card-content">
               <div><span>name: <strong>{{pipeline.project?.name}}</strong></span></div>
-              <span>ref: <strong>{{pipeline.ref}}</strong></span>
-              <span>updated: <strong>{{pipeline.updated_at  | dateAgo}} ago</strong></span>
-              <span>user: <strong>{{pipeline.user?.name}}</strong></span>
-              <span>last activity: <strong>{{pipeline.last_activity_at | dateAgo}}</strong></span>
+              <div><span>id: <strong>{{pipeline.id}}</strong></span></div>
+              <div><span>status: <strong>{{pipeline.detailed_status?.text}}</strong></span></div>
+              <div><span>icon: <strong>{{pipeline.detailed_status?.icon}}</strong></span></div>
+              <div><span>user: <strong>{{pipeline.user?.name}}</strong></span></div>
+              <div><span>ref: <strong>{{pipeline.ref}}</strong></span></div>
+              <div><span>updated: <strong>{{pipeline.updated_at  | dateAgo}} ago</strong></span></div>
+              <div><span>started: <strong>{{pipeline.started_at | dateAgo}}</strong></span></div>
+              <div><span>coverage: <strong>{{pipeline.coverage}}</strong></span></div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
     </mat-grid-list>
-
-    <!-- <mat-grid-list cols="1" rowHeight="190px">
-        <mat-grid-tile class="merge-request-tile" *ngFor="let mergeReq of mergeRequests" [colspan]="1">
-          <mat-card class="merge-request-card">
-            <mat-card-header>
-              <mat-card-title>
-                  {{mergeReq.title}}
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="merge-request-content">
-              <div><span>name: <strong>{{mergeReq.project?.name}}</strong></span></div>
-              <div><span>created: <strong>{{mergeReq.created_at | dateAgo}} ago</strong></span></div>
-              <div><span>last activity: <strong>{{mergeReq.last_activity_at | dateAgo}} ago</strong></span></div>
-              <div><span>open issues: <strong>{{mergeReq.open_issues_count}}</strong></span></div>
-              <div><span>approvals before merge: <strong>{{mergeReq.approvals_before_merge}}</strong></span></div>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-      </mat-grid-list> -->
-    

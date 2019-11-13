@@ -5,7 +5,6 @@
   .merge_req {
     background-color: #ccc;
     padding: 0.5rem;
-    margin-bottom: 1rem;
     &.ci_success {
       border-left: 0.5rem solid $success;
     }
@@ -21,7 +20,7 @@
 .merge-request-card {
   display: block;
   padding: 32px;
-  border: 1px solid black;
+  border: 1px solid #333;
   border-radius: 8px;
 }
 
@@ -33,4 +32,12 @@
 
 .merge-request-card-content {
   text-align: left;
+}
+
+.text-description {
+  // display: block !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  // // white-space: nowrap;
+  // // word-break: break-word;
 }

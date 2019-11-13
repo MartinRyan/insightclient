@@ -1,8 +1,9 @@
-<!-- <div class="content">
+<!-- <div class="content"> -->
   <h4>Open MR's
     <span class="tag is-medium"
       [ngClass]="{'is-success': mergeRequests?.length === 0, 'is-warning': mergeRequests?.length > 0 && mergeRequests?.length < 5, 'is-danger': mergeRequests?.length > 4}">{{mergeRequests?.length}}</span>
   </h4>
+  <!--
   <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true"></ngx-spinner>
   <div class="merge_req"
     [ngClass]="{'ci_success': mergeReq.ci_status === 'success', 'ci_pending': (mergeReq.ci_status === 'pending' || mergeReq.ci_status === 'running'), 'ci_failed': mergeReq.ci_status === 'failed'}"
@@ -45,19 +46,20 @@
       </mat-card>
     </mat-grid-tile>
 </mat-grid-list> -->
-<mat-grid-list cols="1" rowHeight="200px">
+<mat-grid-list cols="1" rowHeight="240px">
     <mat-grid-tile class="merge-request-tile" *ngFor="let mergeReq of mergeRequests" [colspan]="1">
       <mat-card class="merge-request-card">
         <mat-card-header>
-          <mat-card-title>
-              {{mergeReq.title}}
-          </mat-card-title>
+          <mat-card-title>{{mergeReq.title}}</mat-card-title>
         </mat-card-header>
         <mat-card-content class="merge-request-content">
           <div><span>name: <strong>{{mergeReq.project?.name}}</strong></span></div>
           <div><span>created: <strong>{{mergeReq.created_at | dateAgo}} ago</strong></span></div>
-          <div><span>open issues: <strong>{{mergeReq.open_issues_count}}</strong></span></div>
-          <div><span>approvals before merge: <strong>{{mergeReq.approvals_before_merge}}</strong></span></div>
+          <div><span>open issues: <strong>{{mergeReq.project?.open_issues_count}}</strong></span></div>
+          <div><span>namespace: <strong>{{mergeReq.project.namespace?.name}}</strong></span></div>
+          <!-- <div><span>avatar: <strong>{{mergeReq.project.namespace?.avatar_url}}</strong></span></div> -->
+          <div><span class="text-description">description: <strong>{{mergeReq?.description}}</strong></span></div>
+          <!-- <img mat-card-image [src]="image_url" alt="App Icon"> -->
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>
