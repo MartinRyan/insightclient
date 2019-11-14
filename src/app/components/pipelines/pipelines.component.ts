@@ -53,8 +53,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
             this.subscriptions.push(pipelines$);
             // no empty pipelines
             if (pipelines.length > 0) {
-              // I only want one pipeline for each ref (branch...)
-              const tidyPipelines = uniqBy(pipelines, item => item.ref);
+              // unique by id
+              const tidyPipelines = uniqBy(pipelines, item => item.id);
               tidyPipelines.forEach(pipeline => {
                 const pipeline$ = this.api
                   .fetchPipeline(project.id, pipeline.id)
@@ -65,7 +65,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                     this.subscriptions.push(pipeline$);
                      // tslint:disable-next-line:no-console
                     // console.debug('PIPELINE COMPONENT _ PIPELINE DETAILS -> ' + pipelineDetails[details]);
-                    // only add the pipelines that have run in the last week
+                    // only add the pipelines that have run in the last week - if pipeline volumes are significant
                     // if (differenceInWeeks(new Date(pipelineDetails[details]), new Date()) === 0) {
                     this.pipelines.push({
                         ...pipelineDetails,
