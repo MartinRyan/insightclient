@@ -38,6 +38,8 @@ import { SettingsService } from './services/settings/settings.service';
 import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 @NgModule({
   declarations: [
@@ -59,6 +61,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     BrowserAnimationsModule,
     AppRoutingModule,
     DateFnsModule.forRoot(),
+    FlexLayoutModule,
     MatFormFieldModule,
     MatGridListModule,
     MatCardModule,

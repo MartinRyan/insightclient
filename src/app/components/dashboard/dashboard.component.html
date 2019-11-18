@@ -2,27 +2,12 @@
       <mat-icon>settings_back</mat-icon>
   </button>
   <app-settings *ngIf="isSettingsVisible" [(isVisible)]="isSettingsVisible"></app-settings>
-  <!-- <section class="section">
-    <div class="container">
-      <app-notification></app-notification>
-      <div class="columns">
-        <div class="column is-one-quarter left-col">
-          <app-merge-requests></app-merge-requests>
-        </div>
-        <div class="column">
-          <app-pipelines></app-pipelines>
-        </div>
-      </div>
-    </div>
-  </section> -->
-  <app-notification></app-notification>
-  <app-pipelines></app-pipelines>
-  <app-merge-requests></app-merge-requests>
-  <!-- <div fxLayout="row" fxLayoutGap="10">
+ <app-notification></app-notification>
+  <div fxLayout="row" fxLayoutGap="10">
       <div fxFlex="25%">
           <app-merge-requests></app-merge-requests>
       </div>
       <div fxFlex="75%">
           <app-pipelines></app-pipelines>
       </div>
-    </div> -->
+    </div>
