@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
 import { compareDesc, differenceInWeeks} from 'date-fns';
-import { uniqBy } from 'lodash';
+import { each, isEmpty, uniqBy } from 'lodash';
+import {parseISO} from 'date-fns';
 
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
 import { NotificationService } from './../../services/notification/notification.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { SvgIconRegistryService } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-pipelines',
@@ -16,14 +18,23 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   public pipelines: Array<any>;
   public isLoading = false;
   private subscriptions: Array<any> = [];
+  public iconbase = '/assets/sprite_icons/';
+  public ext = '.svg';
+
+  public STATUSES = Object.freeze({
+    success: {status: 'status_success', icon: '/assets/sprite_icons/status_success.svg', colour: '#31ff53'},
+    failure: {status: 'status_failure', icon: '/assets/sprite_icons/status_success.svg', colour: '#ff3a2b'}
+  });
 
   constructor(
     private api: GitlabApiService,
     private notificationService: NotificationService,
     private spinner: NgxSpinnerService,
-    private zone: NgZone) { }
+    private zone: NgZone,
+    private iconReg: SvgIconRegistryService) { }
 
   ngOnInit() {
+    this.iconReg.loadSvg('assets/sprite_icons/status_success.svg', 'status_success');
     this.fetchdata();
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
@@ -71,7 +82,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                         ...pipelineDetails,
                         ...{ project },
                       });
-                    this.pipelines.sort((o1, o2) => compareDesc(o1.updated_at, o2.updated_at));
+                    this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
                     // }
                   });
               });
@@ -84,6 +95,16 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     }, err => {
       this.notificationService.activeNotification.next({ message: err.message });
     });
+  }
+
+  public setStatusColour(pipeline: any) {
+    // tslint:disable-next-line: no-console
+    // console.debug('pipeline.detailed_status.text}: ' + pipeline.detailed_status.text);
+    // const status = pipeline.detailed_status.text;
+    const status = pipeline.status;
+    // tslint:disable-next-line: no-console
+    console.debug('this.STATUSES[status].colour: ' + this.STATUSES[status].colour);
+    return this.STATUSES[status].colour;
   }
 
   private clearSubscriptions() {

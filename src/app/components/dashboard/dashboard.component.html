@@ -1,6 +1,7 @@
-  <button mat-icon-button class="settings-button" aria-label="Show settings" (click)="showSettings()">
+  <div><button mat-icon-button class="settings-button" aria-label="Show settings" (click)="showSettings()">
       <mat-icon>settings_back</mat-icon>
   </button>
+  </div>
   <app-settings *ngIf="isSettingsVisible" [(isVisible)]="isSettingsVisible"></app-settings>
  <app-notification></app-notification>
   <div fxLayout="row" fxLayoutGap="10">

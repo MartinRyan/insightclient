@@ -27,6 +27,7 @@
     "@ngxs/schematics": "0.0.1-alpha.5",
     "@ngxs/store": "^3.3.2",
     "@types/lodash": "^4.14.145",
+    "angular-svg-icon": "^8.0.0",
     "apollo-angular": "^1.8.0",
     "apollo-angular-link-http": "^1.9.0",
     "apollo-cache-inmemory": "^1.6.0",

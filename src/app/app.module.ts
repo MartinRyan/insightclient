@@ -1,7 +1,8 @@
 import { LayoutModule } from '@angular/cdk/layout';
-import { GitLabApiInterceptor } from './services/gitlab-api/gitlab-api.interceptor';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -18,27 +19,27 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AngularSvgIconModule } from 'angular-svg-icon';
+import { DateFnsModule } from 'ngx-date-fns';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashComponent } from './components/dash/dash.component';
-import { DateFnsModule } from 'ngx-date-fns';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ExpansionComponent } from './components/expansion/expansion.component';
+import { MergeRequestsComponent } from './components/merge-requests/merge-requests.component';
 import { NavComponent } from './components/nav/nav.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { PipelinesComponent } from './components/pipelines/pipelines.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { TableComponent } from './components/table/table.component';
 import { GraphQLModule } from './graphql.module';
-import { PipelinesComponent } from './components/pipelines/pipelines.component';
-import { MergeRequestsComponent } from './components/merge-requests/merge-requests.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DateAgoPipe } from './pipes/date-ago.pipe';
+import { GitLabApiInterceptor } from './services/gitlab-api/gitlab-api.interceptor';
+import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
 import { NotificationService } from './services/notification/notification.service';
 import { SettingsService } from './services/settings/settings.service';
-import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
-import { DateAgoPipe } from './pipes/date-ago.pipe';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -81,7 +82,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    AngularSvgIconModule
   ],
   providers: [
     NotificationService,
