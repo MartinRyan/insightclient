@@ -6,15 +6,15 @@
   <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true">
   </ngx-spinner>
   <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-    <mat-card class="pipeline-card" fxFlex="0 1 calc(25% - 32px)" [ngClass]="pipeline.detailed_status?.text"
+    <mat-card class="pipeline-card" [style.background-color] ="setStatusColour(pipeline)" fxFlex="0 1 calc(25% - 32px)"
       *ngFor="let pipeline of pipelines">
       <mat-card-header>
         <mat-card-title>{{pipeline.project?.name}}</mat-card-title>
       </mat-card-header>
       <!-- <div [ngStyle]="{background: '#31ff53', height: '50px', width: '50px'}"></div> -->
-      <!-- <div [ngStyle]="{background: setStatusColour(pipeline.status), height: '50px', width: '50px'}"></div> -->
-      
-      <mat-card-content class="pipeline-card-content">
+      <!-- <div [ngStyle]="{background: setStatusColour(pipeline), height: '50px', width: '50px'}"></div> -->
+      <!-- <div width="50px" height="50px" [style.background-color] ="setStatusColour(pipeline)"></div> -->
+      <mat-card-content class="pipeline-content">
          <div class="status"><img src="{{iconbase + pipeline.detailed_status?.icon + ext}}"/>
           <span><strong> {{pipeline.detailed_status?.text}}</strong></span></div>
         <div><span>name: <strong>{{pipeline.project?.name}}</strong></span></div>
@@ -25,7 +25,7 @@
         <div><span>ref: <strong>{{pipeline.ref}}</strong></span></div>
         <div><span>updated: <strong>{{pipeline.updated_at  | dateAgo}} ago</strong></span></div>
         <!-- <div><div class="material-icons md-8">schedule</div><span><strong>updated {{pipeline.updated_at | dateAgo}}</strong></span></div> -->
-        <!-- <div><div class="material-icons md-12">schedule</div><span><strong>{{pipeline.started_at | dateAgo}}</strong></span></div> -->
+        <div><div class="material-icons md-12">schedule</div><span><strong>{{pipeline.started_at | dateAgo}}</strong></span></div>
         <!-- <div><mat-icon class="material-icons md-8">schedule</mat-icon><span><strong>{{pipeline.started_at | dateAgo}}</strong></span></div> -->
         <!-- <div><span>coverage: <strong>{{pipeline.coverage}}</strong></span></div> -->
       </mat-card-content>

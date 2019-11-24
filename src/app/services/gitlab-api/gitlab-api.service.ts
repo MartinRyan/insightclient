@@ -26,6 +26,20 @@ export class GitlabApiService {
       );
   }
 
+  get namespaces() {
+    return this.http
+      .get<any[]>(`namespaces`)
+      .pipe(
+        retryWhen(err => {
+          return err.pipe(
+            delay(5000),
+            take(3),
+            o => concat(o, throwError('Retries exceeded - fetch name spaces'))
+          );
+        })
+      );
+  }
+
   get projects() {
     return this.http
       .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=100`)
@@ -49,11 +63,69 @@ export class GitlabApiService {
       );
   }
 
+  get projectsAll() {
+    return this.http
+      // .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=100`)
+      // .get<any[]>(`projects&order_by=last_activity_at&per_page=100`)
+      .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
+      .pipe(map(projects => {
+        return projects.filter(
+          project =>
+            project.length > 0
+        );
+      }))
+      .pipe(
+        retryWhen(err => {
+          return err.pipe(
+            delay(5000),
+            take(3),
+            o => concat(o, throwError('Retries exceeded - fetch projects'))
+          );
+        })
+      );
+  }
+
+  projectsByNamespace(namespace: any) {
+    return this.http
+    .get<any[]>(`projects?search=${namespace}&order_by=last_activity_at&per_page=100`)
+      .pipe(map(projects => {
+        return projects.filter(
+          project =>
+            project.length > 0
+        );
+      }))
+      .pipe(
+        retryWhen(err => {
+          return err.pipe(
+            delay(5000),
+            take(3),
+            o => concat(o, throwError('Retries exceeded - fetch projects'))
+          );
+        })
+      );
+  }
+
   fetchPipelines(projectId: string) {
     // tslint:disable-next-line: no-console
     // console.debug('gitlab-ap.service fetchPipelines projectId => ' + projectId);
     return this.http
-      .get<any[]>(`projects/${projectId}/pipelines?per_page=5`)
+      .get<any[]>(`projects/${projectId}/pipelines?per_page=100`)
+      .pipe(
+        retryWhen(err => {
+          return err.pipe(
+            delay(5000),
+            take(3),
+            o => concat(o, throwError('Retries exceeded -  fetch pipelines'))
+          );
+        })
+      );
+  }
+
+  fetchPipelinesAll() {
+    // tslint:disable-next-line: no-console
+    // console.debug('gitlab-ap.service fetchPipelines projectId => ' + projectId);
+    return this.http
+      .get<any[]>(`projects/pipelines?per_page=100`)
       .pipe(
         retryWhen(err => {
           return err.pipe(
@@ -87,6 +159,22 @@ export class GitlabApiService {
     // console.debug('gitlab-ap.service fetchPipeline projectId => ' + projectId + ' pipelineId: ' + pipelineId);
     return this.http
       .get<any>(`projects/${projectId}/pipelines/${pipelineId}`)
+      .pipe(
+        retryWhen(err => {
+          return err.pipe(
+            delay(5000),
+            take(3),
+            o => concat(o, throwError('Retries exceeded - fetch pipeline'))
+          );
+        })
+      );
+  }
+
+  fetchPipelineB(pipelineId: string) {
+    // tslint:disable-next-line: no-console
+    // console.debug('gitlab-ap.service fetchPipeline projectId => ' + projectId + ' pipelineId: ' + pipelineId);
+    return this.http
+      .get<any>(`projects/pipelines/${pipelineId}`)
       .pipe(
         retryWhen(err => {
           return err.pipe(
