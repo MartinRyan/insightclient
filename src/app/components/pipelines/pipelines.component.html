@@ -6,7 +6,7 @@
   <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true">
   </ngx-spinner>
   <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-    <mat-card class="pipeline-card" [style.background-color] ="setStatusColour(pipeline)" fxFlex="0 1 calc(25% - 32px)"
+    <mat-card class="pipeline-card" [style.background-color] ="setStatusColour(pipeline)" fxFlex="0 1 calc(20% - 32px)"
       *ngFor="let pipeline of pipelines">
       <mat-card-header>
         <mat-card-title>{{pipeline.project?.name}}</mat-card-title>
@@ -15,8 +15,9 @@
       <!-- <div [ngStyle]="{background: setStatusColour(pipeline), height: '50px', width: '50px'}"></div> -->
       <!-- <div width="50px" height="50px" [style.background-color] ="setStatusColour(pipeline)"></div> -->
       <mat-card-content class="pipeline-content">
-         <div class="status"><img src="{{iconbase + pipeline.detailed_status?.icon + ext}}"/>
-          <span><strong> {{pipeline.detailed_status?.text}}</strong></span></div>
+         <div class="status">
+          <span><strong> {{pipeline.detailed_status?.text}}</strong></span> <img src="{{iconbase + pipeline.detailed_status?.icon + ext}}"/></div>
+          <div class="avatar">avatar: <img src="{{pipeline.user?.avatar_url}}"/></div>
         <div><span>name: <strong>{{pipeline.project?.name}}</strong></span></div>
         <div><span>id: <strong>{{pipeline.id}}</strong></span></div>
         <!-- <div><span>status:<strong>{{pipeline.detailed_status?.text}}</strong></span></div> -->
@@ -27,6 +28,6 @@
         <!-- <div><div class="material-icons md-8">schedule</div><span><strong>updated {{pipeline.updated_at | dateAgo}}</strong></span></div> -->
         <div><div class="material-icons md-12">schedule</div><span><strong>{{pipeline.started_at | dateAgo}}</strong></span></div>
         <!-- <div><mat-icon class="material-icons md-8">schedule</mat-icon><span><strong>{{pipeline.started_at | dateAgo}}</strong></span></div> -->
-        <!-- <div><span>coverage: <strong>{{pipeline.coverage}}</strong></span></div> -->
+        <div><span>coverage: <strong>{{pipeline.coverage}}</strong></span></div>
       </mat-card-content>
     </mat-card>
