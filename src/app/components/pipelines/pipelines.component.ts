@@ -111,7 +111,9 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     console.log('');
     console.log('refreshing name spaces');
     const names = [];
+    const ids = [];
     names.push('ACCESS'); // for testing, as only an admin sees all namespaces
+    ids.push(11); // for testing, as only an admin sees all namespaces
     const namespaceObjects = [];
     const namespaces$ = this.api.namespaces.subscribe(namespaces => {
       this.subscriptions.push(namespaces$);
@@ -122,14 +124,13 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       }
       console.log('namespaces ' + namespaces);
       for (const namespace of namespaces) {
-        // console.log('namespace value.id ' + value.id);
-        // console.log('namespace value.name ' + value.name);
-        // console.log('namespace key ' + key);
-        // console.log('namespace value.id ' + value);
-        // console.log('namespace value.namespace.name ' + value.namespace.name);
         names.push(namespace.name);
+        console.log('namespace.id ' + namespace.id);
+        ids.push(namespace.id);
       }
-      this.fetchProjects(names);
+      // this.fetchProjects(names);
+      this.fetchProjectsByGroupID(ids);
+      // this.fetchProjectsByGroupName(names);
     }, err => {
       this.notificationService.activeNotification.next({ message: err.message });
     });
@@ -143,6 +144,55 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       console.log('fetching projects');
       const projectObjects: any = [];
       this.api.projectsByNamespace(name)
+        .subscribe(projects => {
+          for (const p of (projects as any)) {
+            // projectsArray.push(p);
+            projectsArray.push({
+              name: p.name,
+              id: p.id
+            });
+          }
+          this.fetchPipelines(projectsArray);
+        }, err => {
+          this.notificationService.activeNotification.next({ message: err.message });
+        });
+    }
+  }
+
+  private fetchProjectsByGroupID(ids: Array<string>) {
+    const projectsArray: any = [];
+    for (const id of ids) {
+      this.isLoading = true;
+      this.spinner.show();
+      console.log('fetching projects');
+      console.log('id -> ' + id);
+      const projectObjects: any = [];
+      this.api.projectsByGroupID(id)
+        .subscribe(projects => {
+          for (const p of (projects as any)) {
+            // projectsArray.push(p);
+            projectsArray.push({
+              name: p.name,
+              id: p.id
+            });
+          }
+          this.fetchPipelines(projectsArray);
+          console.log('projectsArray:=> ' + projectsArray);
+        }, err => {
+          this.notificationService.activeNotification.next({ message: err.message });
+        });
+    }
+  }
+
+  private fetchProjectsByGroupName(names: Array<string>) {
+    const projectsArray: any = [];
+    for (const name of names) {
+      this.isLoading = true;
+      this.spinner.show();
+      console.log('fetching projects');
+      console.log('name -> ' + name);
+      const projectObjects: any = [];
+      this.api.projectsByGroupName(name)
         .subscribe(projects => {
           for (const p of (projects as any)) {
             // projectsArray.push(p);

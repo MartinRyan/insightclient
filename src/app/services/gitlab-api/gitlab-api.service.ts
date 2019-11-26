@@ -107,6 +107,34 @@ export class GitlabApiService {
       );
   }
 
+  projectsByGroupID(id: any) {
+    return this.http
+    .get<any[]>(`groups/${id}/projects`)
+      .pipe(
+        retryWhen(err => {
+          return err.pipe(
+            delay(5000),
+            take(3),
+            o => concat(o, throwError('Retries exceeded - fetch projects'))
+          );
+        })
+      );
+  }
+
+  projectsByGroupName(name: string) {
+    return this.http
+    .get<any[]>(`groups?search=${name}/projects&order_by=last_activity_at&per_page=100`)
+      .pipe(
+        retryWhen(err => {
+          return err.pipe(
+            delay(5000),
+            take(3),
+            o => concat(o, throwError('Retries exceeded - fetch projects'))
+          );
+        })
+      );
+  }
+
   fetchPipelines(projectId: string) {
     // tslint:disable-next-line: no-console
     // console.debug('gitlab-ap.service fetchPipelines projectId => ' + projectId);
