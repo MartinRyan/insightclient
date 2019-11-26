@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams} from '@angular/common/http';
 import { Injectable, ɵConsole } from '@angular/core';
 import { Observable, throwError, concat} from 'rxjs';
 import { delay, retryWhen, take, map } from 'rxjs/operators';
@@ -66,8 +66,8 @@ export class GitlabApiService {
   get projectsAll() {
     return this.http
       // .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=100`)
-      // .get<any[]>(`projects&order_by=last_activity_at&per_page=100`)
-      .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
+      .get<any[]>(`projects?e&order_by=last_activity_at&per_page=100`)
+      // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
       .pipe(map(projects => {
         return projects.filter(
           project =>
@@ -85,13 +85,15 @@ export class GitlabApiService {
       );
   }
 
-  projectsByNamespace(namespace: any) {
+  projectsByNamespace(name: string) {
     return this.http
-    .get<any[]>(`projects?search=${namespace}&order_by=last_activity_at&per_page=100`)
+    .get<any[]>(`projects?search=${name}&order_by=last_activity_at&per_page=100`)
       .pipe(map(projects => {
         return projects.filter(
           project =>
-            project.length > 0
+            project.namespace.name === name,
+            // tslint:disable-next-line: no-console
+            console.debug('gitlab-ap.service projectsByNamespace name => ' + name)
         );
       }))
       .pipe(
