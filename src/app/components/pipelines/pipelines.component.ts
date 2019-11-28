@@ -50,8 +50,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       setInterval(() => {
         this.clearSubscriptions();
         // this.fetchdata();
-        this.fetchNamespaces();
-      }, 30000);
+        // this.fetchNamespaces();
+      }, 60000);
     });
   }
 
@@ -65,6 +65,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     console.log('refreshing pipelines');
     this.pipelines = [];
     const details = 'pipeline_details';
+    const started = 'started_at';
     const projects$ = this.api.projects.subscribe(projects => {
       this.subscriptions.push(projects$);
       projects.forEach(project => {
@@ -84,15 +85,14 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                     this.isLoading = false;
                     this.spinner.hide();
                     this.subscriptions.push(pipeline$);
-                    // console.log('PIPELINE COMPONENT _ PIPELINE DETAILS -> ' + pipelineDetails[details]);
                     // only add the pipelines that have run in the last week - if pipeline volumes are significant
-                    // if (differenceInWeeks(new Date(pipelineDetails[details]), new Date()) === 0) {
+                    if (differenceInWeeks(new Date(pipelineDetails[started]), new Date()) === 0) {
                     this.pipelines.push({
                       ...pipelineDetails,
                       ...{ project },
                     });
                     this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
-                    // }
+                    }
                   });
               });
             } else {
@@ -112,8 +112,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     console.log('refreshing name spaces');
     const names = [];
     const ids = [];
-    names.push('ACCESS'); // for testing, as only an admin sees all namespaces
-    ids.push(11); // for testing, as only an admin sees all namespaces
+    // names.push('ACCESS'); // for testing, as only an admin sees all namespaces
+    // ids.push(11); // for testing, as only an admin sees all namespaces
     const namespaceObjects = [];
     const namespaces$ = this.api.namespaces.subscribe(namespaces => {
       this.subscriptions.push(namespaces$);
@@ -138,9 +138,9 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
   private fetchProjects(names: Array<string>) {
     const projectsArray: any = [];
+    this.isLoading = true;
+    this.spinner.show();
     for (const name of names) {
-      this.isLoading = true;
-      this.spinner.show();
       console.log('fetching projects');
       const projectObjects: any = [];
       this.api.projectsByNamespace(name)
@@ -160,13 +160,12 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
   private fetchProjectsByGroupID(ids: Array<string>) {
+    console.log('fetching projects');
     const projectsArray: any = [];
+    // this.isLoading = true;
+    // this.spinner.show();
     for (const id of ids) {
-      this.isLoading = true;
-      this.spinner.show();
-      console.log('fetching projects');
       console.log('id -> ' + id);
-      const projectObjects: any = [];
       this.api.projectsByGroupID(id)
         .subscribe(projects => {
           for (const p of (projects as any)) {
@@ -177,7 +176,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
             });
           }
           this.fetchPipelines(projectsArray);
-          console.log('projectsArray:=> ' + projectsArray);
         }, err => {
           this.notificationService.activeNotification.next({ message: err.message });
         });
@@ -186,9 +184,9 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
   private fetchProjectsByGroupName(names: Array<string>) {
     const projectsArray: any = [];
+    // this.isLoading = true;
+    // this.spinner.show();
     for (const name of names) {
-      this.isLoading = true;
-      this.spinner.show();
       console.log('fetching projects');
       console.log('name -> ' + name);
       const projectObjects: any = [];
@@ -202,7 +200,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
             });
           }
           this.fetchPipelines(projectsArray);
-          console.log('projectsArray:=> ' + projectsArray);
         }, err => {
           this.notificationService.activeNotification.next({ message: err.message });
         });
@@ -210,13 +207,14 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
   private fetchPipelines(projects: any) {
-    this.isLoading = true;
-    this.spinner.show();
+    // this.isLoading = true;
+    // this.spinner.show();
     console.log('');
     console.log('refreshing pipelines');
-    console.log('projects: ' + projects);
+    // console.log('projects: ' + projects);
     this.pipelines = [];
     const details = 'pipeline_details';
+    const started = 'started_at';
     projects.forEach(project => {
       // console.log('project.id: ' + project.id);
       // console.log('project.id: ' + project.name);
@@ -236,15 +234,14 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                   this.isLoading = false;
                   this.spinner.hide();
                   this.subscriptions.push(pipeline$);
-                  // console.log('PIPELINE COMPONENT _ PIPELINE DETAILS -> ' + pipelineDetails[details]);
                   // only add the pipelines that have run in the last week - if pipeline volumes are significant
-                  // if (differenceInWeeks(new Date(pipelineDetails[details]), new Date()) === 0) {
+                  if (differenceInWeeks(new Date(pipelineDetails[started]), new Date()) === 0) {
                   this.pipelines.push({
                     ...pipelineDetails,
                     ...{ project },
                   });
                   this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
-                  // }
+                  }
                 });
             });
           }

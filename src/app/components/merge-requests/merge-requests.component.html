@@ -2,7 +2,7 @@
   <span class="tag is-medium"
     [ngClass]="{'is-success': mergeRequests?.length === 0, 'is-warning': mergeRequests?.length > 0 && mergeRequests?.length < 5, 'is-danger': mergeRequests?.length > 4}">{{mergeRequests?.length}}</span>
   </strong></h4>
-<ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true">
+<ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="false">
 </ngx-spinner>
 <div fxLayout="column" fxLayoutGap="1rem">
   <mat-card class="merge-request-card" *ngFor="let mergeReq of mergeRequests">
@@ -11,10 +11,15 @@
     </mat-card-header>
     <mat-card-content class="merge-request-content">
       <div><span>name: <strong>{{mergeReq.project?.name}}</strong></span></div>
+      <!-- <div><span>state: <strong>{{mergeReq.state}}</strong></span></div> -->
       <div><span>created: <strong>{{mergeReq.created_at | dateAgo}} ago</strong></span></div>
+      <div><span>updated: <strong>{{mergeReq.updated_at | dateAgo}} ago</strong></span></div>
       <div><span>open issues: <strong>{{mergeReq.project?.open_issues_count}}</strong></span></div>
-      <div><span>namespace: <strong>{{mergeReq.project.namespace?.name}}</strong></span></div>
+      <div><span>group: <strong>{{mergeReq.project.namespace?.name}}</strong></span></div>
       <!-- <div><span>avatar: <strong>{{mergeReq.project.namespace?.avatar_url}}</strong></span></div> -->
+      <div><span>author: <strong>{{mergeReq.author?.name}}</strong></span></div>
+      <!-- <div><span>assignee: <strong>{{mergeReq.assignee?.name}}</strong></span></div> -->
+      <div><span>assignee: <img mat-card-avatar src='{{mergeReq.assignee?.avatar_url}}' alt="User Avatar"><strong>{{mergeReq.assignee?.name}}</strong></span></div>
       <div><span class="text-description">description: <strong>{{mergeReq?.description}}</strong></span></div>
       <!-- <img mat-card-image [src]="image_url" alt="App Icon"> -->
     </mat-card-content>

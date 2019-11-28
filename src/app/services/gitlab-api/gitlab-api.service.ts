@@ -14,7 +14,7 @@ export class GitlabApiService {
 
   get mergeRequests() {
     return this.http
-      .get<any[]>('merge_requests?state=opened&scope=all&per_page=100')
+      .get<any[]>('merge_requests?state=opened&scope=all&per_page=30')
       .pipe(
         retryWhen(err => {
           return err.pipe(
@@ -42,7 +42,7 @@ export class GitlabApiService {
 
   get projects() {
     return this.http
-      .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=100`)
+      .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=30`)
       // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
       .pipe(map(projects => {
         return projects.filter(
@@ -87,7 +87,7 @@ export class GitlabApiService {
 
   projectsByNamespace(name: string) {
     return this.http
-    .get<any[]>(`projects?search=${name}&order_by=last_activity_at&per_page=100`)
+    .get<any[]>(`projects?search=${name}&order_by=last_activity_at&per_page=30`)
       .pipe(map(projects => {
         return projects.filter(
           project =>
@@ -123,7 +123,7 @@ export class GitlabApiService {
 
   projectsByGroupName(name: string) {
     return this.http
-    .get<any[]>(`groups?search=${name}/projects&order_by=last_activity_at&per_page=100`)
+    .get<any[]>(`groups?search=${name}/projects&order_by=last_activity_at&per_page=30`)
       .pipe(
         retryWhen(err => {
           return err.pipe(
@@ -139,7 +139,7 @@ export class GitlabApiService {
     // tslint:disable-next-line: no-console
     // console.debug('gitlab-ap.service fetchPipelines projectId => ' + projectId);
     return this.http
-      .get<any[]>(`projects/${projectId}/pipelines?per_page=100`)
+      .get<any[]>(`projects/${projectId}/pipelines?per_page=30`)
       .pipe(
         retryWhen(err => {
           return err.pipe(
@@ -155,7 +155,7 @@ export class GitlabApiService {
     // tslint:disable-next-line: no-console
     // console.debug('gitlab-ap.service fetchPipelines projectId => ' + projectId);
     return this.http
-      .get<any[]>(`projects/pipelines?per_page=100`)
+      .get<any[]>(`projects/pipelines?per_page=10`)
       .pipe(
         retryWhen(err => {
           return err.pipe(

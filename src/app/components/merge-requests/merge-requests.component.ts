@@ -24,11 +24,13 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     private zone: NgZone) { }
 
   ngOnInit() {
-    this.fetchdata();
+    // this.fetchdata();
+    this.fetchdataAll();
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        this.fetchdata();
+        // this.fetchdata();
+        this.fetchdataAll();
       }, 60000);
     });
   }
@@ -38,6 +40,55 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
   }
 
   private fetchdata() {
+    this.isLoading = true;
+    this.spinner.show();
+    const key = 'namespace';
+    // tslint:disable-next-line:no-console
+    console.debug('refreshing MRs');
+    this.mergeRequests = [];
+    const mergeReqs$ = this.api.mergeRequests.subscribe(
+      mergeRequests => {
+        this.subscriptions.push(mergeReqs$);
+        mergeRequests.forEach(mergeRequest => {
+          const project$ = this.api
+            .fetchProject(mergeRequest.project_id)
+            .subscribe(project => {
+              this.subscriptions.push(project$);
+              if (
+                project[key].name ===
+                this.settingsService.settings.namespace
+              ) {
+                const lastPipeline$ = this.api
+                  .fetchLastPipelineByRef(
+                    project.id,
+                    mergeRequest.source_branch
+                  )
+                  .subscribe(lastPipeline => {
+                    this.notificationService.activeNotification.next(null);
+                    this.isLoading = false;
+                    this.spinner.hide();
+                    this.subscriptions.push(lastPipeline$);
+                    this.mergeRequests.push({
+                      ...mergeRequest,
+                      ...{ project },
+                      ...{
+                        ci_status:
+                          lastPipeline.length > 0
+                            ? lastPipeline[0].status
+                            : 'unknown',
+                      },
+                    });
+                  });
+              }
+            });
+        });
+      },
+      err => {
+        this.notificationService.activeNotification.next({ message: err.message });
+      }
+    );
+  }
+  private fetchdataAll() {
     this.isLoading = true;
     this.spinner.show();
     const key = 'namespace';

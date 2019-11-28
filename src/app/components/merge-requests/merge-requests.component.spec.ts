@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MergeRequestsComponent } from './merge-requests.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('MergeRequestsComponent', () => {
   let component: MergeRequestsComponent;
@@ -8,7 +9,8 @@ describe('MergeRequestsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MergeRequestsComponent ]
+      declarations: [ MergeRequestsComponent ],
+      providers: [HttpClientModule]
     })
     .compileComponents();
   }));

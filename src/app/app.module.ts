@@ -89,6 +89,8 @@ import { SettingsService } from './services/settings/settings.service';
     NotificationService,
     SettingsService,
     GitlabApiService,
+    FormsModule,
+    ReactiveFormsModule,
     { provide: HTTP_INTERCEPTORS, useClass: GitLabApiInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

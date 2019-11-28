@@ -8,6 +8,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { NavComponent } from './nav.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 describe('NavComponent', () => {
   let component: NavComponent;
@@ -22,6 +23,7 @@ describe('NavComponent', () => {
         MatButtonModule,
         MatIconModule,
         MatListModule,
+        MatMenuModule,
         MatSidenavModule,
         MatToolbarModule,
       ]
