@@ -40,6 +40,20 @@ export class GitlabApiService {
       );
   }
 
+  projectByID(id: any) {
+    return this.http
+    .get<any>(`projects/${id}`)
+      .pipe(
+        retryWhen(err => {
+          return err.pipe(
+            delay(5000),
+            take(3),
+            o => concat(o, throwError('Retries exceeded - fetch projects'))
+          );
+        })
+      );
+  }
+
   get projects() {
     return this.http
       .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=30`)
@@ -171,7 +185,7 @@ export class GitlabApiService {
     // tslint:disable-next-line: no-console
     // console.debug('gitlab-ap.service fetchLastPipelineByRef projectId => ' + projectId + ' ref: ' + ref);
     return this.http
-      .get<any[]>(`projects/${projectId}/pipelines?ref=${ref}&per_page=1`)
+      .get<any>(`projects/${projectId}/pipelines?ref=${ref}&per_page=1`)
       // .pipe(map(resp => resp[0].status))
       .pipe(
         retryWhen(err => {

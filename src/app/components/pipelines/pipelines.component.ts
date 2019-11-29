@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
-import { compareDesc, differenceInWeeks } from 'date-fns';
+import { compareDesc, differenceInDays, differenceInWeeks, parseISO } from 'date-fns';
 import { each, isEmpty, uniqBy } from 'lodash';
-import { parseISO } from 'date-fns';
 
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
 import { NotificationService } from './../../services/notification/notification.service';
@@ -50,8 +49,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       setInterval(() => {
         this.clearSubscriptions();
         // this.fetchdata();
-        // this.fetchNamespaces();
-      }, 60000);
+        this.fetchNamespaces();
+      }, 80000);
     });
   }
 
@@ -86,13 +85,13 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                     this.spinner.hide();
                     this.subscriptions.push(pipeline$);
                     // only add the pipelines that have run in the last week - if pipeline volumes are significant
-                    if (differenceInWeeks(new Date(pipelineDetails[started]), new Date()) === 0) {
+                    // if (differenceInWeeks(new Date(pipelineDetails[started]), new Date()) === 0) {
                     this.pipelines.push({
                       ...pipelineDetails,
                       ...{ project },
                     });
                     this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
-                    }
+                    // }
                   });
               });
             } else {
@@ -112,8 +111,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     console.log('refreshing name spaces');
     const names = [];
     const ids = [];
-    // names.push('ACCESS'); // for testing, as only an admin sees all namespaces
-    // ids.push(11); // for testing, as only an admin sees all namespaces
     const namespaceObjects = [];
     const namespaces$ = this.api.namespaces.subscribe(namespaces => {
       this.subscriptions.push(namespaces$);
@@ -128,9 +125,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         console.log('namespace.id ' + namespace.id);
         ids.push(namespace.id);
       }
-      // this.fetchProjects(names);
       this.fetchProjectsByGroupID(ids);
-      // this.fetchProjectsByGroupName(names);
     }, err => {
       this.notificationService.activeNotification.next({ message: err.message });
     });
@@ -175,7 +170,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
               id: p.id
             });
           }
-          this.fetchPipelines(projectsArray);
+          const uniqueProjects: Array<any> = uniqBy(projectsArray, item => item.id);
+          this.fetchPipelines(uniqueProjects);
         }, err => {
           this.notificationService.activeNotification.next({ message: err.message });
         });
@@ -207,17 +203,12 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
   private fetchPipelines(projects: any) {
-    // this.isLoading = true;
-    // this.spinner.show();
     console.log('');
     console.log('refreshing pipelines');
-    // console.log('projects: ' + projects);
     this.pipelines = [];
     const details = 'pipeline_details';
     const started = 'started_at';
     projects.forEach(project => {
-      // console.log('project.id: ' + project.id);
-      // console.log('project.id: ' + project.name);
       const pipelines$ = this.api
         .fetchPipelines(project.id)
         .subscribe(pipelines => {
@@ -235,12 +226,13 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                   this.spinner.hide();
                   this.subscriptions.push(pipeline$);
                   // only add the pipelines that have run in the last week - if pipeline volumes are significant
-                  if (differenceInWeeks(new Date(pipelineDetails[started]), new Date()) === 0) {
+                  if (differenceInDays(new Date(pipelineDetails[started]), new Date()) >= -2) {
                   this.pipelines.push({
                     ...pipelineDetails,
                     ...{ project },
                   });
-                  this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
+                  // this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
+                  this.consolidateData(this.pipelines);
                   }
                 });
             });
@@ -249,6 +241,13 @@ export class PipelinesComponent implements OnInit, OnDestroy {
           this.notificationService.activeNotification.next({ message: err.message });
         });
     });
+  }
+
+  private consolidateData(pipelines: Array<any>) {
+    const uniquePipelines = uniqBy(pipelines, item => item.id);
+    uniquePipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
+    this.pipelines = uniquePipelines;
+
   }
 
   public setStatusColour(pipeline: any) {
