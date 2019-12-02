@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
-import { compareDesc, differenceInDays, differenceInWeeks, parseISO } from 'date-fns';
+import { compareDesc, differenceInDays, differenceInWeeks, differenceInMinutes, parseISO } from 'date-fns';
 import { each, isEmpty, uniqBy } from 'lodash';
 
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
@@ -225,8 +225,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                   this.isLoading = false;
                   this.spinner.hide();
                   this.subscriptions.push(pipeline$);
-                  // only add the pipelines that have run in the last week - if pipeline volumes are significant
-                  if (differenceInDays(new Date(pipelineDetails[started]), new Date()) >= -2) {
+                  // only add the pipelines that have run in the last 5 days
+                  if (differenceInDays(new Date(pipelineDetails[started]), new Date()) >= -5) {
                   this.pipelines.push({
                     ...pipelineDetails,
                     ...{ project },

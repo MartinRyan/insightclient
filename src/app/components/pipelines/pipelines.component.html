@@ -2,23 +2,27 @@
   <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true">
   </ngx-spinner>
   <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-    <mat-card class="pipeline-card" [style.background-color] ="setStatusColour(pipeline)" fxFlex="0 1 calc(20% - 32px)"
+    <mat-card class="pipeline-card" [style.background-color]="setStatusColour(pipeline)" fxFlex="0 1 calc(20% - 32px)"
       *ngFor="let pipeline of pipelines">
       <mat-card-header>
         <mat-card-title>{{pipeline.project?.name}}</mat-card-title>
       </mat-card-header>
       <mat-card-content class="pipeline-content">
-         <!-- <div class="status"> -->
-          <!-- <span><strong> {{pipeline.detailed_status?.text}}</strong></span><img src="{{iconbase + pipeline.detailed_status?.icon + ext}}"/></div> -->
-          <div><span><strong> {{pipeline.detailed_status?.text}}</strong></span><span class="status"><img src="{{iconbase + pipeline.detailed_status?.icon + ext}}"/></span></div>
-          <div>avatar: <span class="avatar"><img mat-card-avatar src="{{pipeline.user?.avatar_url}}" alt="User Avatar"/></span></div>
-        <div><span>name: <strong>{{pipeline.project?.name}}</strong></span></div>
-        <div><span>id: <strong>{{pipeline.id}}</strong></span></div>
-        <div><span>user: <strong>{{pipeline.user?.name}}</strong></span></div>
-        <div><span>ref: <strong>{{pipeline.ref}}</strong></span></div>
-        <div><span>updated: <strong>{{pipeline.updated_at  | dateAgo}}</strong></span></div>
-        <div><span>started: </span><span><strong>{{pipeline.started_at | dateAgo}}</strong></span></div>
-        <!-- <div><span>started: </span><mat-icon class="material-icons md-8">schedule</mat-icon><span><strong>{{pipeline.started_at | dateAgo}}</strong></span></div> -->
+        <div><span><strong> {{ pipeline.detailed_status?.text }}</strong></span>
+          <span class="status"><img src="{{iconbase + pipeline.detailed_status?.icon + ext}}" /></span></div>
+        <div>avatar: <span class="avatar"><img mat-card-avatar src="{{pipeline.user?.avatar_url}}" alt="User Avatar" /></span></div>
+        <div><span>name: <strong>{{ pipeline.project?.name }}</strong></span></div>
+        <div><span>id: <strong>{{ pipeline.id }}</strong></span></div>
+        <div><span>user: <strong>{{ pipeline.user?.name }}</strong></span></div>
+        <div><span>ref: <strong>{{ pipeline.ref }}</strong></span></div>
+        <div><span>tag: <strong>{{ pipeline.tag }}</strong></span></div>
+        <div><span>updated: <strong>{{ pipeline.updated_at  | dateAgo }}</strong></span></div>
+        <div><span>started: </span><span><strong>{{ pipeline.started_at | dateAgo }}</strong></span></div>
+        <div><span>finished: </span><span><strong>{{ pipeline.finished_at | dateAgo }}</strong></span></div>
+        <!-- <div><span>committed: </span><span><strong>{{ pipeline.committed_at | dateAgo }}</strong></span></div> -->
+        <div><span>duration: </span><span><strong>{{ pipeline.duration | secondsToTime}}</strong></span></div>
+        <!-- <div>favicon: <span class="avatar"><img mat-card-avatar src="{{ pipeline.detailed_status?.favicon }}"
+              alt="favicon" /></span></div> -->
         <div><span>coverage: <strong>{{pipeline.coverage}}</strong></span></div>
       </mat-card-content>
     </mat-card>

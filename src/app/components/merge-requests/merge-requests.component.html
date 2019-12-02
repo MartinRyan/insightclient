@@ -1,6 +1,7 @@
-<h4 class="mat-h4"><strong>Open MR's: 
-  <span class="tag is-medium"
-    [ngClass]="{'is-success': mergeRequests?.length === 0, 'is-warning': mergeRequests?.length > 0 && mergeRequests?.length < 5, 'is-danger': mergeRequests?.length > 4}">{{mergeRequests?.length}}</span>
+<h4 class="mat-h4">
+  <strong>Open MR's:
+    <span
+      [ngClass]="{'is-success': mergeRequests?.length === 0, 'is_warning': mergeRequests?.length > 0 && mergeRequests?.length > 5, 'is_danger': mergeRequests?.length > 4}">{{mergeRequests?.length}}</span>
   </strong></h4>
 <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="false">
 </ngx-spinner>
@@ -11,18 +12,29 @@
     </mat-card-header>
     <mat-card-content class="merge-request-content">
       <div><span>name: <strong>{{mergeReq.project?.name}}</strong></span></div>
-      <!-- <div><span>state: <strong>{{mergeReq.state}}</strong></span></div> -->
       <div><span>created: <strong>{{mergeReq.created_at | dateAgo}} ago</strong></span></div>
       <div><span>updated: <strong>{{mergeReq.updated_at | dateAgo}} ago</strong></span></div>
       <div><span>open issues: <strong>{{mergeReq.project?.open_issues_count}}</strong></span></div>
-      <div><span>group: <strong>{{mergeReq.project.namespace?.name}}</strong></span></div>
-      <!-- <div><span>avatar: <strong>{{mergeReq.project.namespace?.avatar_url}}</strong></span></div> -->
+      <div><span>group: <strong>{{mergeReq?.project.namespace?.name}}</strong></span></div>
+      <div><span>notes: <strong>{{mergeReq?.user_notes_count}}</strong></span></div>
+      <div><span>target: <strong>{{mergeReq?.target_branch}}</strong></span></div>
+      <div><span>source: <strong>{{mergeReq?.source_branch}}</strong></span></div>
+      <div><span>in progress: <strong>{{mergeReq?.work_in_progress}}</strong></span></div>
+      <div><span>merge status: <strong>{{mergeReq?.merge_status}}</strong></span></div>
+      <div><span>merge on success: <strong>{{mergeReq?.merge_when_pipeline_succeeds}}</strong></span></div>
       <div><span>author: <strong>{{mergeReq.author?.name}}</strong></span></div>
-      <!-- <div><span>assignee: <strong>{{mergeReq.assignee?.name}}</strong></span></div> -->
-      <div><span>assignee: <img mat-card-avatar src='{{mergeReq.assignee?.avatar_url}}' alt="User Avatar"><strong>{{mergeReq.assignee?.name}}</strong></span></div>
-      <div><span class="text-description">description: <strong>{{mergeReq?.description}}</strong></span></div>
-      <!-- <img mat-card-image [src]="image_url" alt="App Icon"> -->
+      <div *ngIf="!mergeReq.assignees?.length"><span>assignee: <strong>{{mergeReq.assignee?.name}}</strong></span><img
+          mat-card-avatar src='{{ mergeReq.assignee?.avatar_url }}' alt="User Avatar"></div>
+      <div *ngFor="let assig of mergeReq.assignees; let i = index">
+        <div *ngIf="mergeReq.assignees?.length"></div>
+        <div><span>assignee {{i +1}}: <strong>{{assig.name}}</strong></span><img mat-card-avatar
+            src='{{ mergeReq.assignee?.avatar_url }}' alt="User Avatar"></div>
+      </div>
+      <div>
+        <mat-icon class="material-icons md8 icon-orange">star_border</mat-icon><span><strong>
+            {{ mergeReq?.star_count}}</strong></span>
+      </div>
+      <div><span class="text-description">description: {{mergeReq?.description}}</span></div>
     </mat-card-content>
   </mat-card>
 </div>
-

@@ -40,6 +40,7 @@ import { GitLabApiInterceptor } from './services/gitlab-api/gitlab-api.intercept
 import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
 import { NotificationService } from './services/notification/notification.service';
 import { SettingsService } from './services/settings/settings.service';
+import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { SettingsService } from './services/settings/settings.service';
     MergeRequestsComponent,
     DashboardComponent,
     DateAgoPipe,
+    SecondsToTimePipe,
 
   ],
   imports: [

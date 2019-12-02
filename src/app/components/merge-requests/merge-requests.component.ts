@@ -26,13 +26,11 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.fetchdata();
-    // this.fetchdataAll();
     this.fetchNamespaces();
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
         // this.fetchdata();
-        // this.fetchdataAll();
         this.fetchNamespaces();
       }, 60000);
     });
@@ -91,53 +89,6 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
       }
     );
   }
-  private fetchdataAll() {
-    this.isLoading = true;
-    this.spinner.show();
-    const key = 'namespace';
-    const started = 'started_at';
-    // tslint:disable-next-line:no-console
-    console.debug('refreshing MRs');
-    this.mergeRequests = [];
-    const mergeReqs$ = this.api.mergeRequests.subscribe(
-      mergeRequests => {
-        this.subscriptions.push(mergeReqs$);
-        mergeRequests.forEach(mergeRequest => {
-          const project$ = this.api
-            .fetchProject(mergeRequest.project_id)
-            .subscribe(project => {
-              this.subscriptions.push(project$);
-              const lastPipeline$ = this.api
-                .fetchLastPipelineByRef(
-                  project.id,
-                  mergeRequest.source_branch
-                )
-                .subscribe(lastPipeline => {
-                  this.notificationService.activeNotification.next(null);
-                  this.isLoading = false;
-                  this.spinner.hide();
-                  this.subscriptions.push(lastPipeline$);
-                  if (differenceInWeeks(new Date(lastPipeline[started]), new Date()) === 0) {
-                  this.mergeRequests.push({
-                    ...mergeRequest,
-                    ...{ project },
-                    ...{
-                      ci_status:
-                        lastPipeline.length > 0
-                          ? lastPipeline[0].status
-                          : 'unknown',
-                    },
-                  });
-                }
-                });
-            });
-        });
-      },
-      err => {
-        this.notificationService.activeNotification.next({ message: err.message });
-      }
-    );
-  }
 
   private fetchNamespaces() {
     this.isLoading = true;
@@ -146,8 +97,6 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     console.log('refreshing name spaces');
     const names = [];
     const ids = [];
-    // names.push('ACCESS'); // for testing, as only an admin sees all namespaces
-    // ids.push(11); // for testing, as only an admin sees all namespaces
     const namespaceObjects = [];
     const namespaces$ = this.api.namespaces.subscribe(namespaces => {
       this.subscriptions.push(namespaces$);
@@ -162,9 +111,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
         console.log('namespace.id ' + namespace.id);
         ids.push(namespace.id);
       }
-      // this.fetchProjects(names);
       this.fetchProjectsByGroupID(ids);
-      // this.fetchProjectsByGroupName(names);
     }, err => {
       this.notificationService.activeNotification.next({ message: err.message });
     });
@@ -184,7 +131,6 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
               id: p.id
             });
           }
-          // this.fetchPipelines(projectsArray);
           this.fetchMergeRequests(projectsArray);
         }, err => {
           this.notificationService.activeNotification.next({ message: err.message });
@@ -199,7 +145,6 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     const mergeReqs$ = this.api.mergeRequests.subscribe(
       mergeRequests => {
         this.subscriptions.push(mergeReqs$);
-        // const tidyMergeRequests = uniqBy(this.mergeRequests, item => item.id);
         mergeRequests.forEach(mergeRequest => {
           const project$ = this.api
             .projectByID(mergeRequest.project_id)
@@ -217,8 +162,8 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
                   this.isLoading = false;
                   this.spinner.hide();
                   this.subscriptions.push(lastPipeline$);
-                  // console.log('lastPipeline[updated] -> ' + lastPipeline[updated]);
-                  // if (differenceInDays(new Date(lastPipeline[created]), new Date()) >= -1) {
+                  // only add the merge requests that have run in the last 3 weeks
+                  // if (differenceInDays(new Date(mergeRequest[created]), new Date()) >= -21) {
                   this.mergeRequests.push({
                     ...mergeRequest,
                     ...{ project },
