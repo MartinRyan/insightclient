@@ -16,7 +16,7 @@ export class SecondsToTimePipe implements PipeTransform {
         return ('0' + hours).substr(-2) + ':' + ('0' + minutes).substr(-2) + ':' + ('0' + seconds).substr(-2);
       } else if (value >= 60) {
         return ('0' + minutes).substr(-2) + ':' + ('0' + seconds).substr(-2);
-      } else if (value === 0) {
+      } else if (value === null) {
         return ('running');
       } else {
         return('0' + seconds).substr(-2) + ' seconds';
