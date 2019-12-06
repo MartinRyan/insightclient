@@ -151,7 +151,6 @@ export class GitlabApiService {
 
   fetchPipelines(projectId: string) {
     // tslint:disable-next-line: no-console
-    // console.debug('gitlab-ap.service fetchPipelines projectId => ' + projectId);
     return this.http
       .get<any[]>(`projects/${projectId}/pipelines?per_page=30`)
       .pipe(
@@ -167,7 +166,6 @@ export class GitlabApiService {
 
   fetchPipelinesAll() {
     // tslint:disable-next-line: no-console
-    // console.debug('gitlab-ap.service fetchPipelines projectId => ' + projectId);
     return this.http
       .get<any[]>(`projects/pipelines?per_page=10`)
       .pipe(
@@ -183,7 +181,6 @@ export class GitlabApiService {
 
   fetchLastPipelineByRef(projectId: string, ref: string) {
     // tslint:disable-next-line: no-console
-    // console.debug('gitlab-ap.service fetchLastPipelineByRef projectId => ' + projectId + ' ref: ' + ref);
     return this.http
       .get<any>(`projects/${projectId}/pipelines?ref=${ref}&per_page=1`)
       // .pipe(map(resp => resp[0].status))
@@ -200,7 +197,6 @@ export class GitlabApiService {
 
   fetchPipeline(projectId: string, pipelineId: string) {
     // tslint:disable-next-line: no-console
-    // console.debug('gitlab-ap.service fetchPipeline projectId => ' + projectId + ' pipelineId: ' + pipelineId);
     return this.http
       .get<any>(`projects/${projectId}/pipelines/${pipelineId}`)
       .pipe(
@@ -216,7 +212,6 @@ export class GitlabApiService {
 
   fetchPipelineB(pipelineId: string) {
     // tslint:disable-next-line: no-console
-    // console.debug('gitlab-ap.service fetchPipeline projectId => ' + projectId + ' pipelineId: ' + pipelineId);
     return this.http
       .get<any>(`projects/pipelines/${pipelineId}`)
       .pipe(
@@ -232,7 +227,6 @@ export class GitlabApiService {
 
   fetchProject(id: string) {
     // tslint:disable-next-line: no-console
-    // console.debug('gitlab-ap.service fetchProject id => ' + id );
     return this.http.get<any>(`projects/${id}`).pipe(
       retryWhen(err => {
         return err.pipe(

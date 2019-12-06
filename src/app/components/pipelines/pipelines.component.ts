@@ -58,6 +58,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     this.clearSubscriptions();
   }
 
+  // entry for single namespace data
   private fetchdata() {
     this.isLoading = true;
     this.spinner.show();
@@ -104,6 +105,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     });
   }
 
+  // entry for multi namespace data
   private fetchNamespaces() {
     this.isLoading = true;
     this.spinner.show();
@@ -131,34 +133,32 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     });
   }
 
-  private fetchProjects(names: Array<string>) {
-    const projectsArray: any = [];
-    this.isLoading = true;
-    this.spinner.show();
-    for (const name of names) {
-      console.log('fetching projects');
-      const projectObjects: any = [];
-      this.api.projectsByNamespace(name)
-        .subscribe(projects => {
-          for (const p of (projects as any)) {
-            // projectsArray.push(p);
-            projectsArray.push({
-              name: p.name,
-              id: p.id
-            });
-          }
-          this.fetchPipelines(projectsArray);
-        }, err => {
-          this.notificationService.activeNotification.next({ message: err.message });
-        });
-    }
-  }
+  // private fetchProjects(names: Array<string>) {
+  //   const projectsArray: any = [];
+  //   this.isLoading = true;
+  //   this.spinner.show();
+  //   for (const name of names) {
+  //     console.log('fetching projects');
+  //     const projectObjects: any = [];
+  //     this.api.projectsByNamespace(name)
+  //       .subscribe(projects => {
+  //         for (const p of (projects as any)) {
+  //           // projectsArray.push(p);
+  //           projectsArray.push({
+  //             name: p.name,
+  //             id: p.id
+  //           });
+  //         }
+  //         this.fetchPipelines(projectsArray);
+  //       }, err => {
+  //         this.notificationService.activeNotification.next({ message: err.message });
+  //       });
+  //   }
+  // }
 
   private fetchProjectsByGroupID(ids: Array<string>) {
     console.log('fetching projects');
     const projectsArray: any = [];
-    // this.isLoading = true;
-    // this.spinner.show();
     for (const id of ids) {
       console.log('id -> ' + id);
       this.api.projectsByGroupID(id)
@@ -178,29 +178,27 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     }
   }
 
-  private fetchProjectsByGroupName(names: Array<string>) {
-    const projectsArray: any = [];
-    // this.isLoading = true;
-    // this.spinner.show();
-    for (const name of names) {
-      console.log('fetching projects');
-      console.log('name -> ' + name);
-      const projectObjects: any = [];
-      this.api.projectsByGroupName(name)
-        .subscribe(projects => {
-          for (const p of (projects as any)) {
-            // projectsArray.push(p);
-            projectsArray.push({
-              name: p.name,
-              id: p.id
-            });
-          }
-          this.fetchPipelines(projectsArray);
-        }, err => {
-          this.notificationService.activeNotification.next({ message: err.message });
-        });
-    }
-  }
+  // private fetchProjectsByGroupName(names: Array<string>) {
+  //   const projectsArray: any = [];
+  //   for (const name of names) {
+  //     console.log('fetching projects');
+  //     console.log('name -> ' + name);
+  //     const projectObjects: any = [];
+  //     this.api.projectsByGroupName(name)
+  //       .subscribe(projects => {
+  //         for (const p of (projects as any)) {
+  //           // projectsArray.push(p);
+  //           projectsArray.push({
+  //             name: p.name,
+  //             id: p.id
+  //           });
+  //         }
+  //         this.fetchPipelines(projectsArray);
+  //       }, err => {
+  //         this.notificationService.activeNotification.next({ message: err.message });
+  //       });
+  //   }
+  // }
 
   private fetchPipelines(projects: any) {
     console.log('');

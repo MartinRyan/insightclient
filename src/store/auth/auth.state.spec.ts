@@ -33,9 +33,9 @@ describe('[TEST]: AuthStore', () => {
     const authentication: AuthenticationStateModel = {
       id: '12',
       firstName: 'Adam',
-      lastName: 'Gordon',
-      fullName: 'Adam Gordon',
-      email: 'agordon@google.com',
+      lastName: 'Ant',
+      fullName: 'Adam Ant',
+      email: 'adamant@google.com',
       roles: ['ADMIN']
     };
 

@@ -28,11 +28,6 @@ describe('GitlabApiService', () => {
       expect(apiService).toBeTruthy();
   })));
 
-  // it('should be created', () => {
-  //   const service: GitlabApiService = TestBed.get(GitlabApiService);
-  //   expect(service).toBeTruthy();
-  // });
-
   // it(`should issue a request`,
   //   // 1. declare as async test since the HttpClient works with Observables
   //   async(

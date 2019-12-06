@@ -5,22 +5,22 @@ import { DictionaryReset, SetDictionaryData } from './dictionary.actions';
 
 const data = [
   {
-    id: '323',
-    departmentCode: '2392',
+    id: '232',
+    departmentCode: '1234',
     departmentName: 'Main office',
     mainCuratorUserId: 'admin',
-    mainCuratorName: 'Adam Gordon',
+    mainCuratorName: 'Adam Ant',
     backupCuratorUserId: 'manager',
-    backupCuratorName: 'Alexander Chester'
+    backupCuratorName: 'King Leonidas'
   },
   {
-    id: '322',
-    departmentCode: '2999',
-    departmentName: 'New York office',
+    id: '777',
+    departmentCode: '12321',
+    departmentName: 'Ministry of Magic',
     mainCuratorUserId: 'manager',
-    mainCuratorName: 'Alexander Chester',
+    mainCuratorName: 'Professor Dumbledore',
     backupCuratorUserId: 'manager',
-    backupCuratorName: 'Amanda Brian'
+    backupCuratorName: 'HeWho Shallnot BeNamed'
   }
 ];
 
@@ -62,7 +62,7 @@ describe('[TEST]: Dictionary state', () => {
     expect(actual).toEqual(dictionary);
   });
 
-  it('should be reset state', function() {
+  it('should be reset state', () => {
     const dictionary: DictionaryStateModel = {
       content: [],
       page: 0,

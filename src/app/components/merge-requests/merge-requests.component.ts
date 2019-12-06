@@ -40,6 +40,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     this.clearSubscriptions();
   }
 
+  // entry for single namespace data
   private fetchdata() {
     this.isLoading = true;
     this.spinner.show();
@@ -90,6 +91,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     );
   }
 
+  // entry for multi namespace data
   private fetchNamespaces() {
     this.isLoading = true;
     this.spinner.show();

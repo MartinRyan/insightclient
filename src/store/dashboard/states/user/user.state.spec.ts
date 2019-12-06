@@ -38,10 +38,10 @@ describe('[TEST]: User state', () => {
       userId: '12',
       departmentCode: '2392',
       departmentName: 'Main office',
-      email: 'agordon@google.com',
+      email: 'adamant@google.com',
       firstName: 'Adam',
-      lastName: 'Gordon',
-      fullName: 'Adam Gordon',
+      lastName: 'Ant',
+      fullName: 'Adam Ant',
       positionId: '102003',
       positionName: 'admin'
     };
