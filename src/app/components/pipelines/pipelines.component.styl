@@ -7,53 +7,6 @@
 //     margin-bottom: 32px;
 //   }
 
-// content {
-//   h4 {
-//     color: cornsilk;
-//   }
-// }
-// .pipeline {
-//   border: 1px solid gray;
-//   margin: 0.5rem;
-//   min-width: 12rem;
-//   background-color: #aaa;
-//   color: white;
-//   strong {
-//     color: #ccc;
-//   }
-//   &.success {
-//     background-color: green;
-//   }
-//   &.failed {
-//     background-color: red;
-//   }
-//   &.running,
-//   &.pending {
-//     background-color: orange;
-//   }
-//   .timestamp {
-//     border-top: 1px solid #ccc;
-//   }
-//   .project {
-//     color: black;
-//     h5 {
-//       margin-bottom: 0;
-//     }
-//     background-color: rgba(255, 255, 255, 0.5);
-//     margin: 0;
-//     padding: 0.25rem;
-//     figure {
-//       // margin: 1rem 0 1rem 1rem;
-//       margin-right: 1rem;
-//       img {
-//         border-radius: 100%;
-//         width: 100%;
-//         height: 100%;
-//       }
-//     }
-//   }
-// }
-
 .mat-h4 {
   color: #333;
   margin 0 0 0 1rem;
@@ -80,24 +33,24 @@
 .success {
   text-align: left;
   background-color: #90fe88;
-  }
+}
 
 .failed {
   text-align: left;
   background-color: #ff6740;
-  }
+}
 
 .passed {
   text-align: left;
   background-color: #90fe88;
-  }
+}
 
 .status {
   // object-fit: cover; /*this makes the image in src fit to the size specified below*/
   // width: .5rem; /* Here you can use wherever you want to specify the width and also the height of the <img>*/
   // height: .5rem;
   // padding-inline-start: .4rem;
-  }
+}
 
 .avatar {
   // object-fit: cover; /*this makes the image in src fit to the size specified below*/
@@ -106,10 +59,15 @@
   // padding-inline-start: .4rem;
 }
 
-  mat-card img{
-  object-fit: cover; /*this makes the image in src fit to the size specified below*/
-  width: 1.6rem; /* Here you can use wherever you want to specify the width and also the height of the <img>*/
+mat-card img {
+  object-fit: cover;
+  /*this makes the image in src fit to the size specified below*/
+  width: 1.6rem;
+  /* Here you can use wherever you want to specify the width and also the height of the <img>*/
   height: 1.6rem;
   padding-inline-start: .4rem;
 }
 
+.spinner {
+  position: relative;
+  }

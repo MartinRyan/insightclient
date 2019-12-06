@@ -1,7 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MergeRequestsComponent } from './merge-requests.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { SvgIconRegistryService, SvgLoader, AngularSvgIconModule } from 'angular-svg-icon';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 describe('MergeRequestsComponent', () => {
   let component: MergeRequestsComponent;
@@ -9,8 +11,9 @@ describe('MergeRequestsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, NgxSpinnerModule],
       declarations: [ MergeRequestsComponent ],
-      providers: [HttpClientModule]
+      providers: [HttpClientTestingModule, SvgIconRegistryService, SvgLoader, AngularSvgIconModule]
     })
     .compileComponents();
   }));

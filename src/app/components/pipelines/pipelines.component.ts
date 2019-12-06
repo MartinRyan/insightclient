@@ -42,7 +42,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     private iconReg: SvgIconRegistryService) { }
 
   ngOnInit() {
-    this.iconReg.loadSvg('assets/sprite_icons/status_success.svg', 'status_success');
+    // this.iconReg.loadSvg('assets/sprite_icons/status_success.svg', 'status_success');
     // this.fetchdata();
     this.fetchNamespaces();
     this.zone.runOutsideAngular(() => {

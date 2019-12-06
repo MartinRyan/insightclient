@@ -1,6 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -25,7 +26,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DashComponent } from './components/dash/dash.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ExpansionComponent } from './components/expansion/expansion.component';
 import { MergeRequestsComponent } from './components/merge-requests/merge-requests.component';
@@ -46,7 +46,6 @@ import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
 @NgModule({
   declarations: [
     AppComponent,
-    DashComponent,
     NavComponent,
     ExpansionComponent,
     TableComponent,
@@ -77,6 +76,7 @@ import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
+    MatRadioModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -91,10 +91,12 @@ import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
     NotificationService,
     SettingsService,
     GitlabApiService,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     { provide: HTTP_INTERCEPTORS, useClass: GitLabApiInterceptor, multi: true }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

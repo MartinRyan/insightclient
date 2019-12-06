@@ -1,6 +1,8 @@
 <h4 class="mat-h4"><strong>Pipelines</strong>
-  <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true">
-  </ngx-spinner>
+  <div class="spinner">
+    <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true">
+    </ngx-spinner>
+  </div>
   <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="20px" fxLayoutAlign="flex-start">
     <mat-card class="pipeline-card" [style.background-color]="setStatusColour(pipeline)" fxFlex="0 1 calc(20% - 32px)"
       *ngFor="let pipeline of pipelines">
@@ -10,10 +12,11 @@
       <mat-card-content class="pipeline-content">
         <div><span><strong> {{ pipeline.detailed_status?.text }}</strong></span>
           <span class="status"><img src="{{iconbase + pipeline.detailed_status?.icon + ext}}" /></span></div>
-        <div>avatar: <span class="avatar"><img mat-card-avatar src="{{pipeline.user?.avatar_url}}" alt="User Avatar" /></span></div>
+        <!-- <div>avatar: <span class="avatar"><img mat-card-avatar src="{{pipeline.user?.avatar_url}}" alt="User Avatar" /></span></div> -->
         <div><span>name: <strong>{{ pipeline.project?.name }}</strong></span></div>
         <div><span>id: <strong>{{ pipeline.id }}</strong></span></div>
-        <div><span>user: <strong>{{ pipeline.user?.name }}</strong></span></div>
+        <div><span>triggerer: <strong>{{ pipeline.user?.name }}</strong></span><img mat-card-avatar
+            src="{{pipeline.user?.avatar_url}}" alt="User Avatar" /></div>
         <div><span>ref: <strong>{{ pipeline.ref }}</strong></span></div>
         <div><span>tag: <strong>{{ pipeline.tag }}</strong></span></div>
         <div><span>updated: <strong>{{ pipeline.updated_at  | dateAgo }}</strong></span></div>

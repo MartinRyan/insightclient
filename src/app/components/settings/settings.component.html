@@ -1,90 +1,39 @@
-<div class="modal is-active">
-    <div class="modal-background"></div>
-    <div class="modal-content">
-      <div class="columns">
-        <div class="column is-two-fifths">
-          <figure class="image is-square">
-            <img src="">
-          </figure>
-        </div>
-        <div class="column">
-          <h1 class="title">GitLab Dashboard</h1>
-          <p class="subtitle">alpha</p>
-          <div class="columns">
-            <div class="column">
-              <figure class="image is-square">
-                <img src="">
-              </figure>
-            </div>
-            <div class="column">
-              <figure class="image is-square">
-                <img src="">
-              </figure>
-            </div>
-          </div>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Settings</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
+    <mat-card-content class="content">
+        <mat-radio-group aria-label="is gitlab.com" ngDefaultControl formControlName="isGitlabDotCom">
+          <mat-radio-button class="field" value="true">gitlab.com</mat-radio-button>
+          <mat-radio-button class="field" value="false">self hosted</mat-radio-button>
+        </mat-radio-group>
+      <div *ngIf="settingsForm.value.isGitlabDotCom === 'false'" class="field">
+        <mat-form-field>
+          <mat-label>gitlab location</mat-label>
+          <input matInput placeholder="gitlab location" formControlName="gitlabAddress" name="gitlabAddress" required>
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <mat-form-field>
+          <mat-label>accessToken</mat-label>
+          <input matInput type="password" placeholder="access token" formControlName="accessToken" name="accessToken"
+            required>
+        </mat-form-field>
+      </div>
+      <!-- <div class="field">
+        <mat-form-field>
+          <mat-label>namespace</mat-label>
+          <input matInput placeholder="namespace" formControlName="namespace" name="namespace" required>
+        </mat-form-field>
+      </div> -->
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="field">
+        <div class="button-wrapper">
+          <button mat-flat-button color="primary">save</button>
         </div>
       </div>
-  
-      <form [formGroup]="settingsForm" novalidate>
-        <div class="field">
-          <label class="label">GitLab location</label>
-          <div class="field-body">
-            <div class="field is-narrow">
-              <div class="control">
-                <label class="radio">
-                  <input type="radio" name="isGitlabDotCom" value="true" formControlName="isGitlabDotCom"> GitLab.com
-                </label>
-                <label class="radio">
-                  <input type="radio" name="isGitlabDotCom" value="false" formControlName="isGitlabDotCom"> Self-hosted
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="field" *ngIf="settingsForm.value.isGitlabDotCom === 'false'">
-          <label class="label">
-            GitLab address
-          </label>
-          <div class="control">
-            <input type="text" class="input" formControlName="gitlabAddress">
-          </div>
-          <p class="help">Required</p>
-        </div>
-  
-        <div class="field">
-          <label class="label">
-            Access Token
-          </label>
-          <div class="control">
-            <input type="text" class="input" formControlName="accessToken">
-          </div>
-          <p class="help">Required</p>
-        </div>
-  
-        <div class="field">
-          <label class="label">Namespace</label>
-          <div class="control">
-            <input type="text" class="input" formControlName="namespace">
-          </div>
-          <p class="help">Optional</p>
-        </div>
-  
-        <div class="field is-pulled-right">
-          <p class="control">
-            <button type="submit" class="button is-success" (click)='onSubmit()' [disabled]="settingsForm.pristine || settingsForm.invalid">
-              Save
-            </button>
-          </p>
-          <p class="control">
-            <button type="cancel" class="button is-light" (click)='onCancel()'>
-              Cancel
-            </button>
-          </p>
-        </div>
-      </form>
-      <!-- <p>Form value: {{ settingsForm.value | json }}</p> -->
-    </div>
-    <button mat-icon-button class="settings-button" aria-label="hide settings" (click)="hide()">
-        <mat-icon>settings_backup_restore</mat-icon>
-    </button>
-  </div>
+    </mat-card-actions>
+  </form>
+</mat-card>
