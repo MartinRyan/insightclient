@@ -42,7 +42,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     private iconReg: SvgIconRegistryService) { }
 
   ngOnInit() {
-    // this.iconReg.loadSvg('assets/sprite_icons/status_success.svg', 'status_success');
     // this.fetchdata();
     this.fetchNamespaces();
     this.zone.runOutsideAngular(() => {
@@ -133,29 +132,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     });
   }
 
-  // private fetchProjects(names: Array<string>) {
-  //   const projectsArray: any = [];
-  //   this.isLoading = true;
-  //   this.spinner.show();
-  //   for (const name of names) {
-  //     console.log('fetching projects');
-  //     const projectObjects: any = [];
-  //     this.api.projectsByNamespace(name)
-  //       .subscribe(projects => {
-  //         for (const p of (projects as any)) {
-  //           // projectsArray.push(p);
-  //           projectsArray.push({
-  //             name: p.name,
-  //             id: p.id
-  //           });
-  //         }
-  //         this.fetchPipelines(projectsArray);
-  //       }, err => {
-  //         this.notificationService.activeNotification.next({ message: err.message });
-  //       });
-  //   }
-  // }
-
   private fetchProjectsByGroupID(ids: Array<string>) {
     console.log('fetching projects');
     const projectsArray: any = [];
@@ -177,28 +153,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         });
     }
   }
-
-  // private fetchProjectsByGroupName(names: Array<string>) {
-  //   const projectsArray: any = [];
-  //   for (const name of names) {
-  //     console.log('fetching projects');
-  //     console.log('name -> ' + name);
-  //     const projectObjects: any = [];
-  //     this.api.projectsByGroupName(name)
-  //       .subscribe(projects => {
-  //         for (const p of (projects as any)) {
-  //           // projectsArray.push(p);
-  //           projectsArray.push({
-  //             name: p.name,
-  //             id: p.id
-  //           });
-  //         }
-  //         this.fetchPipelines(projectsArray);
-  //       }, err => {
-  //         this.notificationService.activeNotification.next({ message: err.message });
-  //       });
-  //   }
-  // }
 
   private fetchPipelines(projects: any) {
     console.log('');

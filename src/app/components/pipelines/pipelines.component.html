@@ -12,7 +12,6 @@
       <mat-card-content class="pipeline-content">
         <div><span><strong> {{ pipeline.detailed_status?.text }}</strong></span>
           <span class="status"><img src="{{iconbase + pipeline.detailed_status?.icon + ext}}" /></span></div>
-        <!-- <div>avatar: <span class="avatar"><img mat-card-avatar src="{{pipeline.user?.avatar_url}}" alt="User Avatar" /></span></div> -->
         <div><span>name: <strong>{{ pipeline.project?.name }}</strong></span></div>
         <div><span>id: <strong>{{ pipeline.id }}</strong></span></div>
         <div><span>triggerer: <strong>{{ pipeline.user?.name }}</strong></span><img mat-card-avatar
