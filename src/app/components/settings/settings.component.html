@@ -4,10 +4,10 @@
   </mat-card-header>
   <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
     <mat-card-content class="content">
-        <mat-radio-group aria-label="is gitlab.com" ngDefaultControl formControlName="isGitlabDotCom">
-          <mat-radio-button class="field" value="true">gitlab.com</mat-radio-button>
-          <mat-radio-button class="field" value="false">self hosted</mat-radio-button>
-        </mat-radio-group>
+      <mat-radio-group aria-label="is gitlab.com" ngDefaultControl formControlName="isGitlabDotCom">
+        <mat-radio-button class="field" value="true">gitlab.com</mat-radio-button>
+        <mat-radio-button class="field" value="false">self hosted</mat-radio-button>
+      </mat-radio-group>
       <div *ngIf="settingsForm.value.isGitlabDotCom === 'false'" class="field">
         <mat-form-field>
           <mat-label>gitlab location</mat-label>
@@ -18,15 +18,30 @@
         <mat-form-field>
           <mat-label>accessToken</mat-label>
           <input matInput type="password" placeholder="access token" formControlName="accessToken" name="accessToken"
-            required>
+            autocomplete="off" required>
         </mat-form-field>
       </div>
-      <!-- <div class="field">
+      <div class="field">
+        <h4>select namespace</h4>
         <mat-form-field>
-          <mat-label>namespace</mat-label>
-          <input matInput placeholder="namespace" formControlName="namespace" name="namespace" required>
+          <mat-label>select namespace</mat-label>
+          <mat-select #selected formControlName="namespaceSelect" [formControl]="namespaceControl"
+            (selectionChange)="onSelection(selected.value)">
+            <mat-option *ngFor="let name of names" [value]="name">
+              {{ name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="namespaceControl.hasError('required')">Please choose a namespace</mat-error>
+          <p>You selected: {{selected.value}}</p>
         </mat-form-field>
-      </div> -->
+      </div>
+      <div class="field">
+        <h4>input namespace</h4>
+        <mat-form-field>
+          <mat-label>input namespace</mat-label>
+          <input matInput placeholder="{{selected.value}}" formControlName="namespace" name="namespace" required>
+        </mat-form-field>
+      </div>
     </mat-card-content>
     <mat-card-actions>
       <div class="field">

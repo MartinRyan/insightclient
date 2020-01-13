@@ -25,13 +25,13 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     private zone: NgZone) { }
 
   ngOnInit() {
-    // this.fetchdata();
-    this.fetchNamespaces();
+    this.fetchdata();
+    // this.fetchNamespaces();
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        // this.fetchdata();
-        this.fetchNamespaces();
+        this.fetchdata();
+        // this.fetchNamespaces();
       }, 60000);
     });
   }

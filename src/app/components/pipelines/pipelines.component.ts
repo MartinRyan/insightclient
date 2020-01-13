@@ -42,13 +42,13 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     private iconReg: SvgIconRegistryService) { }
 
   ngOnInit() {
-    // this.fetchdata();
-    this.fetchNamespaces();
+    this.fetchdata();
+    // this.fetchNamespaces();
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        // this.fetchdata();
-        this.fetchNamespaces();
+        this.fetchdata();
+        // this.fetchNamespaces();
       }, 80000);
     });
   }

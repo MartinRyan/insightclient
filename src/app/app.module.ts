@@ -41,6 +41,7 @@ import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
 import { NotificationService } from './services/notification/notification.service';
 import { SettingsService } from './services/settings/settings.service';
 import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -79,6 +80,7 @@ import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
     MatRadioModule,
     MatTableModule,
     MatPaginatorModule,
+    MatSelectModule,
     MatSortModule,
     GraphQLModule,
     HttpClientModule,

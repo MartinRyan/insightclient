@@ -1,9 +1,14 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, OnChanges, Output,
   SimpleChanges, SimpleChange } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { NotificationService } from './../../services/notification/notification.service';
 import { SettingsService } from './../../services/settings/settings.service';
+import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
+export interface Brand {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-settings',
@@ -15,8 +20,20 @@ export class SettingsComponent implements OnInit {
   // tslint:disable-next-line: variable-name
   private _isVisible: boolean;
   settingsForm: FormGroup;
+  public isLoading = false;
+  private subscriptions: Array<any> = [];
+  public namespaces: Array<any>;
+  public names: Array<string>;
+  namespaceControl = new FormControl('', [Validators.required]);
+  selectFormControl = new FormControl('', Validators.required);
+  displayInputNamespace = true;
 
-  constructor(private fb: FormBuilder, private settingsService: SettingsService, private notificationService: NotificationService) { }
+  constructor(
+    private fb: FormBuilder,
+    private settingsService: SettingsService,
+    private notificationService: NotificationService,
+    private api: GitlabApiService,
+    private spinner: NgxSpinnerService) { }
 
   @Output() isVisibleChange = new EventEmitter();
 
@@ -31,6 +48,7 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.fetchNamespaces();
     this.createForm();
   }
 
@@ -49,6 +67,42 @@ export class SettingsComponent implements OnInit {
       namespace: !!savedConfig ? savedConfig.namespace : '',
     });
   }
+
+  private fetchNamespaces() {
+    this.isLoading = true;
+    this.spinner.show();
+    console.log('');
+    console.log('fetching name spaces');
+    const names = [];
+    const ids = [];
+    const namespaceList = [];
+    const namespaces$ = this.api.namespaces.subscribe(namespaces => {
+      this.subscriptions.push(namespaces$);
+      if (namespaces.length > 0) {
+        namespaceList.push({
+          ...namespaces
+        });
+      }
+      for (const namespace of namespaces) {
+        names.push(namespace.name);
+        console.log('namespace.name ' + namespace.name);
+      }
+      this.names = names;
+      console.log('this.names ', this.names);
+    }, err => {
+      this.notificationService.activeNotification.next({ message: err.message });
+    });
+  }
+
+  onSelection(namespace) {
+    this.settingsForm.value.namespace = namespace;
+    this.settingsService.settings = this.settingsForm.value;
+    this.hide();
+    this.notificationService.activeNotification.next({
+        message: 'Please wait a few seconds...',
+        level: 'is-warning',
+      });
+    }
 
   onSubmit() {
     this.settingsService.settings = this.settingsForm.value;
