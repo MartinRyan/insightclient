@@ -6,6 +6,7 @@ import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service
 import { NotificationService } from './../../services/notification/notification.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SvgIconRegistryService } from 'angular-svg-icon';
+import { SettingsService } from './../../services/settings/settings.service';
 
 @Component({
   selector: 'app-pipelines',
@@ -36,19 +37,18 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
   constructor(
     private api: GitlabApiService,
+    private settingsService: SettingsService,
     private notificationService: NotificationService,
     private spinner: NgxSpinnerService,
     private zone: NgZone,
     private iconReg: SvgIconRegistryService) { }
 
   ngOnInit() {
-    this.fetchdata();
-    // this.fetchNamespaces();
+    this.settingsService.settings.isCrossProject === 'true' ? this.fetchNamespaces() : this.fetchdata();
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        this.fetchdata();
-        // this.fetchNamespaces();
+        this.settingsService.settings.isCrossProject === 'true' ? this.fetchNamespaces() : this.fetchdata();
       }, 80000);
     });
   }

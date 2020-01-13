@@ -26,7 +26,6 @@ export class SettingsComponent implements OnInit {
   public names: Array<string>;
   namespaceControl = new FormControl('', [Validators.required]);
   selectFormControl = new FormControl('', Validators.required);
-  displayInputNamespace = true;
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +55,7 @@ export class SettingsComponent implements OnInit {
     const savedConfig = this.settingsService.settings;
     this.settingsForm = this.fb.group({
       isGitlabDotCom: [
-        !!savedConfig ? savedConfig.isGitlabDotCom : true,
+        !!savedConfig ? savedConfig.isGitlabDotCom : false,
         Validators.required,
       ],
       gitlabAddress: !!savedConfig ? savedConfig.gitlabAddress : '',
@@ -65,6 +64,10 @@ export class SettingsComponent implements OnInit {
         Validators.required,
       ],
       namespace: !!savedConfig ? savedConfig.namespace : '',
+      isCrossProject: [
+        !!savedConfig ? savedConfig.isCrossProject : false,
+        Validators.required,
+      ]
     });
   }
 
@@ -88,7 +91,6 @@ export class SettingsComponent implements OnInit {
         console.log('namespace.name ' + namespace.name);
       }
       this.names = names;
-      console.log('this.names ', this.names);
     }, err => {
       this.notificationService.activeNotification.next({ message: err.message });
     });

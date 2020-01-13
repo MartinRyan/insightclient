@@ -3,4 +3,5 @@ export interface Settings {
   gitlabAddress?: string;
   isGitlabDotCom: 'true' | 'false';
   namespace?: string;
+  isCrossProject?: 'true' | 'false';
 }

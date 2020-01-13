@@ -25,13 +25,11 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     private zone: NgZone) { }
 
   ngOnInit() {
-    this.fetchdata();
-    // this.fetchNamespaces();
+    this.settingsService.settings.isCrossProject === 'true' ? this.fetchNamespaces() : this.fetchdata();
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        this.fetchdata();
-        // this.fetchNamespaces();
+        this.settingsService.settings.isCrossProject === 'true' ? this.fetchNamespaces() : this.fetchdata();
       }, 60000);
     });
   }
