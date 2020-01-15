@@ -24,8 +24,9 @@ export class SettingsComponent implements OnInit {
   private subscriptions: Array<any> = [];
   public namespaces: Array<any>;
   public names: Array<string>;
+  namespaceSelectControl = new FormControl('', [Validators.required]);
   namespaceControl = new FormControl('', [Validators.required]);
-  selectFormControl = new FormControl('', Validators.required);
+  // selectFormControl = new FormControl('', Validators.required);
 
   constructor(
     private fb: FormBuilder,

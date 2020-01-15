@@ -49,6 +49,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     const mergeReqs$ = this.api.mergeRequests.subscribe(
       mergeRequests => {
         this.subscriptions.push(mergeReqs$);
+        if (mergeRequests.length > 0 ) {
         mergeRequests.forEach(mergeRequest => {
           const project$ = this.api
             .fetchProject(mergeRequest.project_id)
@@ -82,6 +83,9 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
               }
             });
         });
+      } else {
+        console.log('fetching merge requests length zero ' + mergeRequests.length);
+      }
       },
       err => {
         this.notificationService.activeNotification.next({ message: err.message });
@@ -145,6 +149,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     const mergeReqs$ = this.api.mergeRequests.subscribe(
       mergeRequests => {
         this.subscriptions.push(mergeReqs$);
+        // if (mergeRequests.length > 0 ) {
         mergeRequests.forEach(mergeRequest => {
           const project$ = this.api
             .projectByID(mergeRequest.project_id)
@@ -181,6 +186,9 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
                 });
             });
         });
+      // } else {
+      //   console.log('fetching merge requests length zero ' + mergeRequests.length);
+      // }
       },
       err => {
         this.notificationService.activeNotification.next({ message: err.message });

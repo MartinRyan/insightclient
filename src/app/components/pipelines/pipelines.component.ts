@@ -188,6 +188,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                   }
                 });
             });
+          } else {
+            console.log('fetching pipelines length zero ' + pipelines.length);
           }
         }, err => {
           this.notificationService.activeNotification.next({ message: err.message });

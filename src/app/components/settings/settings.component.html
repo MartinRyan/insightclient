@@ -27,25 +27,26 @@
             autocomplete="off" required>
         </mat-form-field>
       </div>
-      <div class="field">
+      <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false'">
         <h4>select namespace</h4>
         <mat-form-field>
           <mat-label>select namespace</mat-label>
-          <mat-select #selected formControlName="namespaceSelect" [formControl]="namespaceControl"
+          <mat-select optional #selected [formControl]="namespaceSelectControl"
             (selectionChange)="onSelection(selected.value)">
             <mat-option *ngFor="let name of names" [value]="name">
               {{ name }}
             </mat-option>
           </mat-select>
-          <mat-error *ngIf="namespaceControl.hasError('required')">Please choose a namespace</mat-error>
-          <p>You selected: {{selected.value}}</p>
+          <!-- <mat-error *ngIf="namespaceSelectControl.hasError('required')">Please choose a namespace</mat-error> -->
         </mat-form-field>
+        <p *ngIf="selected.value">You selected: {{selected.value}}</p>
       </div>
-      <div class="field">
+      <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false'">
         <h4>input namespace</h4>
         <mat-form-field>
           <mat-label>input namespace</mat-label>
-          <input matInput placeholder="{{selected.value}}" formControlName="namespace" name="namespace" required>
+          <input matInput formControlName="namespace" name="namespace" optional>
+          <!-- <mat-error *ngIf="namespaceControl.hasError('required')">Please input a namespace</mat-error> -->
         </mat-form-field>
       </div>
     </mat-card-content>
