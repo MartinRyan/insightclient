@@ -1,0 +1,61 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Settings</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
+    <mat-card-content class="content">
+      <mat-radio-group aria-label="is gitlab.com" ngDefaultControl formControlName="isGitlabDotCom">
+        <mat-radio-button class="field" value="true">gitlab.com</mat-radio-button>
+        <mat-radio-button class="field" value="false">self hosted</mat-radio-button>
+      </mat-radio-group>
+      <div *ngIf="settingsForm.value.isGitlabDotCom === 'false'" class="field">
+        <mat-form-field>
+          <mat-label>gitlab location</mat-label>
+          <input matInput placeholder="gitlab location" formControlName="gitlabAddress" name="gitlabAddress" required>
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <mat-radio-group aria-label="is cross project"  formControlName="isCrossProject">
+            <mat-radio-button class="field" value="true">is cross project</mat-radio-button>
+            <mat-radio-button class="field" value="false">single project</mat-radio-button>
+          </mat-radio-group>
+      </div>
+      <div class="field">
+        <mat-form-field>
+          <mat-label>accessToken</mat-label>
+          <input matInput type="password" placeholder="access token" formControlName="accessToken" name="accessToken"
+            autocomplete="off" required>
+        </mat-form-field>
+      </div>
+      <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false'">
+        <h4>select namespace</h4>
+        <mat-form-field>
+          <mat-label>select namespace</mat-label>
+          <mat-select optional #selected [formControl]="namespaceSelectControl"
+            (selectionChange)="onSelection(selected.value)">
+            <mat-option *ngFor="let name of names" [value]="name">
+              {{ name }}
+            </mat-option>
+          </mat-select>
+          <!-- <mat-error *ngIf="namespaceSelectControl.hasError('required')">Please choose a namespace</mat-error> -->
+        </mat-form-field>
+        <p *ngIf="selected.value">You selected: {{selected.value}}</p>
+      </div>
+      <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false'">
+        <h4>input namespace</h4>
+        <mat-form-field>
+          <mat-label>input namespace</mat-label>
+          <input matInput formControlName="namespace" name="namespace" optional>
+          <!-- <mat-error *ngIf="namespaceControl.hasError('required')">Please input a namespace</mat-error> -->
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="field">
+        <div class="button-wrapper">
+          <button mat-flat-button color="primary">save</button>
+        </div>
+      </div>
+    </mat-card-actions>
+  </form>
+</mat-card>
