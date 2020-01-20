@@ -26,7 +26,6 @@ export class SettingsComponent implements OnInit {
   public names: Array<string>;
   namespaceSelectControl = new FormControl('', [Validators.required]);
   namespaceControl = new FormControl('', [Validators.required]);
-  // selectFormControl = new FormControl('', Validators.required);
 
   constructor(
     private fb: FormBuilder,
@@ -55,20 +54,11 @@ export class SettingsComponent implements OnInit {
   private createForm() {
     const savedConfig = this.settingsService.settings;
     this.settingsForm = this.fb.group({
-      isGitlabDotCom: [
-        !!savedConfig ? savedConfig.isGitlabDotCom : false,
-        Validators.required,
-      ],
+      isGitlabDotCom: [ !!savedConfig ? savedConfig.isGitlabDotCom : false, Validators.required ],
       gitlabAddress: !!savedConfig ? savedConfig.gitlabAddress : '',
-      accessToken: [
-        !!savedConfig ? savedConfig.accessToken : '',
-        Validators.required,
-      ],
+      accessToken: [ !!savedConfig ? savedConfig.accessToken : '', Validators.required ],
       namespace: !!savedConfig ? savedConfig.namespace : '',
-      isCrossProject: [
-        !!savedConfig ? savedConfig.isCrossProject : false,
-        Validators.required,
-      ]
+      isCrossProject: [ !!savedConfig ? savedConfig.isCrossProject : false, Validators.required ]
     });
   }
 
@@ -90,6 +80,7 @@ export class SettingsComponent implements OnInit {
       for (const namespace of namespaces) {
         names.push(namespace.name);
         console.log('namespace.name ' + namespace.name);
+        console.log('namespace.id ' + namespace.id);
       }
       this.names = names;
     }, err => {
