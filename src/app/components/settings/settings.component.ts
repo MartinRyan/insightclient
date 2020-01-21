@@ -25,9 +25,11 @@ export class SettingsComponent implements OnInit {
   public namespaces: Array<any>;
   public names: Array<any>;
   public ids: Array<number>;
+  public subgroups: Array<any>;
   namespaceSelectControl = new FormControl('', [Validators.required]);
   namespaceControl = new FormControl('', [Validators.required]);
 
+  subgroupSelectControl = new FormControl('');
   constructor(
     private fb: FormBuilder,
     private settingsService: SettingsService,
@@ -59,6 +61,7 @@ export class SettingsComponent implements OnInit {
       gitlabAddress: !!savedConfig ? savedConfig.gitlabAddress : '',
       accessToken: [ !!savedConfig ? savedConfig.accessToken : '', Validators.required ],
       namespace: !!savedConfig ? savedConfig.namespace : '',
+      subgroup: !!savedConfig ? savedConfig.subgroup : '',
       isCrossProject: [ !!savedConfig ? savedConfig.isCrossProject : false, Validators.required ]
     });
   }
@@ -69,7 +72,6 @@ export class SettingsComponent implements OnInit {
     console.log('');
     console.log('fetching name spaces');
     const names = [];
-    const ids = [];
     const namespaceList = [];
     const namespaces$ = this.api.namespaces.subscribe(namespaces => {
       this.subscriptions.push(namespaces$);
@@ -79,28 +81,43 @@ export class SettingsComponent implements OnInit {
         });
       }
       for (const namespace of namespaces) {
-        names.push(namespace); // push object
-        // ids.push(namespace.id);
+        names.push(namespace);
         console.log('namespace.name ' + namespace.name);
         console.log('namespace.id ' + namespace.id);
       }
       this.names = names;
-      // this.ids = ids;
-    }, err => {
+    },
+    err => {
       this.notificationService.activeNotification.next({ message: err.message });
-    });
+  });
+}
+
+  private fetchSubgroupsyGroupID(id: any) {
+    console.log('fetching subgroups');
+    const subgroupsArray: any = [];
+    this.api.subgroupsByGroupID(id)
+      .subscribe(subgroups => {
+        for (const s of (subgroups as any)) {
+          console.log('subgroup ', s);
+          subgroupsArray.push(s);
+        }
+        this.subgroups = subgroupsArray;
+      }, err => {
+        this.notificationService.activeNotification.next({ message: err.message });
+      });
   }
 
-  onSelection(value) {
-    console.log('onSelection value id ', value.id);
-    console.log('onSelection value name ', value.name);
-    // this.settingsForm.value.namespace = value.name;
-    // this.settingsService.settings = this.settingsForm.value.name;
-    // this.hide();
-    // this.notificationService.activeNotification.next({
-    //     message: 'Please wait a few seconds...',
-    //     level: 'is-warning',
-    //   });
+  onSelection(namespaceObject) {
+    console.log('onSelection namespaceObject id ', namespaceObject.id);
+    console.log('onSelection namespaceObject name ', namespaceObject.name);
+    this.settingsForm.value.namespace = namespaceObject.name;
+    this.settingsService.settings = this.settingsForm.value;
+    this.fetchSubgroupsyGroupID(namespaceObject.id);
+    this.hide();
+    this.notificationService.activeNotification.next({
+        message: 'Please wait a few seconds...',
+        level: 'is-warning',
+      });
     }
 
   onSubmit() {

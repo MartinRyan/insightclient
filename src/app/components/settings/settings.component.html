@@ -33,20 +33,33 @@
           <mat-label>select namespace</mat-label>
           <mat-select optional #selected [formControl]="namespaceSelectControl"
             (selectionChange)="onSelection(selected.value)">
-            <mat-option *ngFor="let nm of names" [value]="nm.id">
+            <mat-option *ngFor="let nm of names" [value]="nm">
               {{ nm.name }}
             </mat-option>
           </mat-select>
-          <!-- <mat-error *ngIf="namespaceSelectControl.hasError('required')">Please choose a namespace</mat-error> -->
         </mat-form-field>
-        <p *ngIf="selected.value">You selected: {{selected.value}}</p>
+        <p *ngIf="selected.value">You selected: {{selected.value.id}}</p>
       </div>
+
+      <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false' && subgroups" >
+        <h4>select subgroup</h4>
+        <mat-form-field>
+          <mat-label>select subgroup</mat-label>
+          <mat-select optional #group [formControl]="subgroupSelectControl"
+            (selectionChange)="onSelection(group.value)">
+            <mat-option *ngFor="let group of subgroups" [value]="group">
+              {{ group.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="group.value">You selected: {{group.value.name}}</p>
+      </div>
+
       <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false'">
         <h4>input namespace</h4>
         <mat-form-field>
           <mat-label>input namespace</mat-label>
           <input matInput formControlName="namespace" name="namespace" optional>
-          <!-- <mat-error *ngIf="namespaceControl.hasError('required')">Please input a namespace</mat-error> -->
         </mat-form-field>
       </div>
     </mat-card-content>
