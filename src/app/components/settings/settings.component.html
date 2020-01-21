@@ -33,8 +33,8 @@
           <mat-label>select namespace</mat-label>
           <mat-select optional #selected [formControl]="namespaceSelectControl"
             (selectionChange)="onSelection(selected.value)">
-            <mat-option *ngFor="let name of names" [value]="name">
-              {{ name }}
+            <mat-option *ngFor="let nm of names" [value]="nm.id">
+              {{ nm.name }}
             </mat-option>
           </mat-select>
           <!-- <mat-error *ngIf="namespaceSelectControl.hasError('required')">Please choose a namespace</mat-error> -->

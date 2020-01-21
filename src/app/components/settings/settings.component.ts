@@ -23,7 +23,8 @@ export class SettingsComponent implements OnInit {
   public isLoading = false;
   private subscriptions: Array<any> = [];
   public namespaces: Array<any>;
-  public names: Array<string>;
+  public names: Array<any>;
+  public ids: Array<number>;
   namespaceSelectControl = new FormControl('', [Validators.required]);
   namespaceControl = new FormControl('', [Validators.required]);
 
@@ -78,24 +79,28 @@ export class SettingsComponent implements OnInit {
         });
       }
       for (const namespace of namespaces) {
-        names.push(namespace.name);
+        names.push(namespace); // push object
+        // ids.push(namespace.id);
         console.log('namespace.name ' + namespace.name);
         console.log('namespace.id ' + namespace.id);
       }
       this.names = names;
+      // this.ids = ids;
     }, err => {
       this.notificationService.activeNotification.next({ message: err.message });
     });
   }
 
-  onSelection(namespace) {
-    this.settingsForm.value.namespace = namespace;
-    this.settingsService.settings = this.settingsForm.value;
-    this.hide();
-    this.notificationService.activeNotification.next({
-        message: 'Please wait a few seconds...',
-        level: 'is-warning',
-      });
+  onSelection(value) {
+    console.log('onSelection value id ', value.id);
+    console.log('onSelection value name ', value.name);
+    // this.settingsForm.value.namespace = value.name;
+    // this.settingsService.settings = this.settingsForm.value.name;
+    // this.hide();
+    // this.notificationService.activeNotification.next({
+    //     message: 'Please wait a few seconds...',
+    //     level: 'is-warning',
+    //   });
     }
 
   onSubmit() {

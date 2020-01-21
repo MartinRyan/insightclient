@@ -40,6 +40,20 @@ export class GitlabApiService {
       );
   }
 
+  get subgroups() {
+    return this.http
+    .get<any[]>(`namespaces`)
+    .pipe(
+      retryWhen(err => {
+        return err.pipe(
+          delay(5000),
+          take(3),
+          o => concat(o, throwError('Retries exceeded - fetch name spaces'))
+        );
+      })
+    );
+  }
+
   projectByID(id: any) {
     return this.http
     .get<any>(`projects/${id}`)
@@ -135,7 +149,7 @@ export class GitlabApiService {
       );
   }
 
-  projectsByGroupName(name: string) {
+  projectsByGroupName(name: any) {
     return this.http
     .get<any[]>(`groups?search=${name}/projects&order_by=last_activity_at&per_page=30`)
       .pipe(
