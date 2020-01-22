@@ -1,11 +1,12 @@
-import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
-import { compareDesc, differenceInDays, differenceInWeeks, differenceInMinutes, parseISO } from 'date-fns';
-import { each, isEmpty, uniqBy } from 'lodash';
+import { Component, EventEmitter, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
+import { SvgIconRegistryService } from 'angular-svg-icon';
+import { compareDesc, differenceInDays, parseISO } from 'date-fns';
+import { uniqBy } from 'lodash';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { max } from 'lodash';
 
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
 import { NotificationService } from './../../services/notification/notification.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { SvgIconRegistryService } from 'angular-svg-icon';
 import { SettingsService } from './../../services/settings/settings.service';
 
 @Component({
@@ -35,6 +36,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     uknown: { status: 'status_uknown', icon: '/assets/sprite_icons/status_success.svg', colour: '#ccc' }
   });
 
+  @Output() pipelineEvent: EventEmitter<boolean> = new EventEmitter();
+
   constructor(
     private api: GitlabApiService,
     private settingsService: SettingsService,
@@ -49,7 +52,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       setInterval(() => {
         this.clearSubscriptions();
         this.settingsService.settings.isCrossProject === 'true' ? this.fetchNamespaces() : this.fetchdata();
-      }, 80000);
+      }, 30000);
     });
   }
 
@@ -94,10 +97,17 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                     // }
                   });
               });
-            } else {
-              console.log('refreshing pipelines length zero ' + pipelines.length);
+              this.notificationService.announcePipelinesLength(pipelines.length);
+              this.notificationService.activateNotification({
+                message: 'pipelines loaded', level: 'is-success', pipelines: pipelines.length });
             }
           });
+      });
+      this.notificationService.announcePipelinesLength(this.pipelines.length);
+      this.notificationService.activateNotification({
+        message: 'no pipelines loaded',
+        level: 'is-danger', pipelines:
+        this.pipelines.length
       });
     }, err => {
       this.notificationService.activeNotification.next({ message: err.message });
@@ -183,13 +193,15 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                     ...pipelineDetails,
                     ...{ project },
                   });
-                  // this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
+                  this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
                   this.consolidateData(this.pipelines);
+                  // this.notificationService.announcePipelinesLength(max(pipelines));
                   }
                 });
             });
           } else {
-            console.log('fetching pipelines length zero ' + pipelines.length);
+            // this.notificationService.announcePipelinesLength(max(pipelines));
+            this.spinner.hide();
           }
         }, err => {
           this.notificationService.activeNotification.next({ message: err.message });
@@ -201,6 +213,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     const uniquePipelines = uniqBy(pipelines, item => item.id);
     uniquePipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
     this.pipelines = uniquePipelines;
+    this.notificationService.announcePipelinesLength(max(pipelines));
 
   }
 

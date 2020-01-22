@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, OnChanges, Output,
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, OnChanges, OnDestroy, Output,
   SimpleChanges, SimpleChange } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NotificationService } from './../../services/notification/notification.service';
 import { SettingsService } from './../../services/settings/settings.service';
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
+import { Subscription } from 'rxjs';
 export interface Brand {
   value: string;
   viewValue: string;
@@ -26,16 +27,29 @@ export class SettingsComponent implements OnInit {
   public names: Array<any>;
   public ids: Array<number>;
   public subgroups: Array<any>;
+  pipelines: number;
+  confirmed = false;
+  announced = false;
+  subscription: Subscription;
   namespaceSelectControl = new FormControl('', [Validators.required]);
   namespaceControl = new FormControl('', [Validators.required]);
-
   subgroupSelectControl = new FormControl('');
+
+
   constructor(
     private fb: FormBuilder,
     private settingsService: SettingsService,
     private notificationService: NotificationService,
     private api: GitlabApiService,
-    private spinner: NgxSpinnerService) { }
+    private spinner: NgxSpinnerService) {
+    const pipelines$ = notificationService.pipeLinesNotification$.subscribe(pipelines => {
+      this.subscriptions.push(pipelines$);
+      console.log('settingsComponent pipelines: ', pipelines);
+      this.pipelines = pipelines;
+      this.announced = true;
+      this.confirmed = false;
+      });
+     }
 
   @Output() isVisibleChange = new EventEmitter();
 
@@ -135,5 +149,16 @@ export class SettingsComponent implements OnInit {
 
   onCancel() {
     this.isVisible = false;
+  }
+
+  onDestroy() {
+    // prevent memory leak when component destroyed
+    this.clearSubscriptions();
+  }
+
+  private clearSubscriptions() {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { Settings } from './../../components/settings/settings.interface';
 
 @Injectable({

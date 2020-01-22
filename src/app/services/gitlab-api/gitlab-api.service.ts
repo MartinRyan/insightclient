@@ -19,7 +19,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch merge requests'))
           );
         })
@@ -33,7 +33,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch name spaces'))
           );
         })
@@ -47,7 +47,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch subgroups'))
           );
         })
@@ -61,7 +61,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch groups'))
           );
         })
@@ -84,7 +84,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch projects'))
           );
         })
@@ -106,7 +106,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch projects'))
           );
         })
@@ -128,7 +128,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch projects'))
           );
         })
@@ -142,7 +142,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch projects'))
           );
         })
@@ -156,7 +156,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch projects'))
           );
         })
@@ -171,7 +171,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded -  fetch pipelines'))
           );
         })
@@ -186,7 +186,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded -  fetch pipelines'))
           );
         })
@@ -202,7 +202,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch pipeline by reference'))
           );
         })
@@ -217,7 +217,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch pipeline'))
           );
         })
@@ -232,7 +232,7 @@ export class GitlabApiService {
         retryWhen(err => {
           return err.pipe(
             delay(5000),
-            take(3),
+            take(1),
             o => concat(o, throwError('Retries exceeded - fetch pipeline'))
           );
         })
@@ -245,7 +245,7 @@ export class GitlabApiService {
       retryWhen(err => {
         return err.pipe(
           delay(5000),
-          take(3),
+          take(1),
           o => concat(o, throwError('Retries exceeded - fetch project'))
         );
       })
