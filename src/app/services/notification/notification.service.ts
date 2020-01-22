@@ -1,14 +1,33 @@
 import { Injectable } from '@angular/core';
-import { of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-  public activeNotification = new Subject<{ message: string; level?: 'is-danger' | 'is-warning' | 'is-success'; pipelines?: number }>();
+  public activeNotification = new Subject<{
+    message: string;
+    level?: 'is-danger' | 'is-warning' | 'is-success';
+    pipelines?: number;
+    mergerequests?: number;
+  }>();
   public activeNotification$ = this.activeNotification.asObservable();
-  private pipeLinesNotificationSource = new Subject<number>();
-  public pipeLinesNotification$ = this.pipeLinesNotificationSource.asObservable();
+
+  public pipelinesNotificationSource = new Subject<{
+    message: string;
+    level?: 'is-danger' | 'is-warning' | 'is-success';
+    pipelines?: number;
+  }>();
+
+  public pipeLinesNotification$ = this.pipelinesNotificationSource.asObservable();
+
+  public mergeReqNotificationSource = new Subject<{
+    message: string;
+    level?: 'is-danger' | 'is-warning' | 'is-success';
+    mergerequests?: number;
+  }>();
+
+  public mergeReqNotification$ = this.mergeReqNotificationSource.asObservable();
 
   constructor() {}
 
@@ -17,8 +36,13 @@ export class NotificationService {
     this.activeNotification.next(notification);
   }
 
-  announcePipelinesLength(length: number) {
-    console.log('notificationService announcePipelinesLength: ', length);
-    this.pipeLinesNotificationSource.next(length);
+  announcePipelines(notification: any) {
+    console.log('notificationService announcePipelines: ', notification);
+    this.pipelinesNotificationSource.next(notification);
+  }
+
+  announceMergeRequests(notification: any) {
+    console.log('notificationService announceMergeRequests: ', notification);
+    this.mergeReqNotificationSource.next(notification);
   }
 }

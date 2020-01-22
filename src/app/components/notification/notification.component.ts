@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NotificationService } from './../../services/notification/notification.service';
-import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
+
+import { NotificationService } from './../../services/notification/notification.service';
 
 @Component({
   selector: 'app-notification',
@@ -16,16 +16,29 @@ export class NotificationComponent implements OnInit {
   } = null;
   private subscriptions: Array<any> = [];
 
-  constructor(private notificationService: NotificationService, private spinner: NgxSpinnerService) { }
+  constructor(
+    private notificationService: NotificationService,
+    private spinner: NgxSpinnerService
+  ) {}
 
   ngOnInit() {
-    const notifications$ = this.notificationService.activeNotification.subscribe(notification => {
-      this.subscriptions.push(notifications$);
-      this.notification = notification;
-      this.spinner.hide();
-      console.log('notification component: ', notification.message, ' notif.pipelines : ', notification.pipelines,
-      ' notification.level: ', notification.level );
-    });
+    const notifications$ = this.notificationService.activeNotification.subscribe(
+      notification => {
+        this.subscriptions.push(notifications$);
+        this.notification = notification;
+        this.spinner.hide();
+        console.log(
+          'notification component: ',
+          notification.message,
+          ' notification.pipelines : ',
+          notification.pipelines,
+          ' notification.mergerequests ',
+          notification.mergerequests,
+          ' notification.level: ',
+          notification.level
+        );
+      }
+    );
   }
 
   onDestroy() {
@@ -38,4 +51,3 @@ export class NotificationComponent implements OnInit {
     });
   }
 }
-

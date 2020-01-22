@@ -97,15 +97,13 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                     // }
                   });
               });
-              // this.notificationService.announcePipelinesLength(pipelines.length);
-              this.notificationService.activateNotification({
+              this.notificationService.announcePipelines({
                 message: 'pipelines loaded', level: 'is-success', pipelines: pipelines.length
               });
             } else {
               this.isLoading = false;
               this.spinner.hide();
-              // this.notificationService.announcePipelinesLength(this.pipelines.length);
-              this.notificationService.activateNotification({
+              this.notificationService.announcePipelines({
               message: 'no pipelines loaded',
               level: 'is-danger',
               pipelines: 0
@@ -205,12 +203,16 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                   });
                   this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
                   this.consolidateData(this.pipelines);
-                  // this.notificationService.announcePipelinesLength(max(pipelines));
+                  // this.notificationService.announcePipelines({
+                  //   message: 'pipelines loaded', level: 'is-success', pipelines: pipelines.length
+                  // });
                   }
                 });
             });
           } else {
-            // this.notificationService.announcePipelinesLength(max(pipelines));
+            // this.notificationService.announcePipelines({
+            //   message: 'pipelines loaded', level: 'is-success', pipelines: pipelines.length
+            // });
             // this.spinner.hide();
           }
         }, err => {
@@ -225,7 +227,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     const uniquePipelines = uniqBy(pipelines, item => item.id);
     uniquePipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
     this.pipelines = uniquePipelines;
-    // this.notificationService.announcePipelinesLength(max(pipelines));
 
   }
 

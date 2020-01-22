@@ -1,10 +1,16 @@
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import {
+  compareDesc,
+  differenceInDays,
+  differenceInWeeks,
+  parseISO
+} from 'date-fns';
+import { uniqBy } from 'lodash';
+import { NgxSpinnerService } from 'ngx-spinner';
+
+import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
 import { NotificationService } from './../../services/notification/notification.service';
 import { SettingsService } from './../../services/settings/settings.service';
-import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { compareDesc, differenceInDays, differenceInWeeks, parseISO } from 'date-fns';
-import { uniqBy } from 'lodash';
 
 @Component({
   selector: 'app-merge-requests',
@@ -12,7 +18,6 @@ import { uniqBy } from 'lodash';
   styleUrls: ['./merge-requests.component.styl']
 })
 export class MergeRequestsComponent implements OnInit, OnDestroy {
-
   public mergeRequests: Array<any>;
   public isLoading = false;
   private subscriptions: Array<any> = [];
@@ -22,14 +27,19 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private notificationService: NotificationService,
     private spinner: NgxSpinnerService,
-    private zone: NgZone) { }
+    private zone: NgZone
+  ) {}
 
   ngOnInit() {
-    this.settingsService.settings.isCrossProject === 'true' ? this.fetchNamespaces() : this.fetchdata();
+    this.settingsService.settings.isCrossProject === 'true'
+      ? this.fetchNamespaces()
+      : this.fetchdata();
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        this.settingsService.settings.isCrossProject === 'true' ? this.fetchNamespaces() : this.fetchdata();
+        this.settingsService.settings.isCrossProject === 'true'
+          ? this.fetchNamespaces()
+          : this.fetchdata();
       }, 60000);
     });
   }
@@ -49,47 +59,61 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     const mergeReqs$ = this.api.mergeRequests.subscribe(
       mergeRequests => {
         this.subscriptions.push(mergeReqs$);
-        if (mergeRequests.length > 0 ) {
-        mergeRequests.forEach(mergeRequest => {
-          const project$ = this.api
-            .fetchProject(mergeRequest.project_id)
-            .subscribe(project => {
-              this.subscriptions.push(project$);
-              if (
-                project[key].name ===
-                this.settingsService.settings.namespace
-              ) {
-                const lastPipeline$ = this.api
-                  .fetchLastPipelineByRef(
-                    project.id,
-                    mergeRequest.source_branch
-                  )
-                  .subscribe(lastPipeline => {
-                    this.notificationService.activeNotification.next(null);
-                    this.isLoading = false;
-                    this.spinner.hide();
-                    this.subscriptions.push(lastPipeline$);
-                    this.mergeRequests.push({
-                      ...mergeRequest,
-                      ...{ project },
-                      ...{
-                        ci_status:
-                          lastPipeline.length > 0
-                            ? lastPipeline[0].status
-                            : 'unknown',
-                      },
+        if (mergeRequests.length > 0) {
+          mergeRequests.forEach(mergeRequest => {
+            const project$ = this.api
+              .fetchProject(mergeRequest.project_id)
+              .subscribe(project => {
+                this.subscriptions.push(project$);
+                if (
+                  project[key].name === this.settingsService.settings.namespace
+                ) {
+                  const lastPipeline$ = this.api
+                    .fetchLastPipelineByRef(
+                      project.id,
+                      mergeRequest.source_branch
+                    )
+                    .subscribe(lastPipeline => {
+                      // this.notificationService.activeNotification.next(null);
+                      this.isLoading = false;
+                      this.spinner.hide();
+                      this.subscriptions.push(lastPipeline$);
+                      this.mergeRequests.push({
+                        ...mergeRequest,
+                        ...{ project },
+                        ...{
+                          ci_status:
+                            lastPipeline.length > 0
+                              ? lastPipeline[0].status
+                              : 'unknown'
+                        }
+                      });
+                      this.notificationService.announceMergeRequests({
+                        message: 'merge requests loaded',
+                        level: 'is-success',
+                        mergerequests: this.mergeRequests.length
+                      });
                     });
-                  });
-              }
-            });
-        });
-      } else {
-        console.log('fetching merge requests length zero ' + mergeRequests.length);
-        this.spinner.hide();
-      }
+                }
+              });
+          });
+        } else {
+          console.log(
+            'fetching merge requests length zero ' + this.mergeRequests.length
+          );
+          this.spinner.hide();
+          this.isLoading = false;
+          this.notificationService.announceMergeRequests({
+            message: 'no merge requests loaded',
+            level: 'is-danger',
+            mergerequests: 0
+          });
+        }
       },
       err => {
-        this.notificationService.activeNotification.next({ message: err.message });
+        this.notificationService.activeNotification.next({
+          message: err.message
+        });
       }
     );
   }
@@ -103,23 +127,28 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     const names = [];
     const ids = [];
     const namespaceObjects = [];
-    const namespaces$ = this.api.namespaces.subscribe(namespaces => {
-      this.subscriptions.push(namespaces$);
-      if (namespaces.length > 0) {
-        namespaceObjects.push({
-          ...namespaces
+    const namespaces$ = this.api.namespaces.subscribe(
+      namespaces => {
+        this.subscriptions.push(namespaces$);
+        if (namespaces.length > 0) {
+          namespaceObjects.push({
+            ...namespaces
+          });
+        }
+        console.log('namespaces ' + namespaces);
+        for (const namespace of namespaces) {
+          names.push(namespace.name);
+          console.log('namespace.id ' + namespace.id);
+          ids.push(namespace.id);
+        }
+        this.fetchProjectsByGroupID(ids);
+      },
+      err => {
+        this.notificationService.activeNotification.next({
+          message: err.message
         });
       }
-      console.log('namespaces ' + namespaces);
-      for (const namespace of namespaces) {
-        names.push(namespace.name);
-        console.log('namespace.id ' + namespace.id);
-        ids.push(namespace.id);
-      }
-      this.fetchProjectsByGroupID(ids);
-    }, err => {
-      this.notificationService.activeNotification.next({ message: err.message });
-    });
+    );
   }
 
   private fetchProjectsByGroupID(ids: Array<string>) {
@@ -127,9 +156,9 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     const projectsArray: any = [];
     for (const id of ids) {
       console.log('merge requests id -> ' + id);
-      this.api.projectsByGroupID(id)
-        .subscribe(projects => {
-          for (const p of (projects as any)) {
+      this.api.projectsByGroupID(id).subscribe(
+        projects => {
+          for (const p of projects as any) {
             // projectsArray.push(p);
             projectsArray.push({
               name: p.name,
@@ -137,9 +166,13 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
             });
           }
           this.fetchMergeRequests(projectsArray);
-        }, err => {
-          this.notificationService.activeNotification.next({ message: err.message });
-        });
+        },
+        err => {
+          this.notificationService.activeNotification.next({
+            message: err.message
+          });
+        }
+      );
     }
   }
 
@@ -150,50 +183,76 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     const mergeReqs$ = this.api.mergeRequests.subscribe(
       mergeRequests => {
         this.subscriptions.push(mergeReqs$);
-        if (mergeRequests.length > 0 ) {
-        mergeRequests.forEach(mergeRequest => {
-          const project$ = this.api
-            .projectByID(mergeRequest.project_id)
-            .subscribe(project => {
-              this.subscriptions.push(project$);
-              console.log('merge requests project id -> ' + project.id);
-              console.log('merge requests mergeRequest.source_branch -> ' + mergeRequest.source_branch);
-              const lastPipeline$ = this.api
-                .fetchLastPipelineByRef(
-                  project.id,
-                  mergeRequest.source_branch
-                )
-                .subscribe(lastPipeline => {
-                  this.notificationService.activeNotification.next(null);
-                  this.isLoading = false;
-                  this.spinner.hide();
-                  this.subscriptions.push(lastPipeline$);
-                  // only add the merge requests that have run in the last week
-                  // if (differenceInDays(new Date(mergeRequest[created]), new Date()) >= -7) {
-                  this.mergeRequests.push({
-                    ...mergeRequest,
-                    ...{ project },
-                    ...{
-                      ci_status:
-                        lastPipeline.length > 0
-                          ? lastPipeline[0].status
-                          : 'unknown',
-                    },
+        if (mergeRequests.length > 0) {
+          mergeRequests.forEach(mergeRequest => {
+            const project$ = this.api
+              .projectByID(mergeRequest.project_id)
+              .subscribe(project => {
+                this.subscriptions.push(project$);
+                console.log('merge requests project id -> ' + project.id);
+                console.log(
+                  'merge requests mergeRequest.source_branch -> ' +
+                    mergeRequest.source_branch
+                );
+                const lastPipeline$ = this.api
+                  .fetchLastPipelineByRef(
+                    project.id,
+                    mergeRequest.source_branch
+                  )
+                  .subscribe(lastPipeline => {
+                    this.notificationService.activeNotification.next(null);
+                    this.isLoading = false;
+                    this.spinner.hide();
+                    this.subscriptions.push(lastPipeline$);
+                    // only add the merge requests that have run in the last week
+                    // if (differenceInDays(new Date(mergeRequest[created]), new Date()) >= -7) {
+                    this.mergeRequests.push({
+                      ...mergeRequest,
+                      ...{ project },
+                      ...{
+                        ci_status:
+                          lastPipeline.length > 0
+                            ? lastPipeline[0].status
+                            : 'unknown'
+                      }
+                    });
+                    const tidyMergeRequests = uniqBy(
+                      this.mergeRequests,
+                      item => item.id
+                    );
+                    tidyMergeRequests.sort((o1, o2) =>
+                      compareDesc(
+                        parseISO(o1.updated_at),
+                        parseISO(o2.updated_at)
+                      )
+                    );
+                    this.mergeRequests = tidyMergeRequests;
+                    this.notificationService.announceMergeRequests({
+                      message: 'merge requests loaded',
+                      level: 'is-success',
+                      mergerequests: this.mergeRequests.length
+                    });
+                    // }
                   });
-                  const tidyMergeRequests = uniqBy(this.mergeRequests, item => item.id);
-                  tidyMergeRequests.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
-                  this.mergeRequests = tidyMergeRequests;
-                // }
-                });
-            });
-        });
-      } else {
-        console.log('fetching merge requests length zero ' + mergeRequests.length);
-        this.spinner.hide();
-      }
+              });
+          });
+        } else {
+          console.log(
+            'fetching merge requests length zero ' + this.mergeRequests.length
+          );
+          this.spinner.hide();
+          this.isLoading = false;
+          this.notificationService.announcePipelines({
+            message: 'no merge requests loaded',
+            level: 'is-danger',
+            mergerequests: 0
+          });
+        }
       },
       err => {
-        this.notificationService.activeNotification.next({ message: err.message });
+        this.notificationService.activeNotification.next({
+          message: err.message
+        });
       }
     );
   }
