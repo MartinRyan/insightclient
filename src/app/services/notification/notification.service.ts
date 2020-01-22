@@ -18,7 +18,6 @@ export class NotificationService {
   }
 
   announcePipelinesLength(length: number) {
-    // change the pipeline observable value here
     console.log('notificationService announcePipelinesLength: ', length);
     this.pipeLinesNotificationSource.next(length);
   }

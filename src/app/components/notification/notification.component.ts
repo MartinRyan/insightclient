@@ -19,11 +19,12 @@ export class NotificationComponent implements OnInit {
   constructor(private notificationService: NotificationService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-    const notifications$ = this.notificationService.activeNotification.subscribe(notif => {
+    const notifications$ = this.notificationService.activeNotification.subscribe(notification => {
       this.subscriptions.push(notifications$);
-      this.notification = notif;
+      this.notification = notification;
       this.spinner.hide();
-      console.log('notification component: ', notif.message, ' : ', notif.pipelines );
+      console.log('notification component: ', notification.message, ' notif.pipelines : ', notification.pipelines,
+      ' notification.level: ', notification.level );
     });
   }
 

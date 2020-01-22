@@ -83,7 +83,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                 const pipeline$ = this.api
                   .fetchPipeline(project.id, pipeline.id)
                   .subscribe(pipelineDetails => {
-                    this.notificationService.activeNotification.next(null);
+                    // this.notificationService.activeNotification.next(null);
                     this.isLoading = false;
                     this.spinner.hide();
                     this.subscriptions.push(pipeline$);
@@ -97,19 +97,25 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                     // }
                   });
               });
-              this.notificationService.announcePipelinesLength(pipelines.length);
+              // this.notificationService.announcePipelinesLength(pipelines.length);
               this.notificationService.activateNotification({
-                message: 'pipelines loaded', level: 'is-success', pipelines: pipelines.length });
+                message: 'pipelines loaded', level: 'is-success', pipelines: pipelines.length
+              });
+            } else {
+              this.isLoading = false;
+              this.spinner.hide();
+              // this.notificationService.announcePipelinesLength(this.pipelines.length);
+              this.notificationService.activateNotification({
+              message: 'no pipelines loaded',
+              level: 'is-danger',
+              pipelines: 0
+            });
             }
           });
       });
-      this.notificationService.announcePipelinesLength(this.pipelines.length);
-      this.notificationService.activateNotification({
-        message: 'no pipelines loaded',
-        level: 'is-danger', pipelines:
-        this.pipelines.length
-      });
     }, err => {
+      this.isLoading = false;
+      this.spinner.hide();
       this.notificationService.activeNotification.next({ message: err.message });
     });
   }
@@ -138,6 +144,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       }
       this.fetchProjectsByGroupID(ids);
     }, err => {
+      this.isLoading = false;
+      this.spinner.hide();
       this.notificationService.activeNotification.next({ message: err.message });
     });
   }
@@ -159,6 +167,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
           const uniqueProjects: Array<any> = uniqBy(projectsArray, item => item.id);
           this.fetchPipelines(uniqueProjects);
         }, err => {
+          this.isLoading = false;
+          this.spinner.hide();
           this.notificationService.activeNotification.next({ message: err.message });
         });
     }
@@ -201,9 +211,11 @@ export class PipelinesComponent implements OnInit, OnDestroy {
             });
           } else {
             // this.notificationService.announcePipelinesLength(max(pipelines));
-            this.spinner.hide();
+            // this.spinner.hide();
           }
         }, err => {
+          this.isLoading = false;
+          this.spinner.hide();
           this.notificationService.activeNotification.next({ message: err.message });
         });
     });
@@ -213,7 +225,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     const uniquePipelines = uniqBy(pipelines, item => item.id);
     uniquePipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
     this.pipelines = uniquePipelines;
-    this.notificationService.announcePipelinesLength(max(pipelines));
+    // this.notificationService.announcePipelinesLength(max(pipelines));
 
   }
 
