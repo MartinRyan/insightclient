@@ -24,6 +24,9 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { DateFnsModule } from 'ngx-date-fns';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -42,6 +45,7 @@ import { NotificationService } from './services/notification/notification.servic
 import { SettingsService } from './services/settings/settings.service';
 import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -81,16 +85,21 @@ import { MatSelectModule } from '@angular/material/select';
     MatTableModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatSnackBarModule,
     MatSortModule,
     GraphQLModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     NgxSpinnerModule,
-    AngularSvgIconModule
+    AngularSvgIconModule,
+    MessagesModule,
+    MessageModule
   ],
   providers: [
     NotificationService,
+    MessagesModule,
+    MessageModule,
     SettingsService,
     GitlabApiService,
     HttpClientModule,

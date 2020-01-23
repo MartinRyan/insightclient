@@ -93,7 +93,7 @@ export class GitlabApiService {
     return (
       this.http
         // .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=100`)
-        .get<any[]>(`projects?e&order_by=last_activity_at&per_page=100`)
+        .get<any[]>(`projects?e&order_by=last_activity_at&per_page=30`)
         // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
         .pipe(
           map(projects => {
@@ -162,7 +162,7 @@ export class GitlabApiService {
   fetchPipelines(projectId: string) {
     // tslint:disable-next-line: no-console
     return this.http
-      .get<any[]>(`projects/${projectId}/pipelines?per_page=300`)
+      .get<any[]>(`projects/${projectId}/pipelines?per_page=30`)
       .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
@@ -174,7 +174,7 @@ export class GitlabApiService {
 
   fetchPipelinesAll() {
     // tslint:disable-next-line: no-console
-    return this.http.get<any[]>(`projects/pipelines?per_page=10`).pipe(
+    return this.http.get<any[]>(`projects/pipelines?per_page=30`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded -  fetch pipelines'))

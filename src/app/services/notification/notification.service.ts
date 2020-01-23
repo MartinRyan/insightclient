@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class NotificationService {
-  public activeNotification = new Subject<{
+   public activeNotification = new Subject<{
     message: string;
     level?: 'is-danger' | 'is-warning' | 'is-success';
     pipelines?: number;
@@ -13,7 +13,7 @@ export class NotificationService {
   }>();
   public activeNotification$ = this.activeNotification.asObservable();
 
-  public pipelinesNotificationSource = new Subject<{
+  private pipelinesNotificationSource = new Subject<{
     message: string;
     level?: 'is-danger' | 'is-warning' | 'is-success';
     pipelines?: number;
@@ -21,7 +21,7 @@ export class NotificationService {
 
   public pipeLinesNotification$ = this.pipelinesNotificationSource.asObservable();
 
-  public mergeReqNotificationSource = new Subject<{
+  private mergeReqNotificationSource = new Subject<{
     message: string;
     level?: 'is-danger' | 'is-warning' | 'is-success';
     mergerequests?: number;
@@ -32,17 +32,14 @@ export class NotificationService {
   constructor() {}
 
   activateNotification(notification: any) {
-    console.log('notificationService activateNotification: ', notification);
     this.activeNotification.next(notification);
   }
 
   announcePipelines(notification: any) {
-    console.log('notificationService announcePipelines: ', notification);
     this.pipelinesNotificationSource.next(notification);
   }
 
   announceMergeRequests(notification: any) {
-    console.log('notificationService announceMergeRequests: ', notification);
     this.mergeReqNotificationSource.next(notification);
   }
 }
