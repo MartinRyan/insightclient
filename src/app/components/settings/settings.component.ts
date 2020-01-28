@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Message } from 'primeng/api';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 
@@ -36,13 +38,28 @@ export class SettingsComponent implements OnInit {
   namespaceSelectControl = new FormControl('', [Validators.required]);
   namespaceControl = new FormControl('', [Validators.required]);
   subgroupSelectControl = new FormControl('');
+  public notification: {
+    message: string;
+    level?: 'is-danger' | 'is-warning' | 'is-success';
+    pipelines?: any;
+  } = null;
+  msgs: Message[] = [];
+  message = 'Snack Bar opened.';
+  actionButtonLabel = 'dismiss';
+  action = 'open';
+  setAutoHide = true;
+  autoHide = 2000;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  config = new MatSnackBarConfig();
 
   constructor(
     private fb: FormBuilder,
     private settingsService: SettingsService,
     private notificationService: NotificationService,
     private api: GitlabApiService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private snackBar: MatSnackBar
   ) {
     const pipelines$ = notificationService.pipeLinesNotification$.subscribe(
       pipelines => {
@@ -51,6 +68,7 @@ export class SettingsComponent implements OnInit {
         this.pipelines = pipelines;
         this.announced = true;
         this.confirmed = false;
+        this.openSnackBar(pipelines.level + ' : ' + pipelines.message, this.action);
       }
     );
     const mergerequests$ = notificationService.mergeReqNotification$.subscribe(
@@ -60,6 +78,25 @@ export class SettingsComponent implements OnInit {
         this.mergerequests = mergerequests;
         this.announced = true;
         this.confirmed = false;
+        this.openSnackBar(mergerequests.level + ' : ' + mergerequests.message, this.action);
+      }
+    );
+    const notifications$ = this.notificationService.activeNotification$.subscribe(
+      notification => {
+        this.subscriptions.push(notifications$);
+        this.notification = notification;
+        this.spinner.hide();
+        this.openSnackBar(notification.message, this.action);
+        console.log(
+          'notification component: ',
+          notification.message,
+          ' notification.pipelines : ',
+          notification.pipelines,
+          ' notification.mergerequests ',
+          notification.mergerequests,
+          ' notification.level: ',
+          notification.level
+        );
       }
     );
   }
@@ -79,6 +116,9 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.fetchNamespaces();
     this.createForm();
+    this.config.verticalPosition = this.verticalPosition;
+    this.config.horizontalPosition = this.horizontalPosition;
+    this.config.duration = this.setAutoHide ? this.autoHide : 0;
   }
 
   private createForm() {
@@ -125,9 +165,7 @@ export class SettingsComponent implements OnInit {
         this.names = names;
       },
       err => {
-        this.notificationService.activeNotification.next({
-          message: err.message
-        });
+        this.notificationService.activeNotification.next({ message: err.message });
       }
     );
   }
@@ -144,9 +182,7 @@ export class SettingsComponent implements OnInit {
         this.subgroups = subgroupsArray;
       },
       err => {
-        this.notificationService.activeNotification.next({
-          message: err.message
-        });
+        this.notificationService.activeNotification.next({ message: err.message });
       }
     );
   }
@@ -158,19 +194,19 @@ export class SettingsComponent implements OnInit {
     this.settingsService.settings = this.settingsForm.value;
     this.fetchSubgroupsyGroupID(namespaceObject.id);
     this.hide();
-    this.notificationService.activeNotification.next({
-      message: 'Please wait a few seconds...',
-      level: 'is-warning'
-    });
+    // this.notificationService.activeNotification.next({
+    //   message: 'Please wait a few seconds...',
+    //   level: 'is-warning'
+    // });
   }
 
   onSubmit() {
     this.settingsService.settings = this.settingsForm.value;
     this.hide();
-    this.notificationService.activeNotification.next({
-      message: 'Please wait a few seconds...',
-      level: 'is-warning'
-    });
+    // this.notificationService.activeNotification.next({
+    //   message: 'Please wait a few seconds...',
+    //   level: 'is-warning'
+    // });
   }
 
   hide() {
@@ -189,5 +225,9 @@ export class SettingsComponent implements OnInit {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
     });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action ? this.actionButtonLabel : undefined, this.config);
   }
 }

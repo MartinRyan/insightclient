@@ -24,6 +24,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   private subscriptions: Array<any> = [];
   public iconbase = '/assets/sprite_icons/';
   public ext = '.svg';
+  private pipecheck: any;
 
   public STATUSES = Object.freeze({
     success: { status: 'status_success', icon: '/assets/sprite_icons/status_success.svg', colour: '#90fe88' },
@@ -83,7 +84,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                 const pipeline$ = this.api
                   .fetchPipeline(project.id, pipeline.id)
                   .subscribe(pipelineDetails => {
-                    // this.notificationService.activeNotification.next(null);
+                    this.notificationService.activeNotification.next(null);
                     this.isLoading = false;
                     this.spinner.hide();
                     this.subscriptions.push(pipeline$);
@@ -93,21 +94,22 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                       ...pipelineDetails,
                       ...{ project },
                     });
-                    this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
+                    // this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
                     // }
                   });
               });
+              this.consolidateData(this.pipelines);
               this.notificationService.announcePipelines({
                 message: 'pipelines loaded', level: 'is-success', pipelines: pipelines.length
               });
             } else {
-              this.isLoading = false;
-              this.spinner.hide();
-              this.notificationService.announcePipelines({
-              message: 'no pipelines loaded',
-              level: 'is-danger',
-              pipelines: 0
-            });
+            //   this.isLoading = false;
+            //   this.spinner.hide();
+            //   this.notificationService.announcePipelines({
+            //   message: 'no pipelines loaded',
+            //   level: 'is-danger',
+            //   pipelines: 0
+            // });
             }
           });
       });
@@ -201,19 +203,21 @@ export class PipelinesComponent implements OnInit, OnDestroy {
                     ...pipelineDetails,
                     ...{ project },
                   });
-                  this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
-                  this.consolidateData(this.pipelines);
+                  // this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
+                  // this.consolidateData(this.pipelines);
                   // this.notificationService.announcePipelines({
                   //   message: 'pipelines loaded', level: 'is-success', pipelines: pipelines.length
                   // });
                   }
                 });
             });
+            this.pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
+            // this.consolidateData(this.pipelines);
           } else {
-            // this.notificationService.announcePipelines({
-            //   message: 'pipelines loaded', level: 'is-success', pipelines: pipelines.length
-            // });
-            // this.spinner.hide();
+            this.notificationService.announcePipelines({
+              message: 'pipelines loaded', level: 'is-success', pipelines: pipelines.length
+            });
+            this.spinner.hide();
           }
         }, err => {
           this.isLoading = false;
@@ -224,10 +228,22 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
   private consolidateData(pipelines: Array<any>) {
-    const uniquePipelines = uniqBy(pipelines, item => item.id);
-    uniquePipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
+    // const uniquePipelines = uniqBy(pipelines, item => item.id);
+    // uniquePipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
+    const uniquePipelines = pipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
     this.pipelines = uniquePipelines;
-
+    console.log(' consolidateData  this.pipelines ', this.pipelines);
+    if (uniquePipelines.length >= 1 ) {
+      // const msg = this.notificationService.announcePipelines({
+      //   message: 'pipelines loaded', level: 'is-success', pipelines: this.pipelines.length
+      // });
+    } else {
+      // this.notificationService.announcePipelines({
+      //   message: 'no pipelines loaded',
+      //   level: 'is-danger',
+      //   pipelines: 0
+      // });
+    }
   }
 
   public setStatusColour(pipeline: any) {

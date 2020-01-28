@@ -22,7 +22,7 @@ export class NotificationComponent implements OnInit {
   actionButtonLabel = 'dismiss';
   action = 'open';
   setAutoHide = true;
-  autoHide = 5000;
+  autoHide = 2000;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   config = new MatSnackBarConfig();
@@ -56,7 +56,6 @@ export class NotificationComponent implements OnInit {
         );
       }
     );
-    // this.openSnackBar(this.message, this.action);
   }
 
   onDestroy() {

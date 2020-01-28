@@ -74,7 +74,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
                       mergeRequest.source_branch
                     )
                     .subscribe(lastPipeline => {
-                      // this.notificationService.activeNotification.next(null);
+                      this.notificationService.activeNotification.next(null);
                       this.isLoading = false;
                       this.spinner.hide();
                       this.subscriptions.push(lastPipeline$);
@@ -98,9 +98,6 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
               });
           });
         } else {
-          console.log(
-            'fetching merge requests length zero ' + this.mergeRequests.length
-          );
           this.spinner.hide();
           this.isLoading = false;
           this.notificationService.announceMergeRequests({
@@ -111,9 +108,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
         }
       },
       err => {
-        this.notificationService.activeNotification.next({
-          message: err.message
-        });
+        this.notificationService.activeNotification.next({ message: err.message });
       }
     );
   }
@@ -144,9 +139,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
         this.fetchProjectsByGroupID(ids);
       },
       err => {
-        this.notificationService.activeNotification.next({
-          message: err.message
-        });
+        this.notificationService.activeNotification.next({ message: err.message });
       }
     );
   }
@@ -168,9 +161,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
           this.fetchMergeRequests(projectsArray);
         },
         err => {
-          this.notificationService.activeNotification.next({
-            message: err.message
-          });
+          this.notificationService.activeNotification.next({ message: err.message });
         }
       );
     }
@@ -227,11 +218,11 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
                       )
                     );
                     this.mergeRequests = tidyMergeRequests;
-                    this.notificationService.announceMergeRequests({
-                      message: 'merge requests loaded',
-                      level: 'is-success',
-                      mergerequests: this.mergeRequests.length
-                    });
+                    // this.notificationService.announceMergeRequests({
+                    //   message: 'merge requests loaded',
+                    //   level: 'is-success',
+                    //   mergerequests: this.mergeRequests.length
+                    // });
                     // }
                   });
               });
@@ -242,17 +233,15 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
           );
           this.spinner.hide();
           this.isLoading = false;
-          this.notificationService.announcePipelines({
-            message: 'no merge requests loaded',
-            level: 'is-danger',
-            mergerequests: 0
-          });
+          // this.notificationService.announcePipelines({
+          //   message: 'no merge requests loaded',
+          //   level: 'is-danger',
+          //   mergerequests: 0
+          // });
         }
       },
       err => {
-        this.notificationService.activeNotification.next({
-          message: err.message
-        });
+        this.notificationService.activeNotification.next({ message: err.message });
       }
     );
   }
