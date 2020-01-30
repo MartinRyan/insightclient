@@ -6,4 +6,5 @@ export interface Settings {
   namespace?: any;
   subgroup?: any;
   isCrossProject?: 'true' | 'false';
+  perPage: string;
 }

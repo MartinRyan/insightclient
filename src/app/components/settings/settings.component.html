@@ -32,14 +32,28 @@
         <h4>select time range</h4>
         <mat-form-field>
           <mat-label>number of days</mat-label>
-          <mat-select optional #selected [formControl]="timeRangeSelectControl"
-            (selectionChange)="setTimeRange(selected.value)">
+          <mat-select optional #selectedRange [formControl]="timeRangeSelectControl"
+            (selectionChange)="setTimeRange(selectedRange.value)">
             <mat-option *ngFor="let timeRange of timeRangeDays" [value]="timeRange">
               {{ timeRange }}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <p *ngIf="selected.value">You selected: {{selected.value}}</p>
+        <p *ngIf="selectedRange.value">You selected: {{selectedRange.value}}</p>
+      </div>
+
+      <div class="field">
+        <h4>pipelines per page</h4>
+        <mat-form-field>
+          <mat-label>pipelines per page</mat-label>
+          <mat-select optional #selectedPerPage [formControl]="perPageSelectControl"
+            (selectionChange)="setPerPage(selectedPerPage.value)">
+            <mat-option *ngFor="let perPage of perpageArray" [value]="perPage">
+              {{ perPage }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="selectedPerPage.value">You selected: {{selectedPerPage.value}}</p>
       </div>
 
       <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false'">

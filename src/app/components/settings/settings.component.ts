@@ -27,7 +27,9 @@ export class SettingsComponent implements OnInit {
   public isLoading = false;
   private subscriptions: Array<any> = [];
   public timeRangeDays: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 21, 28, 31, 84, 365];
+  public perpageArray: Array<number> = [2, 4, 6, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60];
   timeRange: number;
+  perPage: number;
   public namespaces: Array<any>;
   public names: Array<any>;
   public ids: Array<number>;
@@ -41,6 +43,7 @@ export class SettingsComponent implements OnInit {
   namespaceSelectControl = new FormControl('');
   namespaceControl = new FormControl('');
   subgroupSelectControl = new FormControl('');
+  perPageSelectControl = new FormControl('');
   public notification: {
     message: string;
     level?: 'is-danger' | 'is-warning' | 'is-success';
@@ -127,6 +130,7 @@ export class SettingsComponent implements OnInit {
         Validators.required
       ],
       timeRange: !!savedConfig ? savedConfig.timeRange : '',
+      perPage: !!savedConfig ? savedConfig.perPage : '',
       namespace: !!savedConfig ? savedConfig.namespace : '',
       subgroup: !!savedConfig ? savedConfig.subgroup : '',
       isCrossProject: [
@@ -139,6 +143,11 @@ export class SettingsComponent implements OnInit {
   setTimeRange(timeRange) {
     this.settingsForm.value.timeRange = timeRange;
     this.settingsService.settings.timeRange = this.settingsForm.value.timeRange;
+  }
+
+  setPerPage(perPage) {
+    this.settingsForm.value.perPage = perPage;
+    this.settingsService.settings.perPage = this.settingsForm.value.perPage;
   }
 
   private fetchNamespaces() {

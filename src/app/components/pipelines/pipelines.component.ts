@@ -26,7 +26,8 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   private pipecheck: any;
   private debouncer: any;
   private pipes: any[];
-  public timeRangeDays = 5;
+  public timeRangeDays: number;
+  public perPage: number;
   public timeRangeWeeks = 100;
   public updateInterval = 90000;
 
@@ -86,6 +87,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.timeRangeDays = Number(this.settingsService.settings.timeRange);
+    this.perPage = Number(this.settingsService.settings.perPage);
     this.settingsService.settings.isCrossProject === 'true'
       ? this.fetchNamespaces()
       : this.fetchdata();
@@ -134,7 +136,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
                       this.spinner.hide();
                       this.subscriptions.push(pipeline$);
                       // only add the pipelines that have run in the timeRange - if pipeline volumes are significant
-                      if (differenceInDays(new Date(pipelineDetails[started]), new Date()) >= (this.timeRangeDays * -1)) {
+                      if (differenceInDays(new Date(pipelineDetails[started]), new Date()) >= (-Math.abs(this.timeRangeDays))) {
                       this.pipelines.push({
                         ...pipelineDetails,
                         ...{ project }

@@ -18,7 +18,7 @@ export class GitlabApiService {
 
   get mergeRequests() {
     return this.http
-      .get<any[]>('merge_requests?state=opened&scope=all&per_page=30')
+      .get<any[]>(`merge_requests?state=opened&scope=all&per_page=30`)
       .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
@@ -62,7 +62,9 @@ export class GitlabApiService {
     return (
       this.http
         .get<any[]>(
-          `projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=30`
+          // tslint:disable-next-line: max-line-length
+          `projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
+          // `projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at`
         )
         // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
         .pipe(
@@ -70,12 +72,7 @@ export class GitlabApiService {
             return projects.filter(
               project =>
                 project.namespace.name ===
-                this.settingsService.settings.namespace,
-              // tslint:disable-next-line: no-console
-              console.debug(
-                'gitlab-ap.service get projects namespace => ' +
-                  this.settingsService.settings.namespace
-              )
+                this.settingsService.settings.namespace
             );
           })
         )
@@ -93,7 +90,9 @@ export class GitlabApiService {
     return (
       this.http
         // .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=100`)
-        .get<any[]>(`projects?e&order_by=last_activity_at&per_page=30`)
+        .get<any[]>(
+          `projects?e&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
+        )
         // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
         .pipe(
           map(projects => {
@@ -113,17 +112,12 @@ export class GitlabApiService {
   projectsByNamespace(name: string) {
     return this.http
       .get<any[]>(
-        `projects?search=${name}&order_by=last_activity_at&per_page=30`
+        `projects?search=${name}&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
+        // `projects?search=${name}&order_by=last_activity_at`
       )
       .pipe(
         map(projects => {
-          return projects.filter(
-            project => project.namespace.name === name,
-            // tslint:disable-next-line: no-console
-            console.debug(
-              'gitlab-ap.service projectsByNamespace name => ' + name
-            )
-          );
+          return projects.filter(project => project.namespace.name === name);
         })
       )
       .pipe(
@@ -148,7 +142,8 @@ export class GitlabApiService {
   projectsByGroupName(name: any) {
     return this.http
       .get<any[]>(
-        `groups?search=${name}/projects&order_by=last_activity_at&per_page=30`
+        `groups?search=${name}/projects&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
+        // `groups?search=${name}/projects&order_by=last_activity_at`
       )
       .pipe(
         retryWhen(err => {
@@ -160,9 +155,10 @@ export class GitlabApiService {
   }
 
   fetchPipelines(projectId: string) {
-    // tslint:disable-next-line: no-console
     return this.http
-      .get<any[]>(`projects/${projectId}/pipelines?per_page=30`)
+      .get<any[]>(
+        `projects/${projectId}/pipelines?per_page=${this.settingsService.settings.perPage}`
+        )
       .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
@@ -173,18 +169,20 @@ export class GitlabApiService {
   }
 
   fetchPipelinesAll() {
-    // tslint:disable-next-line: no-console
-    return this.http.get<any[]>(`projects/pipelines?per_page=30`).pipe(
-      retryWhen(err => {
-        return err.pipe(delay(5000), take(1), o =>
-          concat(o, throwError('Retries exceeded -  fetch pipelines'))
-        );
-      })
-    );
+    return this.http
+      .get<any[]>(
+        `projects/pipelines?per_page=${this.settingsService.settings.perPage}`
+      )
+      .pipe(
+        retryWhen(err => {
+          return err.pipe(delay(5000), take(1), o =>
+            concat(o, throwError('Retries exceeded -  fetch pipelines'))
+          );
+        })
+      );
   }
 
   fetchLastPipelineByRef(projectId: string, ref: string) {
-    // tslint:disable-next-line: no-console
     return (
       this.http
         .get<any>(`projects/${projectId}/pipelines?ref=${ref}&per_page=1`)
@@ -203,7 +201,6 @@ export class GitlabApiService {
   }
 
   fetchPipeline(projectId: string, pipelineId: string) {
-    // tslint:disable-next-line: no-console
     return this.http
       .get<any>(`projects/${projectId}/pipelines/${pipelineId}`)
       .pipe(
@@ -216,7 +213,6 @@ export class GitlabApiService {
   }
 
   fetchPipelineB(pipelineId: string) {
-    // tslint:disable-next-line: no-console
     return this.http.get<any>(`projects/pipelines/${pipelineId}`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
@@ -227,7 +223,6 @@ export class GitlabApiService {
   }
 
   fetchProject(id: string) {
-    // tslint:disable-next-line: no-console
     return this.http.get<any>(`projects/${id}`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
