@@ -15,10 +15,10 @@
         </mat-form-field>
       </div>
       <div class="field">
-        <mat-radio-group aria-label="is cross project"  formControlName="isCrossProject">
-            <mat-radio-button class="field" value="true">is cross project</mat-radio-button>
-            <mat-radio-button class="field" value="false">single project</mat-radio-button>
-          </mat-radio-group>
+        <mat-radio-group aria-label="is cross project" formControlName="isCrossProject">
+          <mat-radio-button class="field" value="true">is cross project</mat-radio-button>
+          <mat-radio-button class="field" value="false">single project</mat-radio-button>
+        </mat-radio-group>
       </div>
       <div class="field">
         <mat-form-field>
@@ -27,6 +27,21 @@
             autocomplete="off" required>
         </mat-form-field>
       </div>
+
+      <div class="field">
+        <h4>select time range</h4>
+        <mat-form-field>
+          <mat-label>number of days</mat-label>
+          <mat-select optional #selected [formControl]="timeRangeSelectControl"
+            (selectionChange)="setTimeRange(selected.value)">
+            <mat-option *ngFor="let timeRange of timeRangeDays" [value]="timeRange">
+              {{ timeRange }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="selected.value">You selected: {{selected.value}}</p>
+      </div>
+
       <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false'">
         <h4>select namespace</h4>
         <mat-form-field>
@@ -41,7 +56,7 @@
         <p *ngIf="selected.value">You selected: {{selected.value.id}}</p>
       </div>
 
-      <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false' && subgroups" >
+      <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false' && subgroups">
         <h4>select subgroup</h4>
         <mat-form-field>
           <mat-label>select subgroup</mat-label>

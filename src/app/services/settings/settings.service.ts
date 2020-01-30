@@ -11,6 +11,7 @@ export class SettingsService {
 
   set settings(settings: Settings) {
     this.savedSettings = settings;
+    console.log('settings service settings: ', settings);
     localStorage.setItem('gitlab_settings', JSON.stringify(settings));
   }
 

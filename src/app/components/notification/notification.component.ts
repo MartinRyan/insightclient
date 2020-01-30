@@ -38,24 +38,24 @@ export class NotificationComponent implements OnInit {
     this.config.horizontalPosition = this.horizontalPosition;
     this.config.duration = this.setAutoHide ? this.autoHide : 0;
     // this.openSnackBar(this.message, this.action);
-    const notifications$ = this.notificationService.activeNotification$.subscribe(
-      notification => {
-        this.subscriptions.push(notifications$);
-        this.notification = notification;
-        this.spinner.hide();
-        this.openSnackBar(notification.message, this.action);
-        console.log(
-          'notification component: ',
-          notification.message,
-          ' notification.pipelines : ',
-          notification.pipelines,
-          ' notification.mergerequests ',
-          notification.mergerequests,
-          ' notification.level: ',
-          notification.level
-        );
-      }
-    );
+    // const notifications$ = this.notificationService.activeNotification$.subscribe(
+    //   notification => {
+    //     this.subscriptions.push(notifications$);
+    //     this.notification = notification;
+    //     this.spinner.hide();
+    //     this.openSnackBar(notification.message, this.action);
+    //     console.log(
+    //       'notification component: ',
+    //       notification.message,
+    //       ' notification.pipelines : ',
+    //       notification.pipelines,
+    //       ' notification.mergerequests ',
+    //       notification.mergerequests,
+    //       ' notification.level: ',
+    //       notification.level
+    //     );
+    //   }
+    // );
   }
 
   onDestroy() {

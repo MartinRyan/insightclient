@@ -40,7 +40,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
         this.settingsService.settings.isCrossProject === 'true'
           ? this.fetchNamespaces()
           : this.fetchdata();
-      }, 60000);
+      }, 90000);
     });
   }
 
@@ -59,7 +59,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     const mergeReqs$ = this.api.mergeRequests.subscribe(
       mergeRequests => {
         this.subscriptions.push(mergeReqs$);
-        if (mergeRequests.length > 0) {
+        if (mergeRequests && mergeRequests.length > 0) {
           mergeRequests.forEach(mergeRequest => {
             const project$ = this.api
               .fetchProject(mergeRequest.project_id)
@@ -88,24 +88,25 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
                               : 'unknown'
                         }
                       });
-                      this.notificationService.announceMergeRequests({
-                        message: 'merge requests loaded',
-                        level: 'is-success',
-                        mergerequests: this.mergeRequests.length
-                      });
+                      // this.notificationService.announceMergeRequests({
+                      //   message: 'merge requests loaded',
+                      //   level: 'is-success',
+                      //   mergerequests: this.mergeRequests.length
+                      // });
                     });
                 }
               });
           });
-        } else {
-          this.spinner.hide();
-          this.isLoading = false;
-          this.notificationService.announceMergeRequests({
-            message: 'no merge requests loaded',
-            level: 'is-danger',
-            mergerequests: 0
-          });
         }
+        // else if (!mergeRequests || mergeRequests.length < 1) {
+        //   this.spinner.hide();
+        //   this.isLoading = false;
+        //   this.notificationService.announceMergeRequests({
+        //     message: 'no merge requests loaded',
+        //     level: 'is-danger',
+        //     mergerequests: 0
+        //   });
+        // }
       },
       err => {
         this.notificationService.activeNotification.next({ message: err.message });
@@ -233,11 +234,11 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
           );
           this.spinner.hide();
           this.isLoading = false;
-          // this.notificationService.announcePipelines({
-          //   message: 'no merge requests loaded',
-          //   level: 'is-danger',
-          //   mergerequests: 0
-          // });
+          this.notificationService.announceMergeRequests({
+            message: 'no merge requests loaded',
+            level: 'is-danger',
+            mergerequests: 0
+          });
         }
       },
       err => {

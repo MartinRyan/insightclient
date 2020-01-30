@@ -26,6 +26,8 @@ export class SettingsComponent implements OnInit {
   settingsForm: FormGroup;
   public isLoading = false;
   private subscriptions: Array<any> = [];
+  public timeRangeDays: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 21, 28, 31, 84, 365];
+  timeRange: number;
   public namespaces: Array<any>;
   public names: Array<any>;
   public ids: Array<number>;
@@ -35,8 +37,9 @@ export class SettingsComponent implements OnInit {
   confirmed = false;
   announced = false;
   subscription: Subscription;
-  namespaceSelectControl = new FormControl('', [Validators.required]);
-  namespaceControl = new FormControl('', [Validators.required]);
+  timeRangeSelectControl = new FormControl('');
+  namespaceSelectControl = new FormControl('');
+  namespaceControl = new FormControl('');
   subgroupSelectControl = new FormControl('');
   public notification: {
     message: string;
@@ -87,16 +90,6 @@ export class SettingsComponent implements OnInit {
         this.notification = notification;
         this.spinner.hide();
         this.openSnackBar(notification.message, this.action);
-        console.log(
-          'notification component: ',
-          notification.message,
-          ' notification.pipelines : ',
-          notification.pipelines,
-          ' notification.mergerequests ',
-          notification.mergerequests,
-          ' notification.level: ',
-          notification.level
-        );
       }
     );
   }
@@ -133,6 +126,7 @@ export class SettingsComponent implements OnInit {
         !!savedConfig ? savedConfig.accessToken : '',
         Validators.required
       ],
+      timeRange: !!savedConfig ? savedConfig.timeRange : '',
       namespace: !!savedConfig ? savedConfig.namespace : '',
       subgroup: !!savedConfig ? savedConfig.subgroup : '',
       isCrossProject: [
@@ -140,6 +134,11 @@ export class SettingsComponent implements OnInit {
         Validators.required
       ]
     });
+  }
+
+  setTimeRange(timeRange) {
+    this.settingsForm.value.timeRange = timeRange;
+    this.settingsService.settings.timeRange = this.settingsForm.value.timeRange;
   }
 
   private fetchNamespaces() {
@@ -159,8 +158,6 @@ export class SettingsComponent implements OnInit {
         }
         for (const namespace of namespaces) {
           names.push(namespace);
-          console.log('namespace.name ' + namespace.name);
-          console.log('namespace.id ' + namespace.id);
         }
         this.names = names;
       },
@@ -188,25 +185,15 @@ export class SettingsComponent implements OnInit {
   }
 
   onSelection(namespaceObject) {
-    console.log('onSelection namespaceObject id ', namespaceObject.id);
-    console.log('onSelection namespaceObject name ', namespaceObject.name);
     this.settingsForm.value.namespace = namespaceObject.name;
     this.settingsService.settings = this.settingsForm.value;
     this.fetchSubgroupsyGroupID(namespaceObject.id);
     this.hide();
-    // this.notificationService.activeNotification.next({
-    //   message: 'Please wait a few seconds...',
-    //   level: 'is-warning'
-    // });
   }
 
   onSubmit() {
     this.settingsService.settings = this.settingsForm.value;
     this.hide();
-    // this.notificationService.activeNotification.next({
-    //   message: 'Please wait a few seconds...',
-    //   level: 'is-warning'
-    // });
   }
 
   hide() {

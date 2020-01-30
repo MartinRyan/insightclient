@@ -1,4 +1,5 @@
 export interface Settings {
+  timeRange: string;
   accessToken: string;
   gitlabAddress?: string;
   isGitlabDotCom: 'true' | 'false';
