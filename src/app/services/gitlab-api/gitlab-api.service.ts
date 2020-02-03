@@ -91,7 +91,7 @@ export class GitlabApiService {
       this.http
         // .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=100`)
         .get<any[]>(
-          `projects?e&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
+          `projects?&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
         )
         // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
         .pipe(
@@ -157,7 +157,7 @@ export class GitlabApiService {
   fetchPipelines(projectId: string) {
     return this.http
       .get<any[]>(
-        `projects/${projectId}/pipelines?per_page=${this.settingsService.settings.perPage}`
+        `projects/${projectId}/pipelines?page=1&per_page=${this.settingsService.settings.perPage}`
         )
       .pipe(
         retryWhen(err => {
