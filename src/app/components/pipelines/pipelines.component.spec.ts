@@ -1,11 +1,10 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AngularSvgIconModule, SvgIconRegistryService, SvgLoader } from 'angular-svg-icon';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { of } from 'rxjs';
-import { NgxSpinnerService, NgxSpinnerModule } from 'ngx-spinner';
 
 import { PipelinesComponent } from './pipelines.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { HttpClientModule } from '@angular/common/http';
-import { SvgIconRegistryService, SvgLoader, AngularSvgIconModule } from 'angular-svg-icon';
 
 
 

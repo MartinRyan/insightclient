@@ -1,8 +1,12 @@
+import { Overlay } from '@angular/cdk/overlay';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { SettingsComponent } from './settings.component';
-import {   } from '@angular/forms';
-import {FormGroup, FormBuilder, ReactiveFormsModule, FormsModule} from '@angular/forms';
+
+// import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent;
@@ -10,9 +14,9 @@ describe('SettingsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule ],
+      imports: [HttpClientTestingModule, ReactiveFormsModule ],
       declarations: [ SettingsComponent ],
-      providers: [FormBuilder, ReactiveFormsModule],
+      providers: [FormBuilder, HttpClientTestingModule, MatSnackBar, Overlay, ReactiveFormsModule],
     })
     .compileComponents();
   }));

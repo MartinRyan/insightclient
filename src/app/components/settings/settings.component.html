@@ -4,7 +4,7 @@
   </mat-card-header>
   <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
     <mat-card-content class="content">
-      <mat-radio-group aria-label="is gitlab.com" ngDefaultControl formControlName="isGitlabDotCom">
+      <mat-radio-group aria-label="is gitlab.com" ngDefaultControl formControlName="isGitlabDotCom" name="isGitlabDotCom">
         <mat-radio-button class="field" value="true">gitlab.com</mat-radio-button>
         <mat-radio-button class="field" value="false">self hosted</mat-radio-button>
       </mat-radio-group>
@@ -15,7 +15,7 @@
         </mat-form-field>
       </div>
       <div class="field">
-        <mat-radio-group aria-label="is cross project" formControlName="isCrossProject">
+        <mat-radio-group aria-label="is cross project" formControlName="isCrossProject" name="isCrossProject">
           <mat-radio-button class="field" value="true">is cross project</mat-radio-button>
           <mat-radio-button class="field" value="false">single project</mat-radio-button>
         </mat-radio-group>
@@ -34,7 +34,7 @@
           <mat-label>number of days</mat-label>
           <mat-select optional #selectedRange [formControl]="timeRangeSelectControl"
             (selectionChange)="setTimeRange(selectedRange.value)">
-            <mat-option *ngFor="let timeRange of timeRangeDays" [value]="timeRange">
+            <mat-option *ngFor="let timeRange of timeRangeDays" [value]="timeRange" name="timeRange">
               {{ timeRange }}
             </mat-option>
           </mat-select>

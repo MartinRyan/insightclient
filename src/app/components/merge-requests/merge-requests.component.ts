@@ -5,7 +5,7 @@ import {
   differenceInWeeks,
   parseISO
 } from 'date-fns';
-import { uniqBy } from 'lodash';
+import { isEmpty, uniqBy } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
@@ -21,6 +21,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
   public mergeRequests: Array<any>;
   public isLoading = false;
   private subscriptions: Array<any> = [];
+  public updateInterval = 90000;
 
   constructor(
     private api: GitlabApiService,
@@ -31,17 +32,23 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.settingsService.settings.isCrossProject === 'true'
-      ? this.fetchNamespaces()
-      : this.fetchdata();
-    this.zone.runOutsideAngular(() => {
-      setInterval(() => {
-        this.clearSubscriptions();
-        this.settingsService.settings.isCrossProject === 'true'
-          ? this.fetchNamespaces()
-          : this.fetchdata();
-      }, 90000);
-    });
+    if (!isEmpty(this.settingsService.settings) && (this.settingsService.settings.isCrossProject === 'true')) {
+      this.fetchNamespaces();
+      this.zone.runOutsideAngular(() => {
+        setInterval(() => {
+          this.clearSubscriptions();
+          this.fetchNamespaces()
+        }, this.updateInterval);
+      });
+    } else {
+      this.fetchdata();
+      this.zone.runOutsideAngular(() => {
+        setInterval(() => {
+          this.clearSubscriptions();
+          this.fetchdata();
+        }, this.updateInterval);
+      });
+    }
   }
 
   ngOnDestroy() {

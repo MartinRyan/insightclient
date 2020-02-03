@@ -1,4 +1,6 @@
+import { Overlay } from '@angular/cdk/overlay';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { NotificationComponent } from './notification.component';
 
@@ -8,7 +10,9 @@ describe('NotificationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NotificationComponent ]
+      imports: [],
+      declarations: [ NotificationComponent ],
+      providers: [MatSnackBar, Overlay]
     })
     .compileComponents();
   }));

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { SvgIconRegistryService } from 'angular-svg-icon';
 import { compareDesc, differenceInDays, differenceInWeeks, parseISO } from 'date-fns';
-import { uniqBy } from 'lodash';
+import { isEmpty, uniqBy } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
@@ -86,19 +86,33 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    this.timeRangeDays = Number(this.settingsService.settings.timeRange);
-    this.perPage = Number(this.settingsService.settings.perPage);
-    this.settingsService.settings.isCrossProject === 'true'
-      ? this.fetchNamespaces()
-      : this.fetchdata();
-    this.zone.runOutsideAngular(() => {
-      setInterval(() => {
-        this.clearSubscriptions();
-        this.settingsService.settings.isCrossProject === 'true'
-          ? this.fetchNamespaces()
-          : this.fetchdata();
-      }, this.updateInterval);
-    });
+    if (!isEmpty(this.settingsService.settings) && !isEmpty(this.settingsService.settings.timeRange)) {
+      this.timeRangeDays = Number(this.settingsService.settings.timeRange);
+    } else {
+      this.timeRangeDays = 7;
+    }
+    if (!isEmpty(this.settingsService.settings) && !isEmpty(this.settingsService.settings.perPage)) {
+      this.perPage = Number(this.settingsService.settings.perPage);
+    } else {
+      this.perPage = 100;
+    }
+    if (!isEmpty(this.settingsService.settings) && (this.settingsService.settings.isCrossProject === 'true')) {
+      this.fetchNamespaces();
+      this.zone.runOutsideAngular(() => {
+        setInterval(() => {
+          this.clearSubscriptions();
+          this.fetchNamespaces()
+        }, this.updateInterval);
+      });
+    } else {
+      this.fetchdata();
+      this.zone.runOutsideAngular(() => {
+        setInterval(() => {
+          this.clearSubscriptions();
+          this.fetchdata();
+        }, this.updateInterval);
+      });
+    }
   }
 
   ngAfterViewInit() { }
