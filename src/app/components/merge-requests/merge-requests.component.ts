@@ -37,7 +37,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
       this.zone.runOutsideAngular(() => {
         setInterval(() => {
           this.clearSubscriptions();
-          this.fetchNamespaces()
+          this.fetchNamespaces();
         }, this.updateInterval);
       });
     } else {
@@ -188,11 +188,6 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
               .projectByID(mergeRequest.project_id)
               .subscribe(project => {
                 this.subscriptions.push(project$);
-                console.log('merge requests project id -> ' + project.id);
-                console.log(
-                  'merge requests mergeRequest.source_branch -> ' +
-                    mergeRequest.source_branch
-                );
                 const lastPipeline$ = this.api
                   .fetchLastPipelineByRef(
                     project.id,

@@ -29,7 +29,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   public timeRangeDays: number;
   public perPage: number;
   public timeRangeWeeks = 100;
-  public updateInterval = 90000;
+  public updateInterval = 62000;
 
   public STATUSES = Object.freeze({
     success: {
@@ -86,22 +86,16 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    if (!isEmpty(this.settingsService.settings) && !isEmpty(this.settingsService.settings.timeRange)) {
-      this.timeRangeDays = Number(this.settingsService.settings.timeRange);
-    } else {
-      this.timeRangeDays = 7;
-    }
-    if (!isEmpty(this.settingsService.settings) && !isEmpty(this.settingsService.settings.perPage)) {
-      this.perPage = Number(this.settingsService.settings.perPage);
-    } else {
-      this.perPage = 100;
-    }
-    if (!isEmpty(this.settingsService.settings) && (this.settingsService.settings.isCrossProject === 'true')) {
+    this.timeRangeDays = Number(this.settingsService.settings.timeRange);
+    this.perPage = Number(this.settingsService.settings.perPage);
+    console.log('this.timeRangeDays: ', this.timeRangeDays);
+    console.log('this.perPage: ', this.perPage);
+    if (!isEmpty(this.settingsService.settings.isCrossProject) && (this.settingsService.settings.isCrossProject === 'true')) {
       this.fetchNamespaces();
       this.zone.runOutsideAngular(() => {
         setInterval(() => {
           this.clearSubscriptions();
-          this.fetchNamespaces()
+          this.fetchNamespaces();
         }, this.updateInterval);
       });
     } else {
@@ -162,9 +156,9 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
                     });
                 });
                 // this.consolidateData(this.pipelines);
-                this.pipelines.sort((o1, o2) =>
-                  compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at))
-                );
+                // this.pipelines.sort((o1, o2) =>
+                //   compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at))
+                // );
                 // this.notificationService.announcePipelines({
                 //   message: 'pipelines loaded',
                 //   level: 'is-success',
@@ -221,30 +215,23 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     const names = [];
     const ids = [];
     const namespaceObjects = [];
-    const namespaces$ = this.api.namespaces.subscribe(
-      namespaces => {
-        this.subscriptions.push(namespaces$);
-        if (namespaces.length > 0) {
-          namespaceObjects.push({
-            ...namespaces
-          });
-        }
-        console.log('namespaces ' + namespaces);
-        for (const namespace of namespaces) {
-          names.push(namespace.name);
-          console.log('namespace.id ' + namespace.id);
-          ids.push(namespace.id);
-        }
-        this.fetchProjectsByGroupID(ids);
-      },
-      err => {
-        this.isLoading = false;
-        this.spinner.hide();
-        this.notificationService.activeNotification.next({
-          message: err.message
+    const namespaces$ = this.api.namespaces.subscribe(namespaces => {
+      this.subscriptions.push(namespaces$);
+      if (namespaces.length > 0) {
+        namespaceObjects.push({
+          ...namespaces
         });
       }
-    );
+      console.log('namespaces ' + namespaces);
+      for (const namespace of namespaces) {
+        names.push(namespace.name);
+        console.log('namespace.id ' + namespace.id);
+        ids.push(namespace.id);
+      }
+      this.fetchProjectsByGroupID(ids);
+    }, err => {
+      this.notificationService.activeNotification.next({ message: err.message });
+    });
   }
 
   private fetchProjectsByGroupID(ids: Array<string>) {

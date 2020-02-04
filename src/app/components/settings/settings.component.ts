@@ -142,12 +142,12 @@ export class SettingsComponent implements OnInit {
 
   setTimeRange(timeRange) {
     this.settingsForm.value.timeRange = timeRange;
-    this.settingsService.settings.timeRange = this.settingsForm.value.timeRange;
+    this.settingsService.settings.timeRange = timeRange;
   }
 
-  setPerPage(perPage) {
-    this.settingsForm.value.perPage = perPage;
-    this.settingsService.settings.perPage = this.settingsForm.value.perPage;
+  setPerPage(value) {
+    this.settingsForm.value.perPage = value;
+    this.settingsService.settings.perPage = value;
   }
 
   private fetchNamespaces() {
