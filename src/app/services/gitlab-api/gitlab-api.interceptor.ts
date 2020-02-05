@@ -6,7 +6,6 @@ import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class GitLabApiInterceptor implements HttpInterceptor {
-
   constructor(private settingsService: SettingsService) {}
 
   intercept(
@@ -21,8 +20,8 @@ export class GitLabApiInterceptor implements HttpInterceptor {
       url: `${gitlabUrl}/api/v4/${req.url}`,
       setHeaders: {
         'Private-Token': this.settingsService.settings.accessToken,
-        'Access-Control-Allow-Origin': 'all',
-      },
+        'Access-Control-Allow-Origin': 'all'
+      }
     });
     return next.handle(apiReq);
   }

@@ -4,7 +4,7 @@
   </mat-card-header>
   <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
     <mat-card-content class="content">
-      <mat-radio-group aria-label="is gitlab.com" ngDefaultControl formControlName="isGitlabDotCom">
+      <mat-radio-group aria-label="is gitlab.com" ngDefaultControl formControlName="isGitlabDotCom" name="isGitlabDotCom">
         <mat-radio-button class="field" value="true">gitlab.com</mat-radio-button>
         <mat-radio-button class="field" value="false">self hosted</mat-radio-button>
       </mat-radio-group>
@@ -14,12 +14,12 @@
           <input matInput placeholder="gitlab location" formControlName="gitlabAddress" name="gitlabAddress" required>
         </mat-form-field>
       </div>
-      <div class="field">
-        <mat-radio-group aria-label="is cross project"  formControlName="isCrossProject">
-            <mat-radio-button class="field" value="true">is cross project</mat-radio-button>
-            <mat-radio-button class="field" value="false">single project</mat-radio-button>
-          </mat-radio-group>
-      </div>
+      <!-- <div class="field">
+        <mat-radio-group aria-label="is cross project" formControlName="isCrossProject" name="isCrossProject">
+          <mat-radio-button class="field" value="true">is cross project</mat-radio-button>
+          <mat-radio-button class="field" value="false">single project</mat-radio-button>
+        </mat-radio-group>
+      </div> -->
       <div class="field">
         <mat-form-field>
           <mat-label>accessToken</mat-label>
@@ -27,26 +27,68 @@
             autocomplete="off" required>
         </mat-form-field>
       </div>
+
+      <div class="field">
+        <h4>select time range</h4>
+        <mat-form-field>
+          <mat-label>number of days</mat-label>
+          <mat-select optional #selectedRange [formControl]="timeRangeSelectControl"
+            (selectionChange)="setTimeRange(selectedRange.value)">
+            <mat-option *ngFor="let timeRange of timeRangeDays" [value]="timeRange" name="timeRange">
+              {{ timeRange }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="selectedRange.value">You selected: {{selectedRange.value}}</p>
+      </div>
+
+      <!-- <div class="field">
+        <h4>pipelines per page</h4>
+        <mat-form-field>
+          <mat-label>pipelines per page</mat-label>
+          <mat-select optional #selectedPerPage [formControl]="perPageSelectControl"
+            (selectionChange)="setPerPage(selectedPerPage.value)">
+            <mat-option *ngFor="let perPage of perpageArray" [value]="perPage">
+              {{ perPage }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="selectedPerPage.value">You selected: {{selectedPerPage.value}}</p>
+      </div> -->
+
       <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false'">
         <h4>select namespace</h4>
         <mat-form-field>
           <mat-label>select namespace</mat-label>
           <mat-select optional #selected [formControl]="namespaceSelectControl"
             (selectionChange)="onSelection(selected.value)">
-            <mat-option *ngFor="let name of names" [value]="name">
-              {{ name }}
+            <mat-option *ngFor="let nm of names" [value]="nm">
+              {{ nm.name }}
             </mat-option>
           </mat-select>
-          <!-- <mat-error *ngIf="namespaceSelectControl.hasError('required')">Please choose a namespace</mat-error> -->
         </mat-form-field>
-        <p *ngIf="selected.value">You selected: {{selected.value}}</p>
+        <p *ngIf="selected.value">You selected: {{selected.value.id}}</p>
       </div>
+
+      <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false' && subgroups">
+        <h4>select subgroup</h4>
+        <mat-form-field>
+          <mat-label>select subgroup</mat-label>
+          <mat-select optional #group [formControl]="subgroupSelectControl"
+            (selectionChange)="onSelection(group.value)">
+            <mat-option *ngFor="let group of subgroups" [value]="group">
+              {{ group.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="group.value">You selected: {{group.value.name}}</p>
+      </div>
+
       <div class="field" *ngIf="settingsForm.value.isCrossProject === 'false'">
         <h4>input namespace</h4>
         <mat-form-field>
           <mat-label>input namespace</mat-label>
           <input matInput formControlName="namespace" name="namespace" optional>
-          <!-- <mat-error *ngIf="namespaceControl.hasError('required')">Please input a namespace</mat-error> -->
         </mat-form-field>
       </div>
     </mat-card-content>
