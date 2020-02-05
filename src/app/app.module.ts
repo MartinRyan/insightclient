@@ -46,7 +46,7 @@ import { SettingsService } from './services/settings/settings.service';
 import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RunnersComponent } from './component/runners/runners.component';
+import { RunnersComponent } from './components/runners/runners.component';
 
 
 @NgModule({
