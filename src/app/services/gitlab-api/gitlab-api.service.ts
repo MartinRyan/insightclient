@@ -231,4 +231,18 @@ export class GitlabApiService {
       })
     );
   }
+
+  fetchRunnersById(projectID: string) {
+    return this.http
+      .get<any[]>(
+        `runners/${projectID}`
+      )
+      .pipe(
+        retryWhen(err => {
+          return err.pipe(delay(5000), take(1), o =>
+            concat(o, throwError('Retries exceeded -  fetch runners by id: '))
+          );
+        })
+      );
+  }
 }
