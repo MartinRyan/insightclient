@@ -7,4 +7,7 @@ export interface Settings {
   subgroup?: any;
   isCrossProject?: 'true' | 'false';
   perPage: string;
+  intervalMR: string;
+  intervalP: string;
+  intervalR: string;
 }
