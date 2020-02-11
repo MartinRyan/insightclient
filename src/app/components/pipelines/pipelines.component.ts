@@ -155,10 +155,6 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
                       );
                     });
                 });
-                // this.consolidateData(this.pipelines);
-                // this.pipelines.sort((o1, o2) =>
-                //   compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at))
-                // );
                 // this.notificationService.announcePipelines({
                 //   message: 'pipelines loaded',
                 //   level: 'is-success',
@@ -242,7 +238,6 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
       this.api.projectsByGroupID(id).subscribe(
         projects => {
           for (const p of projects as any) {
-            // projectsArray.push(p);
             projectsArray.push({
               name: p.name,
               id: p.id
@@ -302,7 +297,6 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
             this.pipelines.sort((o1, o2) =>
               compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at))
             );
-            // this.consolidateData(this.pipelines);
           }
           // else {
           //   this.notificationService.announcePipelines({
@@ -322,27 +316,6 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       );
     });
-  }
-
-  private consolidateData(pipelines: Array<any>) {
-    // const uniquePipelines = uniqBy(pipelines, item => item.id);
-    // uniquePipelines.sort((o1, o2) => compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at)));
-    const uniquePipelines = pipelines.sort((o1, o2) =>
-      compareDesc(parseISO(o1.updated_at), parseISO(o2.updated_at))
-    );
-    this.pipelines = uniquePipelines;
-    console.log(' consolidateData  this.pipelines ', this.pipelines);
-    if (uniquePipelines.length >= 1) {
-      // const msg = this.notificationService.announcePipelines({
-      //   message: 'pipelines loaded', level: 'is-success', pipelines: this.pipelines.length
-      // });
-    } else {
-      // this.notificationService.announcePipelines({
-      //   message: 'no pipelines loaded',
-      //   level: 'is-danger',
-      //   pipelines: 0
-      // });
-    }
   }
 
   public setStatusColour(pipeline: any) {
