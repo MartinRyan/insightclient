@@ -3,161 +3,163 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import { format, subDays } from 'date-fns';
+import { format, subDays, isBefore } from 'date-fns';
 
 // TODO: Replace this with your own data model type
-// export interface TableItem {
-//   name: string;
-//   id: number;
-//   active: string;
-//   description: string;
-//   ip_address: string;
-//   is_shared: string;
-//   online: string;
-//   status: string;
-// }
-
 export interface TableItem {
   name: string;
-  minus7: object;
-  minus6: object;
-  minus5: object;
-  minus4: object;
-  minus3: object;
-  minus2: object;
-  minus1: object;
-  now: object;
+  id: number;
+  active: string;
+  description: string;
+  ip_address: string;
+  is_shared: string;
+  online: string;
+  status: string;
 }
 
-const RUNNER_DATA: TableItem[] = [
-  {
-    name: 'one',
-    minus7: {
-      active: 'true',
-      description: 'runner-12a',
-      id: 1,
-      ip_address: '127.0.0.1',
-      is_shared: 'true',
-      name: 'seven',
-      online: 'true',
-      status: 'online'
-        },
-    minus6: {
-      active: 'true',
-      description: 'shared-runner-5b',
-      id: 6,
-      ip_address: '127.0.0.1',
-      is_shared: 'true',
-      name: 'three',
-      online: 'true',
-      status: 'online'
-        },
-    minus5: {
-      active: 'true',
-      description: 'test-2-78676965',
-      id: 85,
-      ip_address: '127.0.0.1',
-      is_shared: 'false',
-      name: 'five',
-      online: 'false',
-      status: 'offline'
-        },
-    minus4: {
-      active: 'false',
-      description: 'shared-runner-7',
-      id: 4,
-      ip_address: '127.0.0.1',
-      is_shared: 'true',
-      name: 'one',
-      online: 'true',
-      status: 'paused'
-    },
-    minus3: {
-      active: 'true',
-      description: 'shared-runner-1',
-      id: 3,
-      ip_address: '127.0.0.1',
-      is_shared: 'true',
-      name: 'three',
-      online: 'true',
-      status: 'online'
-        },
-    minus2: {
-      active: 'true',
-      description: 'shared-runner-2',
-      id: 2,
-      ip_address: '127.0.0.1',
-      is_shared: 'true',
-      name: 'two',
-      online: 'false',
-      status: 'offline'
-      },
-    minus1: {
-      active: 'true',
-      description: 'test-2-20150125',
-      id: 1,
-      ip_address: '127.0.0.1',
-      is_shared: 'false',
-      name: 'one',
-      online: 'false',
-      status: 'offline'
-        },
-    now: {
-      active: 'true',
-      description: 'shared-runner-1',
-      id: 0,
-      ip_address: '127.0.0.1',
-      is_shared: 'true',
-      name: 'one',
-      online: 'true',
-      status: 'online'
-    }
-  }
-];
+// export interface TableItem {
+//   id: string;
+//   name: string;
+//   minus7: object;
+//   minus6: object;
+//   minus5: object;
+//   minus4: object;
+//   minus3: object;
+//   minus2: object;
+//   minus1: object;
+//   now: object;
+// }
 
-// TODO: replace this with real data from gitlab
 // const RUNNER_DATA: TableItem[] = [
 //   {
+//     id: '',
+//     name: 'one',
+//       minus7: {
+//       active: 'true',
+//       description: 'runner-12a',
+//       id: 1,
+//       ip_address: '127.0.0.1',
+//       is_shared: 'true',
+//       name: 'seven',
+//       online: 'true',
+//       status: 'online'
+//         },
+//       minus6: {
+//       active: 'true',
+//       description: 'shared-runner-5b',
+//       id: 6,
+//       ip_address: '127.0.0.1',
+//       is_shared: 'true',
+//       name: 'three',
+//       online: 'true',
+//       status: 'online'
+//         },
+//     minus5: {
+//       active: 'true',
+//       description: 'test-2-78676965',
+//       id: 85,
+//       ip_address: '127.0.0.1',
+//       is_shared: 'false',
+//       name: 'five',
+//       online: 'false',
+//       status: 'offline'
+//         },
+//     minus4: {
+//       active: 'false',
+//       description: 'shared-runner-7',
+//       id: 4,
+//       ip_address: '127.0.0.1',
+//       is_shared: 'true',
+//       name: 'one',
+//       online: 'true',
+//       status: 'paused'
+//     },
+//     minus3: {
 //       active: 'true',
 //       description: 'shared-runner-1',
+//       id: 3,
+//       ip_address: '127.0.0.1',
+//       is_shared: 'true',
+//       name: 'three',
+//       online: 'true',
+//       status: 'online'
+//         },
+//     minus2: {
+//       active: 'true',
+//       description: 'shared-runner-2',
+//       id: 2,
+//       ip_address: '127.0.0.1',
+//       is_shared: 'true',
+//       name: 'two',
+//       online: 'false',
+//       status: 'offline'
+//       },
+//     minus1: {
+//       active: 'true',
+//       description: 'test-2-20150125',
 //       id: 1,
+//       ip_address: '127.0.0.1',
+//       is_shared: 'false',
+//       name: 'one',
+//       online: 'false',
+//       status: 'offline'
+//         },
+//     now: {
+//       active: 'true',
+//       description: 'shared-runner-1',
+//       id: 0,
 //       ip_address: '127.0.0.1',
 //       is_shared: 'true',
 //       name: 'one',
 //       online: 'true',
 //       status: 'online'
-//   },
-//   {
-//       active: 'true',
-//       description: 'shared-runner-2',
-//       id: 3,
-//       ip_address: '127.0.0.1',
-//       is_shared: 'true',
-//       name: 'three',
-//       online: 'false',
-//       status: 'offline'
-//   },
-//   {
-//       active: 'true',
-//       description: 'test-1-20150125',
-//       id: 6,
-//       ip_address: '127.0.0.1',
-//       is_shared: 'false',
-//       name: 'six',
-//       online: 'true',
-//       status: 'paused'
-//   },
-//   {
-//       active: 'true',
-//       description: 'test-2-20150125',
-//       id: 8,
-//       ip_address: '127.0.0.1',
-//       is_shared: 'false',
-//       name: 'eight',
-//       online: 'false',
-//       status: 'offline'
+//     }
 //   }
 // ];
+
+// TODO: replace this with real data from gitlab
+const RUNNER_DATA: TableItem[] = [
+  {
+      active: 'true',
+      description: 'shared-runner-1',
+      id: 1,
+      ip_address: '127.0.0.1',
+      is_shared: 'true',
+      name: 'one',
+      online: 'true',
+      status: 'online'
+  },
+  {
+      active: 'true',
+      description: 'shared-runner-2',
+      id: 3,
+      ip_address: '127.0.0.1',
+      is_shared: 'true',
+      name: 'three',
+      online: 'false',
+      status: 'offline'
+  },
+  {
+      active: 'true',
+      description: 'test-1-20150125',
+      id: 6,
+      ip_address: '127.0.0.1',
+      is_shared: 'false',
+      name: 'six',
+      online: 'true',
+      status: 'paused'
+  },
+  {
+      active: 'true',
+      description: 'test-2-20150125',
+      id: 8,
+      ip_address: '127.0.0.1',
+      is_shared: 'false',
+      name: 'eight',
+      online: 'false',
+      status: 'offline'
+  }
+];
 
 /**
  * Data source for the Table view. This class should
@@ -234,6 +236,12 @@ export class TableDataSource extends DataSource<TableItem> {
           return compare(a.name, b.name, isAsc);
         case 'id':
           return compare(+a.id, +b.id, isAsc);
+        case 'online':
+          return compare(+a.online, +b.online, isBefore);
+        case 'active':
+          return compare(+a.active, +b.active, isAsc);
+        case 'status':
+          return compare(+a.status, +b.status, isAsc);
         default:
           return 0;
       }
@@ -250,14 +258,6 @@ export class TableDataSource extends DataSource<TableItem> {
     const nowminus2 = format(subDays(n, 2), 'ddMMM');
     const nowminus1 = format(subDays(n, 1), 'ddMMM');
     const now = format(n, 'ddMMM');
-    console.log('now: ', now);
-    console.log('nowminus1: ', nowminus1);
-    console.log('nowminus2: ', nowminus2);
-    console.log('nowminus3: ', nowminus3);
-    console.log('nowminus4: ', nowminus4);
-    console.log('nowminus5: ', nowminus5);
-    console.log('nowminus6: ', nowminus6);
-    console.log('nowminus7: ', nowminus7);
   }
 }
 
