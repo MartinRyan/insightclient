@@ -16,8 +16,8 @@ export class TableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable, {static: false}) table: MatTable<TableItem>;
   dataSource: TableDataSource;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name', 'status', 'active', 'description', 'ip_address', 'is_shared', 'online'];
-  // displayedColumns = ['id', 'name', 'minus7', 'minus6', 'minus5', 'minus4', 'minus3', 'minus2', 'minus1', 'now'];
+  // displayedColumns = ['id', 'name', 'status', 'active', 'description', 'ip_address', 'is_shared', 'online'];
+  displayedColumns = ['id', 'name', 'minus7', 'minus6', 'minus5', 'minus4', 'minus3', 'minus2', 'minus1', 'now'];
   nowminus7: any;
   nowminus6: any;
   nowminus5: any;
