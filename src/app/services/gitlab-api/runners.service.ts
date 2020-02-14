@@ -22,13 +22,6 @@ export class RunnersService {
     private http: HttpClient,
     private settingsService: SettingsService) {}
 
-  // curl --header "PRIVATE-TOKEN: <your_access_token>" "https://gitlab.example.com/api/v4/runners/all"
-  // return this.httpClient.delete<Product>(this.apiServer + '/products/' + id, this.httpOptions)
-
-  // getRunners(): Observable<Runner[]> {
-  //   return this.http.get<Runner[]>(this.gitlabUrl);
-  // }
-
   fetchRunners() {
     return this.http.get<Runner[]>(`${this.gitlabUrl}/api/v4/runners/all`, this.httpOptions).pipe(
       retryWhen(err => {

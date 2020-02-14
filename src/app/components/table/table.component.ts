@@ -6,6 +6,7 @@ import { TableDataSource, TableItem } from './table-datasource';
 import { format, subDays } from 'date-fns';
 import { RunnersService } from 'src/app/services/gitlab-api/runners.service';
 import { RunnersDataSource } from 'src/app/models/runners-data-source.model';
+import { ConditionalExpr } from '@angular/compiler';
 
 @Component({
   selector: 'app-table',
@@ -13,16 +14,27 @@ import { RunnersDataSource } from 'src/app/models/runners-data-source.model';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements AfterViewInit, OnInit {
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
-  @ViewChild(MatTable, {static: false}) table: MatTable<TableItem>;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatTable, { static: false }) table: MatTable<TableItem>;
   dataSource: TableDataSource;
   // dataSource: RunnersDataSource;
   runnerService: RunnersService;
   // dataSource = new RunnersDataSource(this.runnerService);
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   // displayedColumns = ['id', 'name', 'status', 'active', 'description', 'ip_address', 'is_shared', 'online'];
-  displayedColumns = ['id', 'name', 'minus7', 'minus6', 'minus5', 'minus4', 'minus3', 'minus2', 'minus1', 'now'];
+  displayedColumns = [
+    'id',
+    'name',
+    'minus7',
+    'minus6',
+    'minus5',
+    'minus4',
+    'minus3',
+    'minus2',
+    'minus1',
+    'now'
+  ];
   nowminus7: any;
   nowminus6: any;
   nowminus5: any;
@@ -48,7 +60,11 @@ export class TableComponent implements AfterViewInit, OnInit {
     this.table.dataSource = this.dataSource;
   }
 
-getDates() {
+  testClick() {
+    console.log('click');
+  }
+
+  getDates() {
     const now = new Date();
     this.nowminus7 = format(subDays(now, 7), 'ddMMM');
     this.nowminus6 = format(subDays(now, 6), 'ddMMM');
