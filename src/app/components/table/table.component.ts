@@ -4,6 +4,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { TableDataSource, TableItem } from './table-datasource';
 import { format, subDays } from 'date-fns';
+import { RunnersService } from 'src/app/services/gitlab-api/runners.service';
+import { RunnersDataSource } from 'src/app/models/runners-data-source.model';
 
 @Component({
   selector: 'app-table',
@@ -15,6 +17,9 @@ export class TableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatTable, {static: false}) table: MatTable<TableItem>;
   dataSource: TableDataSource;
+  // dataSource: RunnersDataSource;
+  runnerService: RunnersService;
+  // dataSource = new RunnersDataSource(this.runnerService);
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   // displayedColumns = ['id', 'name', 'status', 'active', 'description', 'ip_address', 'is_shared', 'online'];
   displayedColumns = ['id', 'name', 'minus7', 'minus6', 'minus5', 'minus4', 'minus3', 'minus2', 'minus1', 'now'];
@@ -27,8 +32,13 @@ export class TableComponent implements AfterViewInit, OnInit {
   nowminus1: any;
   now: any;
 
+  constructor(private service: RunnersService) {
+    this.runnerService = service;
+  }
+
   ngOnInit() {
     this.dataSource = new TableDataSource();
+    // this.dataSource = new RunnersDataSource(this.runnerService);
     this.getDates();
   }
 

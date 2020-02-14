@@ -12,10 +12,7 @@ export class GitLabApiInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const gitlabUrl =
-      this.settingsService.settings.isGitlabDotCom === 'true'
-        ? 'https://gitlab.com'
-        : this.settingsService.settings.gitlabAddress;
+    const gitlabUrl = this.settingsService.settings.gitlabAddress;
     const apiReq = req.clone({
       url: `${gitlabUrl}/api/v4/${req.url}`,
       setHeaders: {
