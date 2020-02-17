@@ -2,5 +2,12 @@
   width: 100%;
 }
 
-.material-icons.color_green { background-color: chartreuse;}
-.material-icons.color_red{ background-color: red; }
+.material-icons.color_green {
+  color: white;
+  background-color: rgb(88, 207, 73);
+}
+
+.material-icons.color_red {
+  color: white;
+  background-color: rgb(218, 56, 56);
+}

@@ -5,6 +5,7 @@ import { delay, retryWhen, take } from 'rxjs/operators';
 
 import { Runner } from './../../models/runner';
 import { SettingsService } from './../settings/settings.service';
+import { RunnerItem } from 'src/app/models/runners-data-source.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +19,14 @@ export class RunnersService {
     })
   };
 
+
   constructor(
     private http: HttpClient,
-    private settingsService: SettingsService) {}
+    private settingsService: SettingsService) {
+    }
 
   fetchRunners() {
-    return this.http.get<Runner[]>(`${this.gitlabUrl}/api/v4/runners/all`, this.httpOptions).pipe(
+    return this.http.get<Runner[]>(`runners/all`, this.httpOptions).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch runners'))

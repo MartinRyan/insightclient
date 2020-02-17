@@ -20,7 +20,6 @@ export class TableComponent implements AfterViewInit, OnInit {
   dataSource: TableDataSource;
   // dataSource: RunnersDataSource;
   runnerService: RunnersService;
-  // dataSource = new RunnersDataSource(this.runnerService);
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   // displayedColumns = ['id', 'name', 'status', 'active', 'description', 'ip_address', 'is_shared', 'online'];
   displayedColumns = [
@@ -49,9 +48,13 @@ export class TableComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    this.dataSource = new TableDataSource();
-    // this.dataSource = new RunnersDataSource(this.runnerService);
     this.getDates();
+    this.dataSource = new TableDataSource();
+    console.log(this.dataSource);
+    // this.dataSource = new RunnersDataSource(this.runnerService);
+    // this.runnerService.fetchRunners().subscribe((data) => {
+    //   console.log(data);
+    // });
   }
 
   ngAfterViewInit() {
@@ -63,6 +66,14 @@ export class TableComponent implements AfterViewInit, OnInit {
   testClick() {
     console.log('click');
   }
+
+  getClass(online) {
+    console.log('getClass value ', online);
+    return {
+      'material-icons color_green': online === 'true',
+      'material-icons color_red': online === 'false'
+    };
+ }
 
   getDates() {
     const now = new Date();

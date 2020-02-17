@@ -34,7 +34,7 @@ const RUNNER_DATA: TableItem[] = [
   {
     id: '1',
     name: 'shared-runner-1',
-      minus7: {
+    minus7: {
       active: 'true',
       description: 'test03-447589',
       id: 1,
@@ -43,8 +43,8 @@ const RUNNER_DATA: TableItem[] = [
       name: 'shared-runner-1',
       online: 'true',
       status: 'online'
-        },
-      minus6: {
+    },
+    minus6: {
       active: 'true',
       description: 'test-16781-67',
       id: 6,
@@ -53,7 +53,7 @@ const RUNNER_DATA: TableItem[] = [
       name: 'shared-runner-1',
       online: 'true',
       status: 'online'
-        },
+    },
     minus5: {
       active: 'true',
       description: 'test-11-142463576',
@@ -63,7 +63,7 @@ const RUNNER_DATA: TableItem[] = [
       name: 'shared-runner-1',
       online: 'false',
       status: 'offline'
-        },
+    },
     minus4: {
       active: 'false',
       description: 'test-1-3453453',
@@ -83,7 +83,7 @@ const RUNNER_DATA: TableItem[] = [
       name: 'shared-runner-1',
       online: 'true',
       status: 'online'
-        },
+    },
     minus2: {
       active: 'true',
       description: 'test-4-20154',
@@ -93,7 +93,7 @@ const RUNNER_DATA: TableItem[] = [
       name: 'shared-runner-1',
       online: 'false',
       status: 'offline'
-      },
+    },
     minus1: {
       active: 'true',
       description: 'test-5-20150125',
@@ -103,7 +103,7 @@ const RUNNER_DATA: TableItem[] = [
       name: 'shared-runner-1',
       online: 'false',
       status: 'offline'
-        },
+    },
     now: {
       active: 'true',
       description: 'test-6-383487',
@@ -111,6 +111,90 @@ const RUNNER_DATA: TableItem[] = [
       ip_address: '127.0.0.1',
       is_shared: 'true',
       name: 'shared-runner-1',
+      online: 'true',
+      status: 'online'
+    }
+  },
+  {
+    id: '2',
+    name: 'shared-runner-2',
+    minus7: {
+      active: 'true',
+      description: 'test71-34347',
+      id: 1,
+      ip_address: '127.0.0.1',
+      is_shared: 'true',
+      name: 'shared-runner-2',
+      online: 'true',
+      status: 'online'
+    },
+    minus6: {
+      active: 'true',
+      description: 'test-218-878',
+      id: 2,
+      ip_address: '127.0.0.1',
+      is_shared: 'true',
+      name: 'shared-runner-2',
+      online: 'true',
+      status: 'online'
+    },
+    minus5: {
+      active: 'true',
+      description: 'test-43-5457',
+      id: 3,
+      ip_address: '127.0.0.1',
+      is_shared: 'false',
+      name: 'shared-runner-2',
+      online: 'true',
+      status: 'active'
+    },
+    minus4: {
+      active: 'false',
+      description: 'test-1-3453453',
+      id: 4,
+      ip_address: '127.0.0.1',
+      is_shared: 'true',
+      name: 'shared-runner-2',
+      online: 'true',
+      status: 'paused'
+    },
+    minus3: {
+      active: 'true',
+      description: 'test-2-44567',
+      id: 5,
+      ip_address: '127.0.0.1',
+      is_shared: 'true',
+      name: 'shared-runner-2',
+      online: 'true',
+      status: 'online'
+    },
+    minus2: {
+      active: 'true',
+      description: 'test-4-20154',
+      id: 2,
+      ip_address: '127.0.0.1',
+      is_shared: 'true',
+      name: 'shared-runner-2',
+      online: 'true',
+      status: 'online'
+    },
+    minus1: {
+      active: 'true',
+      description: 'test-5-20150125',
+      id: 1,
+      ip_address: '127.0.0.1',
+      is_shared: 'true',
+      name: 'shared-runner-2',
+      online: 'true',
+      status: 'online'
+    },
+    now: {
+      active: 'true',
+      description: 'test-6-383487',
+      id: 0,
+      ip_address: '127.0.0.1',
+      is_shared: 'true',
+      name: 'shared-runner-2',
       online: 'true',
       status: 'online'
     }
