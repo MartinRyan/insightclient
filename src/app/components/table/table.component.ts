@@ -5,8 +5,9 @@ import { MatTable } from '@angular/material/table';
 import { TableDataSource, TableItem } from './table-datasource';
 import { format, subDays } from 'date-fns';
 import { RunnersService } from 'src/app/services/gitlab-api/runners.service';
-import { RunnersDataSource } from 'src/app/models/runners-data-source.model';
+import { RunnersDataSource, RunnerItem } from 'src/app/models/runners-data-source.model';
 import { ConditionalExpr } from '@angular/compiler';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-table',
@@ -17,8 +18,8 @@ export class TableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatTable, { static: false }) table: MatTable<TableItem>;
-  dataSource: TableDataSource;
-  // dataSource: RunnersDataSource;
+  // dataSource: TableDataSource;
+  dataSource: RunnersDataSource;
   runnerService: RunnersService;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   // displayedColumns = ['id', 'name', 'status', 'active', 'description', 'ip_address', 'is_shared', 'online'];
@@ -49,30 +50,23 @@ export class TableComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.getDates();
-    this.dataSource = new TableDataSource();
+    // this.dataSource = new TableDataSource();
+    this.dataSource = new RunnersDataSource(this.runnerService);
+    // this.table.dataSource = this.dataSource;
     console.log(this.dataSource);
-    // this.dataSource = new RunnersDataSource(this.runnerService);
-    // this.runnerService.fetchRunners().subscribe((data) => {
-    //   console.log(data);
-    // });
+    this.runnerService.fetchRunners().subscribe((data) => {
+      console.log(data);
+    });
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
   }
 
-  testClick() {
-    console.log('click');
-  }
-
-  getClass(online) {
-    console.log('getClass value ', online);
-    return {
-      'material-icons color_green': online === 'true',
-      'material-icons color_red': online === 'false'
-    };
+  showData(data) {
+    console.log('showData value ', data);
  }
 
   getDates() {

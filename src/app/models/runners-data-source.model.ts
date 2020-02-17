@@ -18,97 +18,105 @@ export interface RunnerItem {
   minus2: object;
   minus1: object;
   now: object;
+  // status: string;
+  // active: string;
+  // description: string;
+  // ip_address: string;
+  // is_shared: string;
+  // online: string;
 }
 
-const RUNNER_DATA: RunnerItem[] = [
-    {
-      id: '1',
-      name: 'shared-runner-1',
-        minus7: {
-        active: 'true',
-        description: 'test03-447589',
-        id: 1,
-        ip_address: '127.0.0.1',
-        is_shared: 'true',
-        name: 'shared-runner-1',
-        online: 'true',
-        status: 'online'
-          },
-        minus6: {
-        active: 'true',
-        description: 'test-16781-67',
-        id: 6,
-        ip_address: '127.0.0.1',
-        is_shared: 'true',
-        name: 'shared-runner-1',
-        online: 'true',
-        status: 'online'
-          },
-      minus5: {
-        active: 'true',
-        description: 'test-11-142463576',
-        id: 85,
-        ip_address: '127.0.0.1',
-        is_shared: 'false',
-        name: 'shared-runner-1',
-        online: 'false',
-        status: 'offline'
-          },
-      minus4: {
-        active: 'false',
-        description: 'test-1-3453453',
-        id: 4,
-        ip_address: '127.0.0.1',
-        is_shared: 'true',
-        name: 'shared-runner-1',
-        online: 'true',
-        status: 'paused'
-      },
-      minus3: {
-        active: 'true',
-        description: 'test-3-874857',
-        id: 3,
-        ip_address: '127.0.0.1',
-        is_shared: 'true',
-        name: 'shared-runner-1',
-        online: 'true',
-        status: 'online'
-          },
-      minus2: {
-        active: 'true',
-        description: 'test-4-20154',
-        id: 2,
-        ip_address: '127.0.0.1',
-        is_shared: 'true',
-        name: 'shared-runner-1',
-        online: 'false',
-        status: 'offline'
-        },
-      minus1: {
-        active: 'true',
-        description: 'test-5-20150125',
-        id: 1,
-        ip_address: '127.0.0.1',
-        is_shared: 'false',
-        name: 'shared-runner-1',
-        online: 'false',
-        status: 'offline'
-          },
-      now: {
-        active: 'true',
-        description: 'test-6-383487',
-        id: 0,
-        ip_address: '127.0.0.1',
-        is_shared: 'true',
-        name: 'shared-runner-1',
-        online: 'true',
-        status: 'online'
-      }
-    }
-  ];
+// const RUNNER_DATA: RunnerItem[] = [
+//     {
+//       id: '1',
+//       name: 'shared-runner-1',
+//         minus7: {
+//         active: 'true',
+//         description: 'test03-447589',
+//         id: 1,
+//         ip_address: '127.0.0.1',
+//         is_shared: 'true',
+//         name: 'shared-runner-1',
+//         online: 'true',
+//         status: 'online'
+//           },
+//         minus6: {
+//         active: 'true',
+//         description: 'test-16781-67',
+//         id: 6,
+//         ip_address: '127.0.0.1',
+//         is_shared: 'true',
+//         name: 'shared-runner-1',
+//         online: 'true',
+//         status: 'online'
+//           },
+//       minus5: {
+//         active: 'true',
+//         description: 'test-11-142463576',
+//         id: 85,
+//         ip_address: '127.0.0.1',
+//         is_shared: 'false',
+//         name: 'shared-runner-1',
+//         online: 'false',
+//         status: 'offline'
+//           },
+//       minus4: {
+//         active: 'false',
+//         description: 'test-1-3453453',
+//         id: 4,
+//         ip_address: '127.0.0.1',
+//         is_shared: 'true',
+//         name: 'shared-runner-1',
+//         online: 'true',
+//         status: 'paused'
+//       },
+//       minus3: {
+//         active: 'true',
+//         description: 'test-3-874857',
+//         id: 3,
+//         ip_address: '127.0.0.1',
+//         is_shared: 'true',
+//         name: 'shared-runner-1',
+//         online: 'true',
+//         status: 'online'
+//           },
+//       minus2: {
+//         active: 'true',
+//         description: 'test-4-20154',
+//         id: 2,
+//         ip_address: '127.0.0.1',
+//         is_shared: 'true',
+//         name: 'shared-runner-1',
+//         online: 'false',
+//         status: 'offline'
+//         },
+//       minus1: {
+//         active: 'true',
+//         description: 'test-5-20150125',
+//         id: 1,
+//         ip_address: '127.0.0.1',
+//         is_shared: 'false',
+//         name: 'shared-runner-1',
+//         online: 'false',
+//         status: 'offline'
+//           },
+//       now: {
+//         active: 'true',
+//         description: 'test-6-383487',
+//         id: 0,
+//         ip_address: '127.0.0.1',
+//         is_shared: 'true',
+//         name: 'shared-runner-1',
+//         online: 'true',
+//         status: 'online'
+//       }
+//     }
+//   ];
 
 export class RunnersDataSource extends DataSource<any> {
-    data: RunnerItem[] = RUNNER_DATA;
+  // data: RunnerItem[] = RUNNER_DATA;
+  data: RunnerItem[];
+
   constructor(private runnersService: RunnersService) {
     super();
   }
@@ -123,22 +131,22 @@ export class RunnersDataSource extends DataSource<any> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-//   connect(): Observable<RunnerItem[]> {
-//     this.getDates();
-//     // Combine everything that affects the rendered data into one update
-//     // stream for the data-table to consume.
-//     const dataMutations = [
-//       observableOf(this.data),
-//       this.paginator.page,
-//       this.sort.sortChange
-//     ];
+  // connect(): Observable<RunnerItem[]> {
+  //   this.getDates();
+  //   // Combine everything that affects the rendered data into one update
+  //   // stream for the data-table to consume.
+  //   const dataMutations = [
+  //     observableOf(this.data),
+  //     this.paginator.page,
+  //     this.sort.sortChange
+  //   ];
 
-//     return merge(...dataMutations).pipe(
-//       map(() => {
-//         return this.getPagedData(this.getSortedData([...this.data]));
-//       })
-//     );
-//   }
+  //   return merge(...dataMutations).pipe(
+  //     map(() => {
+  //       return this.getPagedData(this.getSortedData([...this.data]));
+  //     })
+  //   );
+  // }
 
   /**
    *  Called when the table is being destroyed. Use this function, to clean up

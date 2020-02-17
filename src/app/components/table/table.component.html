@@ -54,9 +54,10 @@
     <!-- NowMinuSeven Column -->
     <ng-container matColumnDef='minus7'>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus7}}</th>
-      <td mat-cell *matCellDef='let row'><button mat-mini-fab color='primary'
+      <td mat-cell *matCellDef='let row'>
+        <button mat-mini-fab color='primary'
           [className]="row.minus7.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
-          (click)='testClick()'>
+          (click)='showData(row.minus7)'>
           <mat-icon class="material-icons color_green">{{row.minus7.online === 'true' ? 'done' : 'offline_bolt'}}
           </mat-icon>
         </button> {{row.minus7.online}}</td>
@@ -65,9 +66,10 @@
     <!-- NowMinusSix Column -->
     <ng-container matColumnDef='minus6'>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus6}}</th>
-      <td mat-cell *matCellDef='let row'><button mat-mini-fab color='primary'
+      <td mat-cell *matCellDef='let row'>
+        <button mat-mini-fab color='primary'
           [className]="row.minus6.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
-          (click)='testClick()'>
+          (click)='showData(row.minus6)'>
           <mat-icon>{{row.minus6.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
         </button> {{row.minus6.online}}</td>
     </ng-container>
@@ -76,9 +78,10 @@
     <!-- NowMinusFive Column -->
     <ng-container matColumnDef='minus5'>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus5}}</th>
-      <td mat-cell *matCellDef='let row'><button mat-mini-fab color='primary'
+      <td mat-cell *matCellDef='let row'>
+        <button mat-mini-fab color='primary'
           [className]="row.minus5.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
-          (click)='testClick()'>
+          (click)='showData(row.minus5)'>
           <mat-icon>{{row.minus5.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
         </button> {{row.minus5.online}}</td>
     </ng-container>
@@ -86,9 +89,10 @@
     <!-- NowMinusFour Column -->
     <ng-container matColumnDef='minus4'>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus4}}</th>
-      <td mat-cell *matCellDef='let row'><button mat-mini-fab color='primary'
+      <td mat-cell *matCellDef='let row'>
+        <button mat-mini-fab color='primary'
           [className]="row.minus4.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
-          (click)='testClick()'>
+          (click)='showData(row.minus4)'>
           <mat-icon>{{row.minus4.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
         </button> {{row.minus4.online}}</td>
     </ng-container>
@@ -96,9 +100,10 @@
     <!-- NowMinusThree Column -->
     <ng-container matColumnDef='minus3'>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus3}}</th>
-      <td mat-cell *matCellDef='let row'><button mat-mini-fab color='primary'
+      <td mat-cell *matCellDef='let row'>
+        <button mat-mini-fab color='primary'
           [className]="row.minus3.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
-          (click)='testClick()'>
+          (click)='showData(row.minus3)'>
           <mat-icon>{{row.minus3.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
         </button> {{row.minus3.online}}</td>
     </ng-container>
@@ -106,9 +111,10 @@
     <!-- NowMinusTwo Column -->
     <ng-container matColumnDef='minus2'>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus2}}</th>
-      <td mat-cell *matCellDef='let row'><button mat-mini-fab color='primary'
+      <td mat-cell *matCellDef='let row'>
+        <button mat-mini-fab color='primary'
           [className]="row.minus2.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
-          (click)='testClick()'>
+          (click)='showData(row.minus2)'>
           <mat-icon>{{row.minus2.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
         </button> {{row.minus2.online}}</td>
     </ng-container>
@@ -116,9 +122,10 @@
     <!-- NowMinusOne Column -->
     <ng-container matColumnDef='minus1'>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus1}}</th>
-      <td mat-cell *matCellDef='let row'><button mat-mini-fab color='primary'
+      <td mat-cell *matCellDef='let row'>
+        <button mat-mini-fab color='primary'
           [className]="row.minus1.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
-          (click)='testClick()'>
+          (click)='showData(row.minus1)'>
           <mat-icon>{{row.minus1.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
         </button> {{row.minus1.online}}</td>
     </ng-container>
@@ -126,9 +133,12 @@
     <!-- Now Column -->
     <ng-container matColumnDef='now'>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{now}}</th>
-      <td mat-cell *matCellDef='let row'><button mat-mini-fab color='primary'
+      <td mat-cell *matCellDef='let row'>
+        <button mat-mini-fab color='primary'
+          matTooltip="click for data"
+          matTooltipPosition="after"
           [className]="row.now.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
-          (click)='testClick()'>
+          (click)='showData(row.now)'>
           <mat-icon>{{row.now.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
         </button> {{row.now.online}}</td>
     </ng-container>
