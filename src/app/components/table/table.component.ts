@@ -18,8 +18,8 @@ export class TableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatTable, { static: false }) table: MatTable<TableItem>;
-  // dataSource: TableDataSource;
-  dataSource: RunnersDataSource;
+  dataSource: TableDataSource;
+  // dataSource: RunnersDataSource;
   runnerService: RunnersService;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   // displayedColumns = ['id', 'name', 'status', 'active', 'description', 'ip_address', 'is_shared', 'online'];
@@ -50,18 +50,18 @@ export class TableComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.getDates();
-    // this.dataSource = new TableDataSource();
-    this.dataSource = new RunnersDataSource(this.runnerService);
+    this.dataSource = new TableDataSource();
+    // this.dataSource = new RunnersDataSource(this.runnerService);
     // this.table.dataSource = this.dataSource;
     console.log(this.dataSource);
-    this.runnerService.fetchRunners().subscribe((data) => {
-      console.log(data);
-    });
+    // this.runnerService.fetchRunners().subscribe((data) => {
+    //   console.log(data);
+    // });
   }
 
   ngAfterViewInit() {
-    // this.dataSource.sort = this.sort;
-    // this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
   }
 
