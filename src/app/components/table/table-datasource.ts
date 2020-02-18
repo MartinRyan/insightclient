@@ -213,13 +213,13 @@ const RUNNER_DATA: TableItem[] = [
       status: 'active'
     },
     minus6: {
-      active: 'true',
-      description: 'run-3254-745',
-      id: 2,
-      ip_address: '127.0.0.1',
-      is_shared: 'false',
-      name: 'runner-1',
-      online: 'true',
+      active: '',
+      description: '',
+      id: null,
+      ip_address: '',
+      is_shared: '',
+      name: '',
+      online: '',
       status: ''
     },
     minus5: {

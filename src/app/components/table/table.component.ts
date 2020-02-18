@@ -9,6 +9,7 @@ import { RunnersDataSource, RunnerItem } from 'src/app/models/runners-data-sourc
 import { ConditionalExpr } from '@angular/compiler';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Memoize } from 'lodash-decorators/memoize';
+import { isEmpty } from 'lodash';
 
 @Component({
   selector: 'app-table',
@@ -23,7 +24,6 @@ export class TableComponent implements AfterViewInit, OnInit {
   // dataSource: RunnersDataSource;
   runnerService: RunnersService;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  // displayedColumns = ['id', 'name', 'status', 'active', 'description', 'ip_address', 'is_shared', 'online'];
   displayedColumns = [
     'id',
     'name',
@@ -66,7 +66,6 @@ export class TableComponent implements AfterViewInit, OnInit {
     this.table.dataSource = this.dataSource;
   }
 
-  @Memoize
   showData(data) {
     console.log('showData value ', data);
     return data;
@@ -82,14 +81,6 @@ export class TableComponent implements AfterViewInit, OnInit {
     this.nowminus2 = format(subDays(now, 2), 'dd MMM');
     this.nowminus1 = format(subDays(now, 1), 'dd MMM');
     this.now = format(now, 'dd MMM');
-    console.log('now: ', this.now);
-    console.log('nowminus1: ', this.nowminus1);
-    console.log('nowminus2: ', this.nowminus2);
-    console.log('nowminus3: ', this.nowminus3);
-    console.log('nowminus4: ', this.nowminus4);
-    console.log('nowminus5: ', this.nowminus5);
-    console.log('nowminus6: ', this.nowminus6);
-    console.log('nowminus7: ', this.nowminus7);
   }
 
   @Memoize
@@ -103,9 +94,25 @@ export class TableComponent implements AfterViewInit, OnInit {
       icon = 'error';
     } else if (value === 'offline') {
       icon = 'offline_bolt';
-    } else if (value === '') {
+    } else if (isEmpty(value)) {
       icon = 'warning';
     }
     return icon;
+  }
+
+  getStyle(value) {
+    let style = '';
+    if (value === 'active') {
+      style = 'mat-mini-fab material-icons color_green';
+    } else if (value === 'online') {
+      style = 'mat-mini-fab material-icons color_orange';
+    } else if (value === 'paused') {
+      style = 'mat-mini-fab material-icons color_blue';
+    } else if (value === 'offline') {
+      style = 'mat-mini-fab material-icons color_red';
+    } else if (isEmpty(value)) {
+      style = 'mat-mini-fab material-icons color_grey';
+    }
+    return style;
   }
 }
