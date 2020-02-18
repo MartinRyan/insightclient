@@ -221,14 +221,14 @@ export class RunnersService {
         status: 'active'
       },
       minus4: {
-        active: 'false',
+        active: 'true',
         description: 'run-43-575',
         id: 4,
         ip_address: '127.0.0.1',
         is_shared: 'false',
         name: 'runner-1',
-        online: 'false',
-        status: 'offline'
+        online: 'true',
+        status: 'online'
       },
       minus3: {
         active: 'true',
@@ -312,7 +312,7 @@ export class RunnersService {
         is_shared: 'false',
         name: 'runner-2a',
         online: 'true',
-        status: 'paused'
+        status: 'online'
       },
       minus3: {
         active: 'true',

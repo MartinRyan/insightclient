@@ -47,6 +47,7 @@ import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RunnersComponent } from './components/runners/runners.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -63,7 +64,6 @@ import { RunnersComponent } from './components/runners/runners.component';
     DateAgoPipe,
     SecondsToTimePipe,
     RunnersComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -89,6 +89,7 @@ import { RunnersComponent } from './components/runners/runners.component';
     MatSelectModule,
     MatSnackBarModule,
     MatSortModule,
+    MatTooltipModule,
     GraphQLModule,
     HttpClientModule,
     FormsModule,
@@ -97,6 +98,9 @@ import { RunnersComponent } from './components/runners/runners.component';
     AngularSvgIconModule,
     MessagesModule,
     MessageModule
+  ],
+  exports: [
+    MatTooltipModule
   ],
   providers: [
     NotificationService,

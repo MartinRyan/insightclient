@@ -56,11 +56,28 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus7}}</th>
       <td mat-cell *matCellDef='let row'>
         <button mat-mini-fab color='primary'
-          [className]="row.minus7.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
+        matTooltip="
+        id: {{row.minus7.id}}
+        name: {{row.minus7.name}} 
+        active: {{row.minus7.active}} 
+        description: {{row.minus7.description}} 
+        ip_address: {{row.minus7.ip_address}} 
+        is_shared: {{row.minus7.is_shared}} 
+        status: {{row.minus7.status}}
+        uptime: tbd
+        "
+          matTooltipPosition="before"
+          [ngClass]="{
+            'online': 'mat-mini-fab material-icons color_orange',
+            'offline': 'mat-mini-fab material-icons color_red',
+            'paused': 'mat-mini-fab material-icons color_blue',
+            'active': 'mat-mini-fab material-icons color_green',
+            '': 'mat-mini-fab material-icons color_grey'}
+            [row.minus7.status]"
           (click)='showData(row.minus7)'>
-          <mat-icon class="material-icons color_green">{{row.minus7.online === 'true' ? 'done' : 'offline_bolt'}}
+          <mat-icon>{{row.minus7.status === 'offline' ? 'offline_bolt' : 'done'}}
           </mat-icon>
-        </button> {{row.minus7.online}}</td>
+        </button></td>
     </ng-container>
 
     <!-- NowMinusSix Column -->
@@ -68,10 +85,28 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus6}}</th>
       <td mat-cell *matCellDef='let row'>
         <button mat-mini-fab color='primary'
-          [className]="row.minus6.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
+        matTooltip="
+        id: {{row.minus6.id}}
+        name: {{row.minus6.name}} 
+        active: {{row.minus6.active}} 
+        description: {{row.minus6.description}} 
+        ip_address: {{row.minus6.ip_address}} 
+        is_shared: {{row.minus6.is_shared}} 
+        status: {{row.minus6.status}}
+        uptime: tbd
+        "
+          matTooltipPosition="before"
+          [ngClass]="{
+            'online': 'mat-mini-fab material-icons color_orange',
+            'offline': 'mat-mini-fab material-icons color_red',
+            'paused': 'mat-mini-fab material-icons color_blue',
+            'active': 'mat-mini-fab material-icons color_green',
+            '': 'mat-mini-fab material-icons color_grey'}
+            [row.minus6.status]"
           (click)='showData(row.minus6)'>
-          <mat-icon>{{row.minus6.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
-        </button> {{row.minus6.online}}</td>
+          <mat-icon>{{row.minus6.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+        </button>
+      </td>
     </ng-container>
 
 
@@ -80,10 +115,27 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus5}}</th>
       <td mat-cell *matCellDef='let row'>
         <button mat-mini-fab color='primary'
-          [className]="row.minus5.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
+        matTooltip="
+        id: {{row.minus5.id}}
+        name: {{row.minus5.name}} 
+        active: {{row.minus5.active}} 
+        description: {{row.minus5.description}} 
+        ip_address: {{row.minus5.ip_address}} 
+        is_shared: {{row.minus5.is_shared}} 
+        status: {{row.minus5.status}}
+        uptime: tbd
+        "
+          matTooltipPosition="before"
+          [ngClass]="{
+            'online': 'mat-mini-fab material-icons color_orange',
+            'offline': 'mat-mini-fab material-icons color_red',
+            'paused': 'mat-mini-fab material-icons color_blue',
+            'active': 'mat-mini-fab material-icons color_green',
+            '': 'mat-mini-fab material-icons color_grey'}
+            [row.minus5.status]"
           (click)='showData(row.minus5)'>
-          <mat-icon>{{row.minus5.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
-        </button> {{row.minus5.online}}</td>
+          <mat-icon>{{row.minus5.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+        </button></td>
     </ng-container>
 
     <!-- NowMinusFour Column -->
@@ -91,10 +143,27 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus4}}</th>
       <td mat-cell *matCellDef='let row'>
         <button mat-mini-fab color='primary'
-          [className]="row.minus4.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
+        matTooltip="
+        id: {{row.minus4.id}}
+        name: {{row.minus4.name}} 
+        active: {{row.minus4.active}} 
+        description: {{row.minus4.description}} 
+        ip_address: {{row.minus4.ip_address}} 
+        is_shared: {{row.minus4.is_shared}} 
+        status: {{row.minus4.status}}
+        uptime: tbd
+        "
+          matTooltipPosition="before"
+          [ngClass]="{
+            'online': 'mat-mini-fab material-icons color_orange',
+            'offline': 'mat-mini-fab material-icons color_red',
+            'paused': 'mat-mini-fab material-icons color_blue',
+            'active': 'mat-mini-fab material-icons color_green',
+            '': 'mat-mini-fab material-icons color_grey'}
+            [row.minus4.status]"
           (click)='showData(row.minus4)'>
-          <mat-icon>{{row.minus4.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
-        </button> {{row.minus4.online}}</td>
+          <mat-icon>{{row.minus4.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+        </button></td>ssssss
     </ng-container>
 
     <!-- NowMinusThree Column -->
@@ -102,10 +171,27 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus3}}</th>
       <td mat-cell *matCellDef='let row'>
         <button mat-mini-fab color='primary'
-          [className]="row.minus3.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
+        matTooltip="
+        id: {{row.minus3.id}}
+        name: {{row.minus3.name}} 
+        active: {{row.minus3.active}} 
+        description: {{row.minus3.description}} 
+        ip_address: {{row.minus3.ip_address}} 
+        is_shared: {{row.minus3.is_shared}} 
+        status: {{row.minus3.status}}
+        uptime: tbd
+        "
+          matTooltipPosition="before"
+          [ngClass]="{
+            'online': 'mat-mini-fab material-icons color_orange',
+            'offline': 'mat-mini-fab material-icons color_red',
+            'paused': 'mat-mini-fab material-icons color_blue',
+            'active': 'mat-mini-fab material-icons color_green',
+            '': 'mat-mini-fab material-icons color_grey'}
+            [row.minus3.status]"
           (click)='showData(row.minus3)'>
-          <mat-icon>{{row.minus3.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
-        </button> {{row.minus3.online}}</td>
+          <mat-icon>{{row.minus3.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+        </button></td>
     </ng-container>
 
     <!-- NowMinusTwo Column -->
@@ -113,10 +199,27 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus2}}</th>
       <td mat-cell *matCellDef='let row'>
         <button mat-mini-fab color='primary'
-          [className]="row.minus2.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
+        matTooltip="
+        id: {{row.minus2.id}}
+        name: {{row.minus2.name}} 
+        active: {{row.minus2.active}} 
+        description: {{row.minus2.description}} 
+        ip_address: {{row.minus2.ip_address}} 
+        is_shared: {{row.minus2.is_shared}} 
+        status: {{row.minus2.status}}
+        uptime: tbd
+        "
+          matTooltipPosition="before"
+          [ngClass]="{
+            'online': 'mat-mini-fab material-icons color_orange',
+            'offline': 'mat-mini-fab material-icons color_red',
+            'paused': 'mat-mini-fab material-icons color_blue',
+            'active': 'mat-mini-fab material-icons color_green',
+            '': 'mat-mini-fab material-icons color_grey'}
+            [row.minus2.status]"
           (click)='showData(row.minus2)'>
-          <mat-icon>{{row.minus2.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
-        </button> {{row.minus2.online}}</td>
+          <mat-icon>{{row.minus2.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+        </button></td>
     </ng-container>
 
     <!-- NowMinusOne Column -->
@@ -124,10 +227,27 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus1}}</th>
       <td mat-cell *matCellDef='let row'>
         <button mat-mini-fab color='primary'
-          [className]="row.minus1.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
+        matTooltip="
+        id: {{row.minus1.id}}
+        name: {{row.minus1.name}} 
+        active: {{row.minus1.active}} 
+        description: {{row.minus1.description}} 
+        ip_address: {{row.minus1.ip_address}} 
+        is_shared: {{row.minus1.is_shared}} 
+        status: {{row.minus1.status}}
+        uptime: tbd
+        "
+          matTooltipPosition="before"
+          [ngClass]="{
+            'online': 'mat-mini-fab material-icons color_orange',
+            'offline': 'mat-mini-fab material-icons color_red',
+            'paused': 'mat-mini-fab material-icons color_blue',
+            'active': 'mat-mini-fab material-icons color_green',
+            '': 'mat-mini-fab material-icons color_grey'}
+            [row.minus1.status]"
           (click)='showData(row.minus1)'>
-          <mat-icon>{{row.minus1.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
-        </button> {{row.minus1.online}}</td>
+          <mat-icon>{{row.minus1.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+        </button></td>
     </ng-container>
 
     <!-- Now Column -->
@@ -135,12 +255,27 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{now}}</th>
       <td mat-cell *matCellDef='let row'>
         <button mat-mini-fab color='primary'
-          matTooltip="click for data"
-          matTooltipPosition="after"
-          [className]="row.now.online === 'true' ? ' mat-mini-fab material-icons color_green' : 'mat-mini-fab material-icons color_red'"
+          matTooltip="id: {{row.now.id}}
+          name: {{row.now.name}} 
+          active: {{row.now.active}} 
+          description: {{row.now.description}} 
+          ip_address: {{row.now.ip_address}} 
+          is_shared: {{row.now.is_shared}} 
+          status: {{row.now.status}}
+          uptime: tbd
+          "
+          matTooltipPosition="before"
+          matTooltipClass='runners-tooltip'
+          [ngClass]="{
+            'online': 'mat-mini-fab material-icons color_orange',
+            'offline': 'mat-mini-fab material-icons color_red',
+            'paused': 'mat-mini-fab material-icons color_blue',
+            'active': 'mat-mini-fab material-icons color_green',
+            '': 'mat-mini-fab material-icons color_grey'}
+            [row.now.status]"
           (click)='showData(row.now)'>
-          <mat-icon>{{row.now.online === 'true' ? 'done' : 'offline_bolt'}}</mat-icon>
-        </button> {{row.now.online}}</td>
+          <mat-icon>{{row.now.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+        </button></td>
     </ng-container>
 
 

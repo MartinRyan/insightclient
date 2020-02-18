@@ -67,18 +67,19 @@ export class TableComponent implements AfterViewInit, OnInit {
 
   showData(data) {
     console.log('showData value ', data);
+    return data;
  }
 
   getDates() {
     const now = new Date();
-    this.nowminus7 = format(subDays(now, 7), 'ddMMM');
-    this.nowminus6 = format(subDays(now, 6), 'ddMMM');
-    this.nowminus5 = format(subDays(now, 5), 'ddMMM');
-    this.nowminus4 = format(subDays(now, 4), 'ddMMM');
-    this.nowminus3 = format(subDays(now, 3), 'ddMMM');
-    this.nowminus2 = format(subDays(now, 2), 'ddMMM');
-    this.nowminus1 = format(subDays(now, 1), 'ddMMM');
-    this.now = format(now, 'ddMMM');
+    this.nowminus7 = format(subDays(now, 7), 'dd MMM');
+    this.nowminus6 = format(subDays(now, 6), 'dd MMM');
+    this.nowminus5 = format(subDays(now, 5), 'dd MMM');
+    this.nowminus4 = format(subDays(now, 4), 'dd MMM');
+    this.nowminus3 = format(subDays(now, 3), 'dd MMM');
+    this.nowminus2 = format(subDays(now, 2), 'dd MMM');
+    this.nowminus1 = format(subDays(now, 1), 'dd MMM');
+    this.now = format(now, 'dd MMM');
     console.log('now: ', this.now);
     console.log('nowminus1: ', this.nowminus1);
     console.log('nowminus2: ', this.nowminus2);

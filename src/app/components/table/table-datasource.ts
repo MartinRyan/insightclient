@@ -42,7 +42,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'true',
       name: 'shared-runner-1',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus6: {
       active: 'true',
@@ -52,10 +52,10 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'true',
       name: 'shared-runner-1',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus5: {
-      active: 'true',
+      active: 'false',
       description: 'test-11-142463576',
       id: 85,
       ip_address: '127.0.0.1',
@@ -65,14 +65,14 @@ const RUNNER_DATA: TableItem[] = [
       status: 'offline'
     },
     minus4: {
-      active: 'false',
+      active: 'true',
       description: 'test-1-3453453',
       id: 4,
       ip_address: '127.0.0.1',
       is_shared: 'true',
       name: 'shared-runner-1',
       online: 'true',
-      status: 'paused'
+      status: 'active'
     },
     minus3: {
       active: 'true',
@@ -82,10 +82,10 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'true',
       name: 'shared-runner-1',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus2: {
-      active: 'true',
+      active: 'false',
       description: 'test-4-20154',
       id: 2,
       ip_address: '127.0.0.1',
@@ -95,7 +95,7 @@ const RUNNER_DATA: TableItem[] = [
       status: 'offline'
     },
     minus1: {
-      active: 'true',
+      active: 'false',
       description: 'test-5-20150125',
       id: 1,
       ip_address: '127.0.0.1',
@@ -105,28 +105,28 @@ const RUNNER_DATA: TableItem[] = [
       status: 'offline'
     },
     now: {
-      active: 'true',
+      active: 'false',
       description: 'test-6-383487',
       id: 0,
       ip_address: '127.0.0.1',
       is_shared: 'true',
       name: 'shared-runner-1',
       online: 'true',
-      status: 'online'
+      status: 'paused'
     }
   },
   {
     id: '2',
     name: 'shared-runner-2',
     minus7: {
-      active: 'true',
+      active: 'false',
       description: 'test71-34347',
       id: 1,
       ip_address: '127.0.0.1',
       is_shared: 'true',
       name: 'shared-runner-2',
       online: 'true',
-      status: 'online'
+      status: 'paused'
     },
     minus6: {
       active: 'true',
@@ -136,27 +136,27 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'true',
       name: 'shared-runner-2',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus5: {
-      active: 'true',
+      active: 'false',
       description: 'test-43-5457',
       id: 3,
       ip_address: '127.0.0.1',
       is_shared: 'false',
       name: 'shared-runner-2',
       online: 'true',
-      status: 'active'
+      status: 'online'
     },
     minus4: {
-      active: 'false',
+      active: 'true',
       description: 'test-1-3453453',
       id: 4,
       ip_address: '127.0.0.1',
       is_shared: 'true',
       name: 'shared-runner-2',
       online: 'true',
-      status: 'paused'
+      status: 'active'
     },
     minus3: {
       active: 'true',
@@ -166,7 +166,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'true',
       name: 'shared-runner-2',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus2: {
       active: 'true',
@@ -176,7 +176,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'true',
       name: 'shared-runner-2',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus1: {
       active: 'true',
@@ -186,7 +186,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'true',
       name: 'shared-runner-2',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     now: {
       active: 'true',
@@ -196,7 +196,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'true',
       name: 'shared-runner-2',
       online: 'true',
-      status: 'online'
+      status: 'active'
     }
   },
   {
@@ -210,7 +210,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'false',
       name: 'runner-1',
       online: 'true',
-      status: 'paused'
+      status: 'active'
     },
     minus6: {
       active: 'true',
@@ -220,7 +220,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'false',
       name: 'runner-1',
       online: 'true',
-      status: 'online'
+      status: ''
     },
     minus5: {
       active: 'true',
@@ -233,17 +233,17 @@ const RUNNER_DATA: TableItem[] = [
       status: 'active'
     },
     minus4: {
-      active: 'false',
+      active: 'true',
       description: 'run-43-575',
       id: 4,
       ip_address: '127.0.0.1',
       is_shared: 'false',
       name: 'runner-1',
-      online: 'false',
-      status: 'offline'
+      online: 'true',
+      status: 'active'
     },
     minus3: {
-      active: 'true',
+      active: 'false',
       description: 'run-435-987',
       id: 5,
       ip_address: '127.0.0.1',
@@ -260,7 +260,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'false',
       name: 'runner-1',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus1: {
       active: 'true',
@@ -270,7 +270,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'false',
       name: 'runner-1',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     now: {
       active: 'true',
@@ -280,7 +280,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'false',
       name: 'runner-1',
       online: 'true',
-      status: 'online'
+      status: 'active'
     }
   },
   {
@@ -294,7 +294,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'false',
       name: 'runner-2a',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus6: {
       active: 'true',
@@ -304,7 +304,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'false',
       name: 'runner-2a',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus5: {
       active: 'true',
@@ -317,7 +317,7 @@ const RUNNER_DATA: TableItem[] = [
       status: 'active'
     },
     minus4: {
-      active: 'true',
+      active: 'false',
       description: 'run-1104573',
       id: 4,
       ip_address: '127.0.0.1',
@@ -334,7 +334,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'false',
       name: 'runner-2a',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus2: {
       active: 'true',
@@ -344,7 +344,7 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'false',
       name: 'runner-2a',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     minus1: {
       active: 'true',
@@ -354,64 +354,20 @@ const RUNNER_DATA: TableItem[] = [
       is_shared: 'false',
       name: 'runner-2a',
       online: 'true',
-      status: 'online'
+      status: 'active'
     },
     now: {
-      active: 'true',
+      active: 'false',
       description: 'run-88645',
       id: 0,
       ip_address: '127.0.0.1',
       is_shared: 'false',
       name: 'runner-2a',
-      online: 'true',
-      status: 'online'
+      online: 'false',
+      status: 'offline'
     }
   }
 ];
-
-// TODO: replace this with real data from gitlab
-// const RUNNER_DATA: TableItem[] = [
-//   {
-//       active: 'true',
-//       description: 'shared-runner-1',
-//       id: 1,
-//       ip_address: '127.0.0.1',
-//       is_shared: 'true',
-//       name: 'one',
-//       online: 'true',
-//       status: 'online'
-//   },
-//   {
-//       active: 'true',
-//       description: 'shared-runner-2',
-//       id: 3,
-//       ip_address: '127.0.0.1',
-//       is_shared: 'true',
-//       name: 'three',
-//       online: 'false',
-//       status: 'offline'
-//   },
-//   {
-//       active: 'true',
-//       description: 'test-1-20150125',
-//       id: 6,
-//       ip_address: '127.0.0.1',
-//       is_shared: 'false',
-//       name: 'six',
-//       online: 'true',
-//       status: 'paused'
-//   },
-//   {
-//       active: 'true',
-//       description: 'test-2-20150125',
-//       id: 8,
-//       ip_address: '127.0.0.1',
-//       is_shared: 'false',
-//       name: 'eight',
-//       online: 'false',
-//       status: 'offline'
-//   }
-// ];
 
 /**
  * Data source for the Table view. This class should
