@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
 import { NotificationService } from './../../services/notification/notification.service';
 import { SettingsService } from './../../services/settings/settings.service';
+import { Memoize } from 'lodash-decorators/memoize';
 
 
 @Component({
@@ -116,6 +117,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // entry for single namespace data
+  @Memoize
   private fetchdata() {
     this.isLoading = true;
     this.spinner.show();
@@ -203,6 +205,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // entry for multi namespace data
+  @Memoize
   private fetchNamespaces() {
     this.isLoading = true;
     this.spinner.show();
@@ -230,6 +233,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  @Memoize
   private fetchProjectsByGroupID(ids: Array<string>) {
     console.log('fetching projects');
     const projectsArray: any = [];
@@ -260,6 +264,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  @Memoize
   private fetchPipelines(projects: any) {
     console.log('');
     console.log('refreshing pipelines');

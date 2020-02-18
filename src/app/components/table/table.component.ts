@@ -8,6 +8,7 @@ import { RunnersService } from 'src/app/services/gitlab-api/runners.service';
 import { RunnersDataSource, RunnerItem } from 'src/app/models/runners-data-source.model';
 import { ConditionalExpr } from '@angular/compiler';
 import { MatTooltip } from '@angular/material/tooltip';
+import { Memoize } from 'lodash-decorators/memoize';
 
 @Component({
   selector: 'app-table',
@@ -65,6 +66,7 @@ export class TableComponent implements AfterViewInit, OnInit {
     this.table.dataSource = this.dataSource;
   }
 
+  @Memoize
   showData(data) {
     console.log('showData value ', data);
     return data;
@@ -90,6 +92,7 @@ export class TableComponent implements AfterViewInit, OnInit {
     console.log('nowminus7: ', this.nowminus7);
   }
 
+  @Memoize
   getIcon(value) {
     let icon = '';
     if (value === 'active') {

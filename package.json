@@ -38,6 +38,7 @@
     "graphql-tag": "^2.10.0",
     "hammerjs": "^2.0.8",
     "lodash": "^4.17.15",
+    "lodash-decorators": "^6.0.1",
     "ngx-date-fns": "^5.0.0",
     "ngx-spinner": "^8.0.3",
     "primeicons": "^2.0.0",

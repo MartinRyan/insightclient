@@ -11,6 +11,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service';
 import { NotificationService } from './../../services/notification/notification.service';
 import { SettingsService } from './../../services/settings/settings.service';
+import { Memoize } from 'lodash-decorators/memoize';
+
 
 @Component({
   selector: 'app-merge-requests',
@@ -56,6 +58,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
   }
 
   // entry for single namespace data
+  @Memoize
   private fetchdata() {
     this.isLoading = true;
     this.spinner.show();
@@ -122,6 +125,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
   }
 
   // entry for multi namespace data
+  @Memoize
   private fetchNamespaces() {
     this.isLoading = true;
     this.spinner.show();
@@ -152,6 +156,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     );
   }
 
+  @Memoize
   private fetchProjectsByGroupID(ids: Array<string>) {
     console.log('fetching projects');
     const projectsArray: any = [];
@@ -175,6 +180,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
     }
   }
 
+  @Memoize
   private fetchMergeRequests(projects: Array<any>) {
     console.log('fetching merge requests');
     this.mergeRequests = [];
