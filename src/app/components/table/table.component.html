@@ -75,8 +75,7 @@
             '': 'mat-mini-fab material-icons color_grey'}
             [row.minus7.status]"
           (click)='showData(row.minus7)'>
-          <mat-icon>{{row.minus7.status === 'offline' ? 'offline_bolt' : 'done'}}
-          </mat-icon>
+          <mat-icon>{{ getIcon(row.minus7.status)}}</mat-icon>
         </button></td>
     </ng-container>
 
@@ -104,7 +103,7 @@
             '': 'mat-mini-fab material-icons color_grey'}
             [row.minus6.status]"
           (click)='showData(row.minus6)'>
-          <mat-icon>{{row.minus6.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+          <mat-icon>{{ getIcon(row.minus6.status)}}</mat-icon>
         </button>
       </td>
     </ng-container>
@@ -134,7 +133,7 @@
             '': 'mat-mini-fab material-icons color_grey'}
             [row.minus5.status]"
           (click)='showData(row.minus5)'>
-          <mat-icon>{{row.minus5.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+          <mat-icon>{{ getIcon(row.minus5.status)}}</mat-icon>
         </button></td>
     </ng-container>
 
@@ -162,7 +161,7 @@
             '': 'mat-mini-fab material-icons color_grey'}
             [row.minus4.status]"
           (click)='showData(row.minus4)'>
-          <mat-icon>{{row.minus4.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+          <mat-icon>{{ getIcon(row.minus4.status)}}</mat-icon>
         </button></td>ssssss
     </ng-container>
 
@@ -190,7 +189,7 @@
             '': 'mat-mini-fab material-icons color_grey'}
             [row.minus3.status]"
           (click)='showData(row.minus3)'>
-          <mat-icon>{{row.minus3.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+          <mat-icon>{{ getIcon(row.minus3.status)}}</mat-icon>
         </button></td>
     </ng-container>
 
@@ -218,7 +217,7 @@
             '': 'mat-mini-fab material-icons color_grey'}
             [row.minus2.status]"
           (click)='showData(row.minus2)'>
-          <mat-icon>{{row.minus2.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+          <mat-icon>{{ getIcon(row.minus2.status)}}</mat-icon>
         </button></td>
     </ng-container>
 
@@ -246,7 +245,7 @@
             '': 'mat-mini-fab material-icons color_grey'}
             [row.minus1.status]"
           (click)='showData(row.minus1)'>
-          <mat-icon>{{row.minus1.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+          <mat-icon>{{ getIcon(row.minus1.status)}}</mat-icon>
         </button></td>
     </ng-container>
 
@@ -274,7 +273,7 @@
             '': 'mat-mini-fab material-icons color_grey'}
             [row.now.status]"
           (click)='showData(row.now)'>
-          <mat-icon>{{row.now.status === 'offline' ? 'offline_bolt' : 'done'}}</mat-icon>
+          <mat-icon>{{ getIcon(row.now.status)}}</mat-icon>
         </button></td>
     </ng-container>
 

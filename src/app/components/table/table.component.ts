@@ -89,4 +89,20 @@ export class TableComponent implements AfterViewInit, OnInit {
     console.log('nowminus6: ', this.nowminus6);
     console.log('nowminus7: ', this.nowminus7);
   }
+
+  getIcon(value) {
+    let icon = '';
+    if (value === 'active') {
+      icon = 'done_outline';
+    } else if (value === 'online') {
+      icon = 'done';
+    } else if (value === 'paused') {
+      icon = 'error';
+    } else if (value === 'offline') {
+      icon = 'offline_bolt';
+    } else if (value === '') {
+      icon = 'warning';
+    }
+    return icon;
+  }
 }
