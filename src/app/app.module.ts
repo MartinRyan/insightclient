@@ -48,6 +48,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RunnersComponent } from './components/runners/runners.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { DetailComponent } from './components/detail/detail.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     DateAgoPipe,
     SecondsToTimePipe,
     RunnersComponent,
+    DetailComponent,
   ],
   imports: [
     BrowserModule,
