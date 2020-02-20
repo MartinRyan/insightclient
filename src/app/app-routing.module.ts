@@ -6,6 +6,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsComponent } from './components/settings/settings.component';
 import { RunnersComponent } from './components/runners/runners.component';
+import { DetailComponent } from './components/detail/detail.component';
 
 
 const routes: Routes = [
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'expansion', component: ExpansionComponent, pathMatch: 'full' },
   { path: 'table', component: TableComponent, pathMatch: 'full' },
   { path: 'runners', component: RunnersComponent, pathMatch: 'full' },
+  { path: 'detail', component: DetailComponent, pathMatch: 'full' },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

@@ -5,18 +5,6 @@ import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
 import { format, subDays, isBefore } from 'date-fns';
 
-// TODO: Replace this with your own data model type
-// export interface TableItem {
-//   name: string;
-//   id: number;
-//   active: string;
-//   description: string;
-//   ip_address: string;
-//   is_shared: string;
-//   online: string;
-//   status: string;
-// }
-
 export interface TableItem {
   id: string;
   name: string;
