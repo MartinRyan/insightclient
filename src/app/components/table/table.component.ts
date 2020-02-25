@@ -14,7 +14,7 @@ import { isEmpty } from 'lodash';
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.css']
+  styleUrls: ['./table.component.styl']
 })
 export class TableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -94,6 +94,25 @@ export class TableComponent implements AfterViewInit, OnInit {
       icon = 'error';
     } else if (value === 'offline') {
       icon = 'offline_bolt';
+    } else if (isEmpty(value)) {
+      icon = 'warning';
+    }
+    return icon;
+  }
+
+  // if a historical day has no incident then
+  // a normal operation icon is used (tick) otherwise icons for disruption
+  // or service outage can be used
+
+  @Memoize
+  getIconHistorical(value) {
+    let icon = '';
+    if (value === 'normal_operation') {
+      icon = 'done_outline';
+    } else if (value === 'outage') {
+      icon = 'offline_bolt';
+    } else if (value === 'disruption') {
+      icon = 'warning';
     } else if (isEmpty(value)) {
       icon = 'warning';
     }

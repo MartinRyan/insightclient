@@ -4,6 +4,14 @@
           historical uptime
         </span>
 
+        <!-- <div class="shared-partial uptime-90-days-wrapper">
+            <svg class="availability-time-line-graphic" id="uptime-component" preserveAspectRatio="none" height="34" viewBox="300 0 148 34">
+                <ng-container *ngFor="let uptime of uptimes; let i = index">
+                <rect class="uptime-component day-{{i}}" height="34" width="3" fill="#28a745"></rect>
+                </ng-container>
+            </svg>
+        </div> -->
+
         <div class="shared-partial uptime-90-days-wrapper">
           <svg class="availability-time-line-graphic" id="uptime-component" preserveAspectRatio="none" height="34"
             viewBox="300 0 148 34">
@@ -190,161 +198,39 @@
           </svg>
           <div class="legend ">
             <div class="legend-item light legend-item-date-range">
-                <span class="availability-time-line-legend-day-count">30</span> days ago</div>
-            <!-- <div class="spacer"></div> -->
+              <span class="availability-time-line-legend-day-count">30</span> days ago</div>
             <div class="legend-item legend-item-uptime-value legend-item-8l4ygp009s5s">
-                <span id="uptime-percent-8l4ygp009s5s">100</span> % uptime</div>
-            <!-- <div class="spacer"></div> -->
+              <span id="uptime-percent-8l4ygp009s5s">100</span> % uptime</div>
             <div class="legend-item light legend-item-date-range">Today</div>
           </div>
 
           <div class="incidents-list format-expanded">
-            <!-- <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 20 2020
-              </div>
-              <p class="color-secondary">No incidents reported today.</p>
-            </div> -->
-
             <div class="status-day font-regular ">
-              <!-- <div class="date border-color font-large">Feb 19 2020 -->
               </div>
-              <div class="incident-container">
-                <!-- <mat-icon class="incident-calendar-icon">calendar_today</mat-icon> -->
-                <div class="incident-title impact-minor font-large">
-                  <a href="/incidents/fxbbtd7mhz1c">Incident on 2020-02-19 15:17 UTC</a>
-                </div>
-
-                <div class="updates-container">
-                  <div class="update font-regular resolved">
-                    <strong>Resolved</strong> -
-                    This incident has been resolved.
-                    <small>
-                      Feb 19 16:09 UTC
-                    </small>
-                  </div>
-                  <div class="update font-regular update">
-                    <strong>Update</strong> -
-                    We have remediated the source of errors and are currently monitoring recovery.
-                    <small>
-                      Feb 18 15:53 UTC
-                    </small>
-                  </div>
-                  <div class="update font-regular update">
-                    <strong>Update</strong> -
-                    We are continuing to investigate the source of errors and will provide updates when we have them.
-                    <small>
-                      Feb 17 15:46 UTC
-                    </small>
-                  </div>
-                  <div class="update font-regular investigating">
-                    <strong>Investigating</strong> -
-                    We are investigating reports of increased error rates and webhook delivery times.
-                    <small>
-                      Feb 16 15:17 UTC
-                    </small>
-                  </div>
-                </div>
+            <div class="incident-container">
+              <div class="updates-container">
+                <ul>
+                  <li *ngFor="let incident of incidents">
+                    <div class="incident-title impact-minor font-large">
+                      <a href="/incidents/{{'incidents.id'}}">Incident on {{incident.date}}</a>
+                    </div>
+                    <div class="update font-regular update">
+                      <mat-icon [ngClass]="{
+                        'offline': 'incident-calendar-icon color_red',
+                        'paused': 'incident-calendar-icon color_blue',
+                        '': 'incident-calendar-icon color_grey'}
+                        [incident.status]">{{ getIncidentIcon(incident.status)}}</mat-icon>
+                      <small>
+                        timestamp: {{incident.timestamp}}<br>
+                        id: {{incident.id}}<br>
+                        name: {{incident.name}}<br>
+                        description: {{incident.description}}<br>
+                        ip_address: {{incident.ip_address}}<br>
+                        is_shared: {{incident.is_shared}}<br>
+                        status: {{incident.status}}<br>
+                      </small>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
-            <!-- <td let incident of incidents>{{incident.id}}</td> -->
-            <!-- <ul>
-                <li *ngFor="let incident of incidents">
-                    <h2>{{incident.id}} / ${{incident.name}}</h2>
-                    <p> {{incident.description}} </p>
-                </li>
-                </ul> -->
-            
-            <!-- <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 18 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 17 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 16 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 15 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 14 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 13 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 12 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 11 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 10 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 9 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 8 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 7 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div>
-
-            <div class="status-day font-regular no-incidents">
-            <mat-icon class="incident-calendar-icon">calendar_today</mat-icon>
-              <div class="date border-color font-large">Feb 6 2020
-              </div>
-              <p class="color-secondary">No incidents reported.</p>
-            </div> -->
-
-          </div>
-        </div>
