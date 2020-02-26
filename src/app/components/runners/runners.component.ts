@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, OnInit, ViewChild, NO_ERRORS_SCHEMA } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { TableDataSource, TableItem } from './table-datasource';
 import { format, subDays } from 'date-fns';
 import { RunnersService } from 'src/app/services/gitlab-api/runners.service';
 import { RunnersDataSource, RunnerItem } from 'src/app/models/runners-data-source.model';
@@ -12,16 +11,15 @@ import { Memoize } from 'lodash-decorators/memoize';
 import { isEmpty } from 'lodash';
 
 @Component({
-  selector: 'app-table',
-  templateUrl: './table.component.html',
-  styleUrls: ['./table.component.styl']
+  selector: 'app-runners',
+  templateUrl: './runners.component.html',
+  styleUrls: ['./runners.component.styl']
 })
-export class TableComponent implements AfterViewInit, OnInit {
+export class RunnersComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatTable, { static: false }) table: MatTable<TableItem>;
-  dataSource: TableDataSource;
-  // dataSource: RunnersDataSource;
+  @ViewChild(MatTable, { static: false }) table: MatTable<RunnerItem>;
+  dataSource: RunnersDataSource;
   runnerService: RunnersService;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = [
@@ -45,26 +43,23 @@ export class TableComponent implements AfterViewInit, OnInit {
   nowminus1: any;
   now: any;
 
-
   constructor(private service: RunnersService) {
     this.runnerService = service;
   }
 
   ngOnInit() {
     this.getDates();
-    this.dataSource = new TableDataSource();
-    // this.dataSource = new RunnersDataSource(this.runnerService);
-    // this.table.dataSource = this.dataSource;
-    console.log(this.dataSource);
-    // this.runnerService.fetchRunners().subscribe((data) => {
-    //   console.log(data);
-    // });
+    this.dataSource = new RunnersDataSource(this.runnerService);
+    this.runnerService.fetchRunners().subscribe((data) => {
+      console.log(data);
+    });
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
+    console.log('init runners component');
   }
 
   showData(data) {

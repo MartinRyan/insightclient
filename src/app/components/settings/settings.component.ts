@@ -120,10 +120,6 @@ export class SettingsComponent implements OnInit {
   private createForm() {
     const savedConfig = this.settingsService.settings;
     this.settingsForm = this.fb.group({
-      isGitlabDotCom: [
-        !!savedConfig ? savedConfig.isGitlabDotCom : false,
-        Validators.required
-      ],
       gitlabAddress: !!savedConfig ? savedConfig.gitlabAddress : '',
       accessToken: [
         !!savedConfig ? savedConfig.accessToken : '',
