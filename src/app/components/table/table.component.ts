@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -44,6 +44,7 @@ export class TableComponent implements AfterViewInit, OnInit {
   nowminus2: any;
   nowminus1: any;
   now: any;
+
 
   constructor(private service: RunnersService) {
     this.runnerService = service;

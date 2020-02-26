@@ -13,7 +13,9 @@
       <a mat-list-item routerLink="/dashboard">Dashboard</a>
       <a mat-list-item routerLink="/settings">Settings</a>
       <a mat-list-item routerLink="/runners">Runners</a>
-      <a mat-list-item routerLink="/table">Table</a>
+      <a mat-list-item routerLink="/table">Runner Matrix</a>
+      <a mat-list-item routerLink="/heatmap">Heatmap</a>
+
       <!-- <a mat-list-item routerLink="/expansion">Expansion</a> -->
     </mat-nav-list>
   </mat-sidenav>
@@ -34,7 +36,7 @@
       (click)="drawer.toggle()">
       <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
     </button>
-      <span>ci monitoring</span>
+      <span>DevOps Dashboard</span>
       <span class="example-spacer"></span>
       <mat-icon class="example-icon">notifications</mat-icon>
       <button mat-icon-button [matMenuTriggerFor]="menu">

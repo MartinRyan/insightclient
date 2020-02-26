@@ -26,6 +26,7 @@
     "@ngxs/logger-plugin": "^3.3.2",
     "@ngxs/schematics": "0.0.1-alpha.5",
     "@ngxs/store": "^3.3.2",
+    "@syncfusion/ej2-angular-heatmap": "^17.4.51",
     "@types/lodash": "^4.14.145",
     "angular-svg-icon": "^8.0.0",
     "apollo-angular": "^1.8.0",
@@ -34,6 +35,7 @@
     "apollo-client": "^2.6.0",
     "apollo-link": "^1.2.11",
     "date-fns": "^2.7.0",
+    "fin-cal-heatmap": "^3.5.5",
     "graphql": "^14.5.0",
     "graphql-tag": "^2.10.0",
     "hammerjs": "^2.0.8",
@@ -44,6 +46,7 @@
     "primeicons": "^2.0.0",
     "primeng": "^9.0.0-rc.2",
     "rxjs": "~6.4.0",
+    "svelte-heatmap": "^0.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },

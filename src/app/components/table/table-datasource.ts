@@ -133,8 +133,8 @@ const RUNNER_DATA: TableItem[] = [
       ip_address: '127.0.0.1',
       is_shared: 'false',
       name: 'shared-runner-2',
-      online: 'true',
-      status: 'online'
+      online: 'false',
+      status: 'offline'
     },
     minus4: {
       active: 'true',

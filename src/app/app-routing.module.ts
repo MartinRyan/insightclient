@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsComponent } from './components/settings/settings.component';
 import { RunnersComponent } from './components/runners/runners.component';
 import { DetailComponent } from './components/detail/detail.component';
+import { HeatmapComponent } from './components/heatmap/heatmap.component';
 
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'table', component: TableComponent, pathMatch: 'full' },
   { path: 'runners', component: RunnersComponent, pathMatch: 'full' },
   { path: 'detail', component: DetailComponent, pathMatch: 'full' },
+  { path: 'heatmap', component: HeatmapComponent, pathMatch: 'full' },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

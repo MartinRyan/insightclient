@@ -1,6 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -49,6 +49,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RunnersComponent } from './components/runners/runners.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DetailComponent } from './components/detail/detail.component';
+import { HeatMapAllModule } from '@syncfusion/ej2-angular-heatmap';
+import { HeatmapComponent } from './components/heatmap/heatmap.component';
 
 
 @NgModule({
@@ -66,6 +68,7 @@ import { DetailComponent } from './components/detail/detail.component';
     SecondsToTimePipe,
     RunnersComponent,
     DetailComponent,
+    HeatmapComponent
   ],
   imports: [
     BrowserModule,
@@ -99,7 +102,8 @@ import { DetailComponent } from './components/detail/detail.component';
     NgxSpinnerModule,
     AngularSvgIconModule,
     MessagesModule,
-    MessageModule
+    MessageModule,
+    HeatMapAllModule
   ],
   exports: [
     MatTooltipModule
@@ -116,6 +120,6 @@ import { DetailComponent } from './components/detail/detail.component';
     { provide: HTTP_INTERCEPTORS, useClass: GitLabApiInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class AppModule { }
