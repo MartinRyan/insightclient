@@ -51,6 +51,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DetailComponent } from './components/detail/detail.component';
 import { HeatMapAllModule } from '@syncfusion/ej2-angular-heatmap';
 import { HeatmapComponent } from './components/heatmap/heatmap.component';
+import "hammerjs";
 
 
 @NgModule({
@@ -116,8 +117,8 @@ import { HeatmapComponent } from './components/heatmap/heatmap.component';
     GitlabApiService,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule,
-    { provide: HTTP_INTERCEPTORS, useClass: GitLabApiInterceptor, multi: true }
+    ReactiveFormsModule
+    // { provide: HTTP_INTERCEPTORS, useClass: GitLabApiInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

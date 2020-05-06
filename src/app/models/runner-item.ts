@@ -1,7 +1,6 @@
-export interface Runner {
-  id: string;
+export interface RunnerItem {
+    id: string;
     name: string;
-    runner: string;
     minus7: object;
     minus6: object;
     minus5: object;
@@ -17,5 +16,4 @@ export interface Runner {
     is_shared: string;
     online: string;
     uptimes: Array<number>;
-    uptime: number;
-}
+  }

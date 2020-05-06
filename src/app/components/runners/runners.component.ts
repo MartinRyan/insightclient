@@ -4,7 +4,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { format, subDays } from 'date-fns';
 import { RunnersService } from 'src/app/services/gitlab-api/runners.service';
-import { RunnersDataSource, RunnerItem } from 'src/app/models/runners-data-source.model';
+import { Runner } from './../../models/runner';
+import { RunnersDataSource} from './../../models/runners-data-source.model';
 import { ConditionalExpr } from '@angular/compiler';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Memoize } from 'lodash-decorators/memoize';
@@ -18,7 +19,7 @@ import { isEmpty } from 'lodash';
 export class RunnersComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatTable, { static: false }) table: MatTable<RunnerItem>;
+  @ViewChild(MatTable, { static: false }) table: MatTable<Runner>;
   dataSource: RunnersDataSource;
   runnerService: RunnersService;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */

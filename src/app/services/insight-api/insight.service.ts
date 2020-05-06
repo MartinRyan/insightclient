@@ -9,8 +9,10 @@ import { SettingsService } from './../settings/settings.service';
 @Injectable({
   providedIn: 'root'
 })
-export class RunnersService {
-  gitlabUrl = this.settingsService.settings.gitlabAddress;
+export class InsightService {
+  // insighturl = this.settingsService.settings.insighturl;
+  insighturl = 'http://localhost:8888'
+  insightapi = '/api/v1/';
   httpOptions = {
     headers: new HttpHeaders({
       'Private-Token': this.settingsService.settings.accessToken,
@@ -23,12 +25,11 @@ export class RunnersService {
     private settingsService: SettingsService) {
     }
 
-  fetchRunners(): Observable<Runner[]> {
-    const data = this.http.get<Observable<Runner[]>>(`runners/all`, this.httpOptions).pipe(
-      // when authtoken available
+  fetchUptimes(ndays: number) {
+    const data = this.http.get<Observable<Runner[]>>(`${this.insighturl}${this.insightapi}uptime/${ndays}`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
-          concat(o, throwError('Retries exceeded - fetch runners'))
+          concat(o, throwError('Retries exceeded - fetch projects'))
         );
       })
     );
@@ -37,7 +38,8 @@ export class RunnersService {
 
   mutateData(data): Observable<Runner[]> {
     // return this.RUNNER_DATA as Observable<Runner[]>; // testing only
-    // console.log('data: => ', data);
-    return data;
+    console.log('data: => ', data);
+    // return data as Observable<Runner[]>;
+    return data as Observable<any[]>;
   }
 }
