@@ -1,17 +1,14 @@
 
-import { AfterViewInit, Component, EventEmitter, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { SvgIconRegistryService } from 'angular-svg-icon';
-import { compareDesc, differenceInDays, differenceInWeeks, parseISO } from 'date-fns';
-import { isEmpty, uniqBy } from 'lodash';
+import { each } from 'lodash';
+// import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import { Runner } from './../../models/runner';
+import { InsightService } from './../../services/insight-api/insight.service';
 import { NotificationService } from './../../services/notification/notification.service';
 import { SettingsService } from './../../services/settings/settings.service';
-import { Memoize } from 'lodash-decorators/memoize';
-import { InsightService } from './../../services/insight-api/insight.service'
-import { Runners } from 'src/app/models/runners.model';
-import { Runner } from './../../models/runner';
-import { each, map, reverse, uniq } from 'lodash';
+
 
 @Component({
   selector: 'app-heatmap',
@@ -43,9 +40,11 @@ export class HeatmapComponent implements OnInit {
 
   paletteSettings = {
     palette: [
-      { value: 0, color: '#FF3939' },
-      { value: 50, color: '#E85C27' },
-      { value: 100, color: '#60FF73' }
+      { value: 0, color: '#FF3000' }, // red
+      { value: 80, color: '#F0930A' }, // orange
+      { value: 90, color: '#FFE205' }, // yellow
+      { value: 99, color: '#74EB21' }, // green
+      { value: 100, color: '#00F071' }, //  very green
     ]
   };
 
@@ -101,17 +100,11 @@ export class HeatmapComponent implements OnInit {
   private fetchUptimesRangeDays(ndays: number) {
     this.isLoading = true;
     this.spinner.show();
-    console.log('fetching uptimes range: ', ndays, ' days');
-    console.log('');
-    const daydataArray: Array<any> = [];
     const runners = []
-    const uptimesArray = [];
-    const labelsArray = [];
     const celldata = []
 
     this.api.fetchUptimes(ndays).subscribe(
       uptimes => {
-        let timestring;
         let datestring;
         each(uptimes, (value, key) => {
           console.log('');
@@ -127,21 +120,19 @@ export class HeatmapComponent implements OnInit {
           }
           );
           for (const r of runners) {
-          const dayd = {};
-          const labeld = [];
-          each(r, (value, key) => {
-            const d =
-            {
-              'runner': value[0],
-              'uptime': String(value[1]),
-              'date': datestring
-            }
-            celldata.push(d);
-          })
-          console.log('cell data -> \n', celldata);
-        }
-        this.heatmapData = celldata;
+            const dayd = {};
+            each(r, (value, key) => {
+              const d =
+              {
+                'runner': value[0],
+                'uptime': String(value[1]),
+                'date': datestring
+              }
+              celldata.push(d);
+            })
+          }
         });
+        this.heatmapData = celldata;
       },
       err => {
         this.isLoading = false;
@@ -154,11 +145,17 @@ export class HeatmapComponent implements OnInit {
   }
 
   private timestampToDate(timestamp) {
-    const d = new Date(timestamp),
-      mm = ('0' + (d.getMonth() + 1)).slice(-2),
-      dd = ('0' + d.getDate()).slice(-2)
-    const day = dd + '-' + mm;
-    return day;
+    const date = new Date(timestamp);
+    const datestring = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+      .toISOString()
+      .split('T')[0];
+    const month = datestring.split('-')[1];
+    const day = datestring.split('-')[2];
+    return [day, month].join('-');
+  }
+
+  ngOnDestroy() {
+    this.clearSubscriptions();
   }
 
   private clearSubscriptions() {
