@@ -34,18 +34,17 @@ export class HeatmapComponent implements OnInit {
   legendSettings = {
     visible: true,
     position: 'Right',
-    showLabel: true,
-    height: '150px'
+    showLabel: false,
+    height: '400px'
   };
 
   paletteSettings = {
     palette: [
       { value: 0, color: '#FF0600' }, // red
       { value: 50, color: '#FF3000' }, // red
-      { value: 95, color: '#F0930A' }, // orange
+      { value: 90, color: '#F0930A' }, // orange
       { value: 99, color: '#FFE205' }, // yellow
-      { value: 99.5, color: '#74EB21' }, // green
-      { value: 100, color: '#00F071' }, //  very green
+      { value: 100, color: '#00F071' }, // green
     ]
   };
 
