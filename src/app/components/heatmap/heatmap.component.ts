@@ -40,10 +40,11 @@ export class HeatmapComponent implements OnInit {
 
   paletteSettings = {
     palette: [
-      { value: 0, color: '#FF3000' }, // red
-      { value: 80, color: '#F0930A' }, // orange
-      { value: 90, color: '#FFE205' }, // yellow
-      { value: 99, color: '#74EB21' }, // green
+      { value: 0, color: '#FF0600' }, // red
+      { value: 50, color: '#FF3000' }, // red
+      { value: 95, color: '#F0930A' }, // orange
+      { value: 99, color: '#FFE205' }, // yellow
+      { value: 99.5, color: '#74EB21' }, // green
       { value: 100, color: '#00F071' }, //  very green
     ]
   };
