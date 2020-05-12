@@ -52,6 +52,7 @@ import { DetailComponent } from './components/detail/detail.component';
 import { HeatMapAllModule } from '@syncfusion/ej2-angular-heatmap';
 import { HeatmapComponent } from './components/heatmap/heatmap.component';
 import "hammerjs";
+import { MatrixComponent } from './components/matrix/matrix.component';
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import "hammerjs";
     SecondsToTimePipe,
     RunnersComponent,
     DetailComponent,
-    HeatmapComponent
+    HeatmapComponent,
+    MatrixComponent
   ],
   imports: [
     BrowserModule,
