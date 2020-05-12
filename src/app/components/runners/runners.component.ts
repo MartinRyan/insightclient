@@ -1,15 +1,20 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { SettingsService } from './../../services/settings/settings.service';
+import { InsightService } from './../../services/insight-api/insight.service';
+import { AfterViewInit, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { format, subDays } from 'date-fns';
 import { RunnersService } from 'src/app/services/gitlab-api/runners.service';
 import { Runner } from './../../models/runner';
-import { RunnersDataSource} from './../../models/runners-data-source.model';
+import { RunnersDataSource } from './../../models/runners-data-source.model';
 import { ConditionalExpr } from '@angular/compiler';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Memoize } from 'lodash-decorators/memoize';
-import { isEmpty } from 'lodash';
+import { each, isEmpty } from 'lodash';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NotificationService } from './../../services/notification/notification.service';
+import { SvgIconRegistryService } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-runners',
@@ -22,6 +27,8 @@ export class RunnersComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable, { static: false }) table: MatTable<Runner>;
   dataSource: RunnersDataSource;
   runnerService: RunnersService;
+  insightService: InsightService;
+  settingsService: SettingsService;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = [
     'id',
@@ -35,6 +42,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     'minus1',
     'now'
   ];
+
   nowminus7: any;
   nowminus6: any;
   nowminus5: any;
@@ -44,29 +52,120 @@ export class RunnersComponent implements AfterViewInit, OnInit {
   nowminus1: any;
   now: any;
 
-  constructor(private service: RunnersService) {
-    this.runnerService = service;
+  isLoading = false;
+  matrixData = [];
+
+  colnameArray = [
+    'minus7',
+    'minus6',
+    'minus5',
+    'minus4',
+    'minus3',
+    'minus2',
+    'minus1',
+    'now'
+  ];
+
+  constructor(
+    private iservice: InsightService,
+    private sservice: SettingsService,
+    private spinner: NgxSpinnerService,
+    private notificationService: NotificationService,
+    private zone: NgZone,
+    private iconReg: SvgIconRegistryService
+  ) {
+    this.insightService = iservice;
+    this.settingsService = sservice;
   }
 
   ngOnInit() {
     this.getDates();
-    this.dataSource = new RunnersDataSource(this.runnerService);
-    this.runnerService.fetchRunners().subscribe((data) => {
-      console.log(data);
-    });
+    // const ndays = Number(this.settingsService.settings.timeRangeRunners);
+    const ndays = 7 // for testing
+    this.matrixData = this.fetchRunnerMatrixData(ndays);
   }
 
   ngAfterViewInit() {
     // this.dataSource.sort = this.sort;
     // this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
-    console.log('init runners component');
+    this.table.dataSource = this.matrixData;
+  }
+
+  private fetchRunnerMatrixData(ndays: number): any {
+    this.isLoading = true;
+    this.spinner.show();
+    let runners = [];
+    const matrixdata = [];
+    let daydata = [];
+    let runnerObject = {};
+    let dayObject = {};
+
+    this.insightService.fetchRunnerMatrix(ndays).subscribe(
+      matrix => {
+        each(matrix, (value, key) => {
+          let datestring;
+          console.log('');
+          each(value, (v, k) => {
+            let count
+            count++
+            if (k === '_id') {
+              const idobj = Object(v);
+              const idtstring = idobj.$date;
+              datestring = this.timestampToDate(idtstring);
+              dayObject = {
+                'id': count,
+                'name': value[0],
+                runnerObject
+            }
+            }
+            if (k === 'runners') {
+              runners = [];
+              runners.push(v);
+            }
+          }
+          );
+          for (const r of runners) {
+            let index = 0;
+            each(r, (value, key) => {
+              index++
+              let colname = ['minus' + index]; 
+              runnerObject = {
+                // 'id': index,
+                // 'name': value[0],
+                // [this.colnameArray[index]] : {
+                  'active': String(value[2]),
+                  'description': value[0],
+                  'ip_address': value[5],
+                  'is_shared': value[6],
+                  'name': String(value[0]),
+                  'online': String(value[3]),
+                  'status': String(value[4])
+                }
+              // }
+              daydata.push(runnerObject);
+            })
+          }
+          
+          matrixdata.push(daydata);
+          daydata = [];
+        });
+        console.log('MATRIX DATA ]-> \n', matrixdata);
+        return matrixdata
+      },
+      err => {
+        this.isLoading = false;
+        this.spinner.hide();
+        this.notificationService.activeNotification.next({
+          message: err.message
+        });
+      }
+    );
   }
 
   showData(data) {
     console.log('showData value ', data);
     return data;
- }
+  }
 
   getDates() {
     const now = new Date();
@@ -78,6 +177,16 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     this.nowminus2 = format(subDays(now, 2), 'dd MMM');
     this.nowminus1 = format(subDays(now, 1), 'dd MMM');
     this.now = format(now, 'dd MMM');
+  }
+
+  private timestampToDate(timestamp) {
+    const date = new Date(timestamp);
+    const datestring = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+      .toISOString()
+      .split('T')[0];
+    const month = datestring.split('-')[1];
+    const day = datestring.split('-')[2];
+    return [day, month].join('-');
   }
 
   @Memoize

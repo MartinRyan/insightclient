@@ -100,8 +100,8 @@ export class HeatmapComponent implements OnInit {
   private fetchUptimesRangeDays(ndays: number) {
     this.isLoading = true;
     this.spinner.show();
-    const runners = []
-    const celldata = []
+    let runners = [];
+    let celldata = [];
 
     this.api.fetchUptimes(ndays).subscribe(
       uptimes => {
@@ -115,6 +115,7 @@ export class HeatmapComponent implements OnInit {
               datestring = this.timestampToDate(idtstring);
             }
             if (k === 'runners') {
+              runners = [];
               runners.push(v)
             }
           }
@@ -133,6 +134,7 @@ export class HeatmapComponent implements OnInit {
           }
         });
         this.heatmapData = celldata;
+        celldata = [];
       },
       err => {
         this.isLoading = false;
