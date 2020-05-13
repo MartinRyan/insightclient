@@ -1,12 +1,15 @@
-import { SettingsService } from './../../services/settings/settings.service';
-import { InsightService } from './../../services/insight-api/insight.service';
-import { Component, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Memoize } from 'lodash-decorators/memoize';
-import { each, isEmpty } from 'lodash';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NotificationService } from './../../services/notification/notification.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTable } from '@angular/material/table';
 import { SvgIconRegistryService } from 'angular-svg-icon';
+import { each, isEmpty } from 'lodash';
+import { Memoize } from 'lodash-decorators/memoize';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { InsightService } from './../../services/insight-api/insight.service';
+import { NotificationService } from './../../services/notification/notification.service';
+import { SettingsService } from './../../services/settings/settings.service';
 
 export class Group {
   level = 0;
@@ -24,6 +27,9 @@ export class Group {
   styleUrls: ['./matrix.component.styl']
 })
 export class MatrixComponent implements OnInit {
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
   public dataSource = new MatTableDataSource<any | Group>([]);
   private subscriptions: Array<any> = [];
   public updateInterval = 60000;
@@ -34,6 +40,7 @@ export class MatrixComponent implements OnInit {
   settingsService: SettingsService;
   isLoading = false;
   matrixdata: any[];
+  ndays = 7;
 
   constructor(
     protected iservice: InsightService,
@@ -41,7 +48,8 @@ export class MatrixComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notificationService: NotificationService,
     private zone: NgZone,
-    private iconReg: SvgIconRegistryService
+    private iconReg: SvgIconRegistryService,
+    private changeDetectorRefs: ChangeDetectorRef
   ) {
     this.insightService = iservice;
     this.settingsService = sservice;
@@ -65,61 +73,23 @@ export class MatrixComponent implements OnInit {
       field: 'status'
     }];
     this.displayedColumns = this.columns.map(column => column.field);
-    this.groupByColumns = ['date'];
+    // this.groupByColumns = ['date'];
   }
 
   ngOnInit() {
-    // // const ndays = Number(this.settingsService.settings.timeRangeRunners);
-    const ndays = 7 // for testing
-    this.fetchMatrixData(ndays);
+    // this.ndays = Number(this.settingsService.settings.timeRangeMatrix);
+    this.fetchMatrixData(this.ndays);
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        this.fetchMatrixData(ndays);
+        this.fetchMatrixData(this.ndays);
       }, this.updateInterval);
     });
   }
 
   ngAfterViewInit() {
-    // this.dataSource.sort = this.sort;
-    // this.dataSource.paginator = this.paginator;
-    // this.table.dataSource = this.matrixdata;
-    // this._alldata = this.matrixdata;
-    // this.dataSource.data = this.addGroups(this.matrixdata, this.groupByColumns);
-    // this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
-    // this.dataSource.filter = performance.now().toString();
-    
+    this.changeDetectorRefs.detectChanges();
   }
-
-  private loadMatrix():any {
-    this.isLoading = true;
-    this.spinner.show();
-    const ndays = 7 // for testing
-    const data = this.fetchMatrixData(ndays);
-    data.forEach((item, index) => {
-      item.id = index + 1;
-    });
-    this.matrixdata = data;
-    this.dataSource.data = this.addGroups(this.matrixdata, this.groupByColumns);
-    this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
-    this.dataSource.filter = performance.now().toString();
-  }
-
-  // private fetchMatrix(ndays: number): any {
-  //   this.insightService.fetchRunnerMatrix(7)
-  //     .subscribe(
-  //       (data: any) => {
-  //         data.data.forEach((item, index) => {
-  //           item.id = index + 1;
-  //         });
-  //         this._alldata = data.data;
-  //         this.dataSource.data = this.addGroups(this._alldata, this.groupByColumns);
-  //         this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
-  //         this.dataSource.filter = performance.now().toString();
-  //       },
-  //       (err: any) => console.log(err)
-  //     );
-  // }
 
   private fetchMatrixData(ndays: number): any {
     let runners: any = [];
@@ -141,11 +111,6 @@ export class MatrixComponent implements OnInit {
               const idobj = Object(v);
               const idtstring = idobj.$date;
               datestring = this.timestampToDate(idtstring);
-              dayObject = {
-                'id': count,
-                'name': value[0],
-                runnerObject
-              }
             }
             if (k === 'runners') {
               runners = [];
@@ -159,9 +124,6 @@ export class MatrixComponent implements OnInit {
               index++
               let colname = ['minus' + index];
               runnerObject = {
-                // 'id': index,
-                // 'name': value[0],
-                // [this.colnameArray[index]] : {
                 'id': index,
                 'date': datestring,
                 'active': String(value[2]),
@@ -173,26 +135,18 @@ export class MatrixComponent implements OnInit {
                 'online': String(value[3]),
                 'status': String(value[4])
               }
-              // }
-              daydata.push(runnerObject);
               allrunners.push(runnerObject);
             })
           }
-          // mdata.push(daydata);
           daydata = [];
         });
-        console.log('');
         console.log('ALL RUNNERS ]-> \n', allrunners);
-        console.log('');
-        mdata.forEach((item, index) => {
-          item.id = index + 1;
-        });
         this.matrixdata = allrunners;
-        // this.matrixdata = mdata;
+        this.dataSource = new MatTableDataSource(this.matrixdata);
         this.dataSource.data = this.addGroups(this.matrixdata, this.groupByColumns);
         this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
-        this.dataSource.filter = performance.now().toString()
-        // return mdata
+        this.dataSource.filter = performance.now().toString();
+        this.paginator._changePageSize(this.paginator.pageSize);
       },
       err => {
         this.isLoading = false;
