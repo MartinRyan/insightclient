@@ -29,6 +29,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
   runnerService: RunnersService;
   insightService: InsightService;
   settingsService: SettingsService;
+
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = [
     'id',
@@ -43,6 +44,17 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     'now'
   ];
 
+  // displayedColumns = [
+  //   'date',
+  //   'name',
+  //   'description',
+  //   'active',
+  //   'ip_address',
+  //   'is_shared',
+  //   'online',
+  //   'status'
+  // ];
+
   nowminus7: any;
   nowminus6: any;
   nowminus5: any;
@@ -53,7 +65,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
   now: any;
 
   isLoading = false;
-  matrixData = [];
+  matrixdata = [];
 
   colnameArray = [
     'minus7',
@@ -82,20 +94,23 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     this.getDates();
     // const ndays = Number(this.settingsService.settings.timeRangeRunners);
     const ndays = 7 // for testing
-    this.matrixData = this.fetchRunnerMatrixData(ndays);
+    this.matrixdata = this.fetchRunnerMatrixData(ndays);
+    console.log('');
+    console.log('MATRIX DATA >>>>> ', this.matrixdata);
+    console.log('');
   }
 
   ngAfterViewInit() {
     // this.dataSource.sort = this.sort;
     // this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.matrixData;
+    this.table.dataSource = this.matrixdata;
   }
 
   private fetchRunnerMatrixData(ndays: number): any {
     this.isLoading = true;
     this.spinner.show();
     let runners = [];
-    const matrixdata = [];
+    const mdata = [];
     let daydata = [];
     let runnerObject = {};
     let dayObject = {};
@@ -104,19 +119,20 @@ export class RunnersComponent implements AfterViewInit, OnInit {
       matrix => {
         each(matrix, (value, key) => {
           let datestring;
+          let count;
           console.log('');
           each(value, (v, k) => {
-            let count
+            count = 0;
             count++
             if (k === '_id') {
               const idobj = Object(v);
               const idtstring = idobj.$date;
               datestring = this.timestampToDate(idtstring);
-              dayObject = {
-                'id': count,
-                'name': value[0],
-                runnerObject
-            }
+            //   dayObject = {
+            //     'id': count,
+            //     'name': value[0],
+            //     runnerObject
+            // }
             }
             if (k === 'runners') {
               runners = [];
@@ -128,29 +144,47 @@ export class RunnersComponent implements AfterViewInit, OnInit {
             let index = 0;
             each(r, (value, key) => {
               index++
-              let colname = ['minus' + index]; 
-              runnerObject = {
-                // 'id': index,
-                // 'name': value[0],
-                // [this.colnameArray[index]] : {
-                  'active': String(value[2]),
-                  'description': value[0],
-                  'ip_address': value[5],
-                  'is_shared': value[6],
-                  'name': String(value[0]),
-                  'online': String(value[3]),
-                  'status': String(value[4])
-                }
+              let colname = ['minus' + index];
+              let runnerArray =  [];
+              // runnerObject = {
+              //   'id': count,
+              //   'name': value[0],
+              //   [this.colnameArray[index]] : {
+              //     'date': datestring,
+              //     'active': String(value[2]),
+              //     'description': value[0],
+              //     'ip_address': value[5],
+              //     'is_shared': value[6],
+              //     'name': String(value[0]),
+              //     'online': String(value[3]),
+              //     'status': String(value[4])
+              //   }
               // }
+              // runnerArray.push(runnerObject);
+            //   dayObject = {
+            //     'id': count,
+            //     'name': value[0], runnerArray
+            // }
+            //----------------
+            runnerObject = {
+              'date': datestring,
+              'name': value[7],
+              'active': String(value[2]),
+              'description': value[0],
+              'ip_address': value[5],
+              'is_shared': value[6],
+              'online': String(value[3]),
+              'status': String(value[4])
+            }
               daydata.push(runnerObject);
             })
           }
-          
-          matrixdata.push(daydata);
+          // this.matrixdata.push(daydata);
+          mdata.push(daydata);
           daydata = [];
         });
-        console.log('MATRIX DATA ]-> \n', matrixdata);
-        return matrixdata
+        console.log('MATRIX DATA ]-> \n', mdata);
+        return mdata
       },
       err => {
         this.isLoading = false;

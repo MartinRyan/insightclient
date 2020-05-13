@@ -1,3 +1,4 @@
+import { MatrixComponent } from './components/matrix/matrix.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ExpansionComponent} from './components/expansion/expansion.component';
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'runners', component: RunnersComponent, pathMatch: 'full' },
   { path: 'detail', component: DetailComponent, pathMatch: 'full' },
   { path: 'heatmap', component: HeatmapComponent, pathMatch: 'full' },
+  { path: 'matrix', component: MatrixComponent, pathMatch: 'full' },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
