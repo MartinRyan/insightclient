@@ -9,6 +9,7 @@ export interface Runner {
     minus3: object;
     minus2: object;
     minus1: object;
+    minus0: object;
     now: object;
     status: string;
     active: string;

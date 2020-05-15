@@ -25,19 +25,8 @@ export class InsightService {
     private settingsService: SettingsService) {
     }
 
-  fetchUptimes(ndays: number) {
-    const data = this.http.get<Observable<Runner[]>>(`${this.insighturl}${this.insightapi}uptime/${ndays}`).pipe(
-      retryWhen(err => {
-        return err.pipe(delay(5000), take(1), o =>
-          concat(o, throwError('Retries exceeded - fetch runner uptimes'))
-        );
-      })
-    );
-    return this.mutateData(data);
-  }
-
-  fetchRunnerMatrix(ndays: number) {
-    const data = this.http.get<Observable<Runner[]>>(`${this.insighturl}${this.insightapi}matrix/${ndays}`).pipe(
+  fetchInsightData(ndays: number, handler: string) {
+    const data = this.http.get<Observable<Runner[]>>(`${this.insighturl}${this.insightapi}${handler}/${ndays}`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch runner matrix'))

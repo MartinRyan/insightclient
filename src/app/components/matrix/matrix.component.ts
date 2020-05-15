@@ -99,7 +99,7 @@ export class MatrixComponent implements OnInit {
     let mdata: any = [];
     let allrunners: any = [];
 
-    this.insightService.fetchRunnerMatrix(ndays).subscribe(
+    this.insightService.fetchInsightData(ndays, 'matrix').subscribe(
       matrix => {
         each(matrix, (value, key) => {
           let datestring;

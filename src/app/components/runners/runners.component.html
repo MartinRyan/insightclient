@@ -216,6 +216,33 @@
       </ng-container>
   
       <!-- Now Column -->
+      <!-- <ng-container matColumnDef='minus0'>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus0}}</th>
+        <td mat-cell *matCellDef='let row'>
+          <button mat-mini-fab color='primary'
+            matTooltip="id: {{row.minus0.id}}
+            name: {{row.minus0.name}} 
+            active: {{row.minus0.active}} 
+            description: {{row.minus0.description}} 
+            ip_address: {{row.minus0.ip_address}} 
+            is_shared: {{row.minus0.is_shared}} 
+            status: {{row.minus0.status}}
+            uptime: tbd
+            "
+            matTooltipPosition="before"
+            matTooltipClass='runners-tooltip'
+            [ngClass]="{
+              'online': 'mat-mini-fab material-icons color_orange',
+              'offline': 'mat-mini-fab material-icons color_red',
+              'paused': 'mat-mini-fab material-icons color_blue',
+              'active': 'mat-mini-fab material-icons color_green',
+              '': 'mat-mini-fab material-icons color_grey'}
+              [row.minus0.status]"
+            (click)='showData(row.minus0)'>
+            <mat-icon>{{ getIcon(row.minus0.status)}}</mat-icon>
+          </button></td>
+      </ng-container> -->
+
       <ng-container matColumnDef='now'>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{now}}</th>
         <td mat-cell *matCellDef='let row'>
@@ -237,7 +264,7 @@
               'paused': 'mat-mini-fab material-icons color_blue',
               'active': 'mat-mini-fab material-icons color_green',
               '': 'mat-mini-fab material-icons color_grey'}
-              [row.now.status]"
+              [row.minus0.status]"
             (click)='showData(row.now)'>
             <mat-icon>{{ getIcon(row.now.status)}}</mat-icon>
           </button></td>
@@ -248,10 +275,10 @@
       <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
     </table>
   
-    <mat-paginator #paginator [length]='dataSource?.data.length' [pageIndex]='0' [pageSize]='50'
+    <!-- <mat-paginator #paginator [length]='dataSource?.data.length' [pageIndex]='0' [pageSize]='50'
       [pageSizeOptions]='[25, 50, 100, 250]'>
     </mat-paginator>
-  </div>
+  </div> -->
   
   <!-- DIALOG -->
   <div class="dialog-content">
