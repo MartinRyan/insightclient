@@ -55,16 +55,6 @@ export class RunnersComponent implements AfterViewInit, OnInit {
   isLoading = false;
   matrixdata = [];
 
-  colnameArray = [
-    'now',
-    'minus1',
-    'minus2',
-    'minus3',
-    'minus4',
-    'minus5',
-    'minus6'
-  ];
-
   constructor(
     private iservice: InsightService,
     private sservice: SettingsService,
@@ -94,26 +84,25 @@ export class RunnersComponent implements AfterViewInit, OnInit {
 
   private fetchRunners(ndays: number): any {
     let runners: any = [];
-    let daydata: any = [];
     let runnerobj: any = {};
-    let mdata: any = [];
     let allrunners: any = [];
     let matrixdata: any = [];
     let nrunners: number = 0;
     let runnergroup: any = {};
     let sorted_runners: any = [];
-    let namecount: number;
+    let datestring: string;
+    let index = 0;
+    let nameid = -1;
+    let idcount = 0;
+    let rowobj = {};
 
     this.insightService.fetchInsightData(ndays, 'runners').subscribe(
       matrix => {
         each(matrix, (value, key) => {
-          let datestring;
-          let index;
-          let idcount = 0;
+          idcount++
+          index++
+          nameid++
           each(value, (v, k) => {
-            let count;
-            count++
-            index = 0;
             if (k === '_id') {
               const idobj = Object(v);
               const idtstring = idobj.$date;
@@ -122,58 +111,51 @@ export class RunnersComponent implements AfterViewInit, OnInit {
             if (k === 'runners') {
               runners = [];
               runners.push(v);
+              console.log('--- RUNNERS ----', runners);
+              for (const run of runners) {
+                each(run, (val, ke) => {
+                  const name = val[0];
+                  runnerobj = {
+                    'id': Number(idcount),
+                    'date': datestring,
+                    'active': String(val[2]),
+                    'uptime': String(val[1]),
+                    'description': val[0],
+                    'ip_address': val[5],
+                    'is_shared': val[6],
+                    'name': String(val[0]),
+                    'online': String(val[3]),
+                    'status': String(val[4])
+                  }
+                  console.log('--- runnerobj ----', runnerobj);
+                  ['minus' + nameid]
+                  let colname;
+                  nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
+                  rowobj = {
+                    'id': index,
+                    'name': name,
+                    [colname]: runnerobj
+                  }
+                  console.log('--- rowobj ----', rowobj);
+                  allrunners.push(rowobj);
+                })
+              }
             }
             if (k === 'nrunners') {
               nrunners = Number(v[0]);
             }
-            for (const run of runners) {
-              // let col = this.colnameArray[index];
-              each(run, (val, ke) => {
-                // for (const r of run) {
-                index++
-                idcount = index-1
-                if (idcount == 6) {
-                  idcount = -1;
-                }
-                // namecount = idcount % nrunners;
-                // let mykey = this.colnameArray[index];
-                // const mykey = this.colnameArray[index -1];
-                const name = val[0];
-                runnerobj =  {
-                  'id': index,
-                  'date': datestring,
-                  'active': String(val[2]),
-                  'uptime': String(val[1]),
-                  'description': val[0],
-                  'ip_address': val[5],
-                  'is_shared': val[6],
-                  'name': String(val[0]),
-                  'online': String(val[3]),
-                  'status': String(val[4])
-                }
-                const rowob = {
-                  'id': index,
-                  'name': name,
-                  [this.colnameArray[idcount]]: runnerobj
-                }
-                // allrunners.push(runnerobj);
-                allrunners.push(rowob);
-              })
-            }
-            }
-          // }
+          }
           );
         });
+        console.log('--- allrunners ----', allrunners);
         sorted_runners = this.groupby(allrunners, 'name');
+        console.log('--- sorted_runners ----', sorted_runners);
         for (let i = 0; i < nrunners; i++) {
           each(sorted_runners, (prop, obj) => {
             i++
-            const mykey = this.colnameArray[i];
             runnergroup = {
               'id': i,
               'name': obj,
-              // ['minus' + i]:
-              // [mykey]:
               prop
             }
             console.log('runnergroup: ->', runnergroup);
@@ -194,85 +176,6 @@ export class RunnersComponent implements AfterViewInit, OnInit {
       }
     );
   }
-
-  // private fetchMatrixData(ndays: number): any {
-  //   let runners: any = [];
-  //   let daydata: any = [];
-  //   let runnerobj: any = {};
-  //   let mdata: any = [];
-  //   let allrunners: any = [];
-  //   let matrixdata: any = [];
-  //   let nrunners: Number = 0;
-  //   let runnergroup: any = {};
-  //   let sorted_runners: any = [];
-
-  //   this.insightService.fetchInsightData(ndays, 'runners').subscribe(
-  //     matrix => {
-  //       each(matrix, (value, key) => {
-  //         let datestring;
-  //         let index;
-  //         each(value, (v, k) => {
-  //           let count;
-  //           count++
-  //           if (k === '_id') {
-  //             const idobj = Object(v);
-  //             const idtstring = idobj.$date;
-  //             datestring = this.timestampToDate(idtstring);
-  //           }
-  //           if (k === 'runners') {
-  //             runners = [];
-  //             runners.push(v);
-  //           }
-  //           if (k === 'nrunners') {
-  //             nrunners = Number(v[0]);
-  //           }
-  //           for (const r of runners) {
-  //             index = 0;
-  //             each(runners, (val, ke) => {
-  //               index++
-  //               runnerobj = {
-  //                 'id': index,
-  //                 'date': datestring,
-  //                 'active': String(val[2]),
-  //                 'uptime': String(val[1]),
-  //                 'description': val[0],
-  //                 'ip_address': val[5],
-  //                 'is_shared': val[6],
-  //                 'name': String(val[0]),
-  //                 'online': String(val[3]),
-  //                 'status': String(val[4])
-  //               }
-  //               allrunners.push(runnerobj);
-  //             })
-  //           }
-  //         }
-  //         );
-  //       });
-  //       sorted_runners = this.groupByF(allrunners, 'name');
-  //       for (let i = -1; i < nrunners; i++) {
-  //         each(sorted_runners, (prop, obj) => {
-  //           i++
-  //           runnergroup = {
-  //             'id': i,
-  //             'name': obj,
-  //             prop
-  //           }
-  //           console.log('runnergroup: ->', runnergroup);
-  //           matrixdata.push(runnergroup);
-  //         })
-  //       }
-  //       console.log('matrixdata ]-> \n', matrixdata);
-  //       return matrixdata
-  //     },
-  //     err => {
-  //       this.isLoading = false;
-  //       this.spinner.hide();
-  //       this.notificationService.activeNotification.next({
-  //         message: err.message
-  //       });
-  //     }
-  //   );
-  // }
 
   groupby = (array, key) => {
     return array.reduce((result, currentValue) => {
@@ -297,7 +200,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     this.nowminus3 = format(subDays(now, 3), 'dd MMM');
     this.nowminus2 = format(subDays(now, 2), 'dd MMM');
     this.nowminus1 = format(subDays(now, 1), 'dd MMM');
-    this.nowminus0 = format(now, 'dd MMM');
+    // this.nowminus0 = format(now, 'dd MMM');
     this.now = format(now, 'dd MMM');
   }
 
