@@ -33,7 +33,6 @@ export class RunnersComponent implements AfterViewInit, OnInit {
   displayedColumns = [
     'id',
     'name',
-    'minus7',
     'minus6',
     'minus5',
     'minus4',
@@ -44,7 +43,6 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     'now'
   ];
 
-  nowminus7: any;
   nowminus6: any;
   nowminus5: any;
   nowminus4: any;
@@ -64,8 +62,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     'minus3',
     'minus4',
     'minus5',
-    'minus6',
-    'minus7',
+    'minus6'
   ];
 
   constructor(
@@ -102,18 +99,21 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     let mdata: any = [];
     let allrunners: any = [];
     let matrixdata: any = [];
-    let nrunners: Number = 0;
+    let nrunners: number = 0;
     let runnergroup: any = {};
     let sorted_runners: any = [];
+    let namecount: number;
 
     this.insightService.fetchInsightData(ndays, 'runners').subscribe(
       matrix => {
         each(matrix, (value, key) => {
           let datestring;
           let index;
+          let idcount = 0;
           each(value, (v, k) => {
             let count;
             count++
+            index = 0;
             if (k === '_id') {
               const idobj = Object(v);
               const idtstring = idobj.$date;
@@ -126,12 +126,20 @@ export class RunnersComponent implements AfterViewInit, OnInit {
             if (k === 'nrunners') {
               nrunners = Number(v[0]);
             }
-            for (const r of runners) {
-              index = 0;
-              each(r, (val, ke) => {
+            for (const run of runners) {
+              // let col = this.colnameArray[index];
+              each(run, (val, ke) => {
+                // for (const r of run) {
                 index++
-                runnerobj = {
-                  // [this.colnameArray[index]:
+                idcount = index-1
+                if (idcount == 6) {
+                  idcount = -1;
+                }
+                // namecount = idcount % nrunners;
+                // let mykey = this.colnameArray[index];
+                // const mykey = this.colnameArray[index -1];
+                const name = val[0];
+                runnerobj =  {
                   'id': index,
                   'date': datestring,
                   'active': String(val[2]),
@@ -143,20 +151,29 @@ export class RunnersComponent implements AfterViewInit, OnInit {
                   'online': String(val[3]),
                   'status': String(val[4])
                 }
-                allrunners.push(runnerobj);
+                const rowob = {
+                  'id': index,
+                  'name': name,
+                  [this.colnameArray[idcount]]: runnerobj
+                }
+                // allrunners.push(runnerobj);
+                allrunners.push(rowob);
               })
             }
-          }
+            }
+          // }
           );
         });
         sorted_runners = this.groupby(allrunners, 'name');
         for (let i = 0; i < nrunners; i++) {
           each(sorted_runners, (prop, obj) => {
             i++
+            const mykey = this.colnameArray[i];
             runnergroup = {
               'id': i,
               'name': obj,
               // ['minus' + i]:
+              // [mykey]:
               prop
             }
             console.log('runnergroup: ->', runnergroup);
@@ -273,7 +290,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
 
   getDates() {
     const now = new Date();
-    this.nowminus7 = format(subDays(now, 7), 'dd MMM');
+    // this.nowminus7 = format(subDays(now, 7), 'dd MMM');
     this.nowminus6 = format(subDays(now, 6), 'dd MMM');
     this.nowminus5 = format(subDays(now, 5), 'dd MMM');
     this.nowminus4 = format(subDays(now, 4), 'dd MMM');
