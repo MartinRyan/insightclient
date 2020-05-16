@@ -33,16 +33,16 @@ export class RunnersComponent implements AfterViewInit, OnInit {
   displayedColumns = [
     'id',
     'name',
-    'minus6',
+    // 'minus6',
     'minus5',
     'minus4',
     'minus3',
     'minus2',
     'minus1',
-    // 'minus0',
     'now'
   ];
 
+  nowminus7: any;
   nowminus6: any;
   nowminus5: any;
   nowminus4: any;
@@ -72,7 +72,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     // const ndays = Number(this.settingsService.settings.timeRangeRunners);
     const ndays = 7 // for testing
     this.matrixdata = this.fetchRunners(ndays);
-    this.dataSource = new RunnersDataSource();
+    // this.dataSource = new RunnersDataSource();
   }
 
   ngAfterViewInit() {
@@ -102,7 +102,9 @@ export class RunnersComponent implements AfterViewInit, OnInit {
           idcount++
           index++
           nameid++
+          console.log('--- matrixoriginal ----', matrix);
           each(value, (v, k) => {
+            console.log('--- VALUE ----', value);
             if (k === '_id') {
               const idobj = Object(v);
               const idtstring = idobj.$date;
@@ -110,10 +112,11 @@ export class RunnersComponent implements AfterViewInit, OnInit {
             }
             if (k === 'runners') {
               runners = [];
-              runners.push(v);
-              console.log('--- RUNNERS ----', runners);
+              !isEmpty(v) ? runners.push(v): runners.push([]);
               for (const run of runners) {
                 each(run, (val, ke) => {
+                  let r: Runner = run;
+                  console.log('--- RUN LENGTH ----', run.length);
                   const name = val[0];
                   runnerobj = {
                     'id': Number(idcount),
@@ -130,14 +133,17 @@ export class RunnersComponent implements AfterViewInit, OnInit {
                   console.log('--- runnerobj ----', runnerobj);
                   ['minus' + nameid]
                   let colname;
-                  nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
+                  nameid == 0 ? colname = 'now' : colname = 'minus' + nameid;
+                  console.log('--- [colname] ----', [colname]);
                   rowobj = {
                     'id': index,
                     'name': name,
                     [colname]: runnerobj
                   }
                   console.log('--- rowobj ----', rowobj);
+                  // console.log('--- runnerobj ----', runnerobj);
                   allrunners.push(rowobj);
+                  // allrunners.push(runnerobj);
                 })
               }
             }
@@ -150,18 +156,24 @@ export class RunnersComponent implements AfterViewInit, OnInit {
         console.log('--- allrunners ----', allrunners);
         sorted_runners = this.groupby(allrunners, 'name');
         console.log('--- sorted_runners ----', sorted_runners);
-        for (let i = 0; i < nrunners; i++) {
-          each(sorted_runners, (prop, obj) => {
-            i++
-            runnergroup = {
-              'id': i,
-              'name': obj,
-              prop
-            }
-            console.log('runnergroup: ->', runnergroup);
-            matrixdata.push(runnergroup);
-          })
-        }
+        // for (let i = 0; i < nrunners; i++) {
+        //   // let colname;
+        //   // i == 0 ? colname = 'now' : colname = 'minus' + i;
+        //   // console.log('--- [colname] ----', [colname]);
+        //   each(sorted_runners, (prop, obj) => {
+        //     // i++
+        //     runnergroup = {
+        //       'id': i,
+        //       'name': obj,
+        //       // [colname] : prop
+        //       prop
+        //     }
+        //     console.log('runnergroup: ->', runnergroup);
+        //     matrixdata.push(runnergroup);
+        //   })
+        // }
+
+        matrixdata = sorted_runners
         console.log('matrixdata ]-> \n', matrixdata);
         this.matrixdata = matrixdata;
         this.table.dataSource = this.matrixdata;
@@ -193,7 +205,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
 
   getDates() {
     const now = new Date();
-    // this.nowminus7 = format(subDays(now, 7), 'dd MMM');
+    this.nowminus7 = format(subDays(now, 7), 'dd MMM');
     this.nowminus6 = format(subDays(now, 6), 'dd MMM');
     this.nowminus5 = format(subDays(now, 5), 'dd MMM');
     this.nowminus4 = format(subDays(now, 4), 'dd MMM');
