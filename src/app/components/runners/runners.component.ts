@@ -115,6 +115,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
               for (const run of runners) {
                 each(run, (val, ke) => {
                   const name = val[0];
+                  console.log('status ----|', String(val[4]));
                   runnerobj = {
                     'id': Number(idcount),
                     'date': datestring,
@@ -128,9 +129,23 @@ export class RunnersComponent implements AfterViewInit, OnInit {
                     'status': String(val[4])
                   }
                   console.log('--- runnerobj ----', runnerobj);
-                  ['minus' + nameid]
                   let colname;
                   nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
+                  // if(nameid == 0){
+                  //   colname = 'now';
+                  //   rowobj = {
+                  //     'id': index,
+                  //     'name': name,
+                  //     [colname]: runnerobj
+                  //   }
+                  // } else {
+                  //   colname = ['minus' + nameid];
+                  //   rowobj = {
+                  //   'id': index,
+                  //   'name': name,
+                  //   [colname]: runnerobj
+                  // }
+                  // }
                   rowobj = {
                     'id': index,
                     'name': name,
@@ -153,9 +168,12 @@ export class RunnersComponent implements AfterViewInit, OnInit {
         for (let i = 0; i < nrunners; i++) {
           each(sorted_runners, (prop, obj) => {
             i++
+            let colname;
+            i == 1 ? colname = 'now' : colname = ['minus' + i];
             runnergroup = {
               'id': i,
               'name': obj,
+              // [colname]: prop
               prop
             }
             console.log('runnergroup: ->', runnergroup);
