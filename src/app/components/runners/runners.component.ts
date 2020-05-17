@@ -50,6 +50,8 @@ export class RunnersComponent implements AfterViewInit, OnInit {
 
   isLoading = false;
   matrixdata = [];
+  private subscriptions: Array<any> = [];
+  public updateInterval = 60000;
 
   constructor(
     private iservice: InsightService,
@@ -69,6 +71,12 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     // const ndays = Number(this.settingsService.settings.timeRangeRunners);
     const ndays = 7 // for testing
     this.fetchRunners(ndays);
+    this.zone.runOutsideAngular(() => {
+      setInterval(() => {
+        this.clearSubscriptions();
+        this.fetchRunners(ndays);
+      }, this.updateInterval);
+    });
   }
 
   ngAfterViewInit() {
@@ -94,6 +102,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
 
     this.insightService.fetchInsightData(ndays, 'runners').subscribe(
       matrix => {
+        console.log('matrix: ', matrix);
         each(matrix, (value, key) => {
           idcount++
           index++
@@ -247,5 +256,14 @@ export class RunnersComponent implements AfterViewInit, OnInit {
       style = 'mat-mini-fab material-icons color_grey';
     }
     return style;
+  }
+  ngOnDestroy() {
+    this.clearSubscriptions();
+  }
+
+  private clearSubscriptions() {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }
