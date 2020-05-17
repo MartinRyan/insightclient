@@ -16,35 +16,6 @@
         <td mat-cell *matCellDef='let row'>{{row.name}}</td>
       </ng-container>
   
-      <!-- NowMinuSeven Column -->
-      <!-- <ng-container matColumnDef='minus7'>
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus7}}</th>
-        <td mat-cell *matCellDef='let row'>
-          <button mat-mini-fab color='primary'
-          matTooltip="
-          id: {{row.prop.minus7.id}}
-          name: {{row.prop.minus7.name}} 
-          active: {{row.prop.minus7.active}} 
-          description: {{row.prop.minus7.description}} 
-          ip_address: {{row.prop.minus7.ip_address}} 
-          is_shared: {{row.prop.minus7.is_shared}} 
-          status: {{row.prop.minus7.status}}
-          uptime: tbd
-          "
-            matTooltipPosition="before"
-            [ngClass]="{
-              'online': 'mat-mini-fab material-icons color_orange',
-              'offline': 'mat-mini-fab material-icons color_red',
-              'paused': 'mat-mini-fab material-icons color_blue',
-              'active': 'mat-mini-fab material-icons color_green',
-              '': 'mat-mini-fab material-icons color_grey'}
-              [row.prop.minus7.status]"
-              routerLink="/detail"
-            (click)='showData(row.prop.minus7)'>
-            <mat-icon>{{ getIcon(row.prop.minus7.status)}}</mat-icon>
-          </button></td>
-      </ng-container> -->
-  
       <!-- NowMinusSix Column -->
       <ng-container matColumnDef='minus6'>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{nowminus6}}</th>

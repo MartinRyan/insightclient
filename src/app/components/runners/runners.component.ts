@@ -39,7 +39,6 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     'minus3',
     'minus2',
     'minus1',
-    // 'minus0',
     'now'
   ];
 
@@ -115,7 +114,6 @@ export class RunnersComponent implements AfterViewInit, OnInit {
               for (const run of runners) {
                 each(run, (val, ke) => {
                   const name = val[0];
-                  console.log('status ----|', String(val[4]));
                   runnerobj = {
                     'id': Number(idcount),
                     'date': datestring,
@@ -172,7 +170,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
             i == 1 ? colname = 'now' : colname = ['minus' + i];
             runnergroup = {
               'id': i,
-              'name': obj,
+              // 'name': obj,
               // [colname]: prop
               prop
             }
@@ -211,14 +209,12 @@ export class RunnersComponent implements AfterViewInit, OnInit {
 
   getDates() {
     const now = new Date();
-    // this.nowminus7 = format(subDays(now, 7), 'dd MMM');
     this.nowminus6 = format(subDays(now, 6), 'dd MMM');
     this.nowminus5 = format(subDays(now, 5), 'dd MMM');
     this.nowminus4 = format(subDays(now, 4), 'dd MMM');
     this.nowminus3 = format(subDays(now, 3), 'dd MMM');
     this.nowminus2 = format(subDays(now, 2), 'dd MMM');
     this.nowminus1 = format(subDays(now, 1), 'dd MMM');
-    // this.nowminus0 = format(now, 'dd MMM');
     this.now = format(now, 'dd MMM');
   }
 
