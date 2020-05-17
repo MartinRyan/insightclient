@@ -4,16 +4,14 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { SvgIconRegistryService } from 'angular-svg-icon';
 import { format, subDays } from 'date-fns';
-import { each, isEmpty } from 'lodash';
+import { each, isEmpty, keyBy } from 'lodash';
 import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { RunnersService } from 'src/app/services/gitlab-api/runners.service';
 import { Runner } from './../../models/runner';
 import { RunnersDataSource } from './../../models/runners-data-source.model';
 import { InsightService } from './../../services/insight-api/insight.service';
 import { NotificationService } from './../../services/notification/notification.service';
 import { SettingsService } from './../../services/settings/settings.service';
-import { TableDataSource } from '../table/table-datasource';
 
 @Component({
   selector: 'app-runners',
@@ -25,7 +23,6 @@ export class RunnersComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatTable, { static: false }) table: MatTable<Runner>;
   dataSource: RunnersDataSource;
-  runnerService: RunnersService;
   insightService: InsightService;
   settingsService: SettingsService;
 
@@ -33,7 +30,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
   displayedColumns = [
     'id',
     'name',
-    'minus6',
+    // 'minus6',
     'minus5',
     'minus4',
     'minus3',
@@ -42,7 +39,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     'now'
   ];
 
-  nowminus6: any;
+  // nowminus6: any;
   nowminus5: any;
   nowminus4: any;
   nowminus3: any;
@@ -68,17 +65,15 @@ export class RunnersComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.getDates();
+    this.dataSource = new RunnersDataSource();
     // const ndays = Number(this.settingsService.settings.timeRangeRunners);
     const ndays = 7 // for testing
-    this.matrixdata = this.fetchRunners(ndays);
-    this.dataSource = new RunnersDataSource();
+    this.fetchRunners(ndays);
   }
 
   ngAfterViewInit() {
     // this.dataSource.sort = this.sort;
     // this.dataSource.paginator = this.paginator;
-    // this.table.dataSource = this.matrixdata;
-    // this.table.dataSource = this.dataSource;
   }
 
   private fetchRunners(ndays: number): any {
@@ -89,11 +84,13 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     let nrunners: number = 0;
     let runnergroup: any = {};
     let sorted_runners: any = [];
+    let spliced_runners: any = [];
     let datestring: string;
     let index = 0;
     let nameid = -1;
     let idcount = 0;
     let rowobj = {};
+    let rowgroup = [];
 
     this.insightService.fetchInsightData(ndays, 'runners').subscribe(
       matrix => {
@@ -110,11 +107,13 @@ export class RunnersComponent implements AfterViewInit, OnInit {
             if (k === 'runners') {
               runners = [];
               runners.push(v);
-              console.log('--- RUNNERS ----', runners);
               for (const run of runners) {
                 each(run, (val, ke) => {
                   const name = val[0];
+                  let colname;
+                  nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
                   runnerobj = {
+                    'column': colname,
                     'id': Number(idcount),
                     'date': datestring,
                     'active': String(val[2]),
@@ -126,31 +125,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
                     'online': String(val[3]),
                     'status': String(val[4])
                   }
-                  console.log('--- runnerobj ----', runnerobj);
-                  let colname;
-                  nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
-                  // if(nameid == 0){
-                  //   colname = 'now';
-                  //   rowobj = {
-                  //     'id': index,
-                  //     'name': name,
-                  //     [colname]: runnerobj
-                  //   }
-                  // } else {
-                  //   colname = ['minus' + nameid];
-                  //   rowobj = {
-                  //   'id': index,
-                  //   'name': name,
-                  //   [colname]: runnerobj
-                  // }
-                  // }
-                  rowobj = {
-                    'id': index,
-                    'name': name,
-                    [colname]: runnerobj
-                  }
-                  console.log('--- rowobj ----', rowobj);
-                  allrunners.push(rowobj);
+                  allrunners.push(runnerobj);
                 })
               }
             }
@@ -160,28 +135,22 @@ export class RunnersComponent implements AfterViewInit, OnInit {
           }
           );
         });
-        console.log('--- allrunners ----', allrunners);
         sorted_runners = this.groupby(allrunners, 'name');
-        console.log('--- sorted_runners ----', sorted_runners);
         for (let i = 0; i < nrunners; i++) {
           each(sorted_runners, (prop, obj) => {
             i++
-            let colname;
-            i == 1 ? colname = 'now' : colname = ['minus' + i];
+            const propobject = keyBy(prop, 'column');
             runnergroup = {
               'id': i,
-              // 'name': obj,
-              // [colname]: prop
-              prop
+              'name': obj,
+              propobject
             }
-            console.log('runnergroup: ->', runnergroup);
             matrixdata.push(runnergroup);
           })
         }
         console.log('matrixdata ]-> \n', matrixdata);
         this.matrixdata = matrixdata;
-        this.table.dataSource = this.matrixdata;
-        return matrixdata
+        this.table.dataSource = matrixdata;
       },
       err => {
         this.isLoading = false;
@@ -209,7 +178,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
 
   getDates() {
     const now = new Date();
-    this.nowminus6 = format(subDays(now, 6), 'dd MMM');
+    // this.nowminus6 = format(subDays(now, 6), 'dd MMM');
     this.nowminus5 = format(subDays(now, 5), 'dd MMM');
     this.nowminus4 = format(subDays(now, 4), 'dd MMM');
     this.nowminus3 = format(subDays(now, 3), 'dd MMM');

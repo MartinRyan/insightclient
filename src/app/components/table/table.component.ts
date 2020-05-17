@@ -5,8 +5,6 @@ import { MatTable } from '@angular/material/table';
 import { TableDataSource, TableItem } from './table-datasource';
 import { format, subDays } from 'date-fns';
 import { RunnersService } from 'src/app/services/gitlab-api/runners.service';
-// import { RunnerItem } from './../../models/runner-item';
-import { RunnersDataSource } from './../../models/runners-data-source.model';
 import { ConditionalExpr } from '@angular/compiler';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Memoize } from 'lodash-decorators/memoize';
@@ -22,7 +20,6 @@ export class TableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatTable, { static: false }) table: MatTable<TableItem>;
   dataSource: TableDataSource;
-  // dataSource: RunnersDataSource;
   runnerService: RunnersService;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = [
