@@ -1,31 +1,19 @@
-
 import { Component, NgZone, OnInit } from '@angular/core';
 import { SvgIconRegistryService } from 'angular-svg-icon';
 import { each } from 'lodash';
 // import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Runner } from './../../models/runner';
-import { InsightService } from './../../services/insight-api/insight.service';
-import { NotificationService } from './../../services/notification/notification.service';
-import { SettingsService } from './../../services/settings/settings.service';
-import { MatTableDataSource } from '@angular/material';
-
-export class Group {
-  level = 0;
-  parent: Group;
-  expanded = true;
-  totalCounts = 0;
-  get visible(): boolean {
-    return !this.parent || (this.parent.visible && this.parent.expanded);
-  }
-}
+import { Runner } from './../../../models/runner';
+import { InsightService } from './../../../services/insight-api/insight.service';
+import { NotificationService } from './../../../services/notification/notification.service';
+import { SettingsService } from './../../../services/settings/settings.service';
 
 @Component({
-  selector: 'app-heatmap',
-  templateUrl: './heatmap.component.html',
-  styleUrls: ['./heatmap.component.styl']
+  selector: 'app-runner-heatmap',
+  templateUrl: './runner-heatmap.component.html',
+  styleUrls: ['./runner-heatmap.component.styl']
 })
-export class HeatmapComponent implements OnInit {
+export class RunnerHeatmapComponent implements OnInit {
 
   xAxis: Object = {};
   yAxis: Object = {};
@@ -81,7 +69,6 @@ export class HeatmapComponent implements OnInit {
   public updateInterval = 60000;
   public uptimesLive: Array<Runner> = [];
   public rlabels: Array<String> = [];
-  public dataSource = new MatTableDataSource<any | Group>([]);
   matrixdata: any[];
 
 
@@ -111,7 +98,6 @@ export class HeatmapComponent implements OnInit {
     let runners: any = [];
     let daydata: any = [];
     let runnerobj: any = {};
-    // let dayobj: any = {};
     let mdata: any = [];
     let allrunners: any = [];
     let matrixdata: any = [];
@@ -162,7 +148,6 @@ export class HeatmapComponent implements OnInit {
           }
           );
         });
-        // matrixdata = this.groupByF(allrunners, 'name');
         sorted_runners = this.groupby(allrunners, 'name');
         for (let i = 0; i < nrunners; i++) {
           each(sorted_runners, (prop, obj) => {
@@ -234,8 +219,7 @@ export class HeatmapComponent implements OnInit {
                 'date': datestring
               }
               celldata.push(d);
-              console.log('UPTIME d -> ', d);
-              // console.log('UPTIME -> ', value[1]);
+              console.log('heatmap runner -> ', d);
             })
           }
         });

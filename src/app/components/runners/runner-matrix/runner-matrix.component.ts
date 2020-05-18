@@ -7,18 +7,18 @@ import { format, subDays } from 'date-fns';
 import { each, isEmpty, keyBy } from 'lodash';
 import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Runner } from './../../models/runner';
-import { RunnersDataSource } from './../../models/runners-data-source.model';
-import { InsightService } from './../../services/insight-api/insight.service';
-import { NotificationService } from './../../services/notification/notification.service';
-import { SettingsService } from './../../services/settings/settings.service';
+import { Runner } from './../../../models/runner';
+import { RunnersDataSource } from './../../../models/runners-data-source.model';
+import { InsightService } from './../../../services/insight-api/insight.service';
+import { NotificationService } from './../../../services/notification/notification.service';
+import { SettingsService } from './../../../services/settings/settings.service';
 
 @Component({
-  selector: 'app-runners',
-  templateUrl: './runners.component.html',
-  styleUrls: ['./runners.component.styl']
+  selector: 'app-runner-matrix',
+  templateUrl: './runner-matrix.component.html',
+  styleUrls: ['./runner-matrix.component.styl']
 })
-export class RunnersComponent implements AfterViewInit, OnInit {
+export class RunnerMatrixComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatTable, { static: false }) table: MatTable<Runner>;
@@ -100,7 +100,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     let rowobj = {};
     let rowgroup = [];
 
-    this.insightService.fetchInsightData(ndays, 'runners').subscribe(
+    this.insightService.fetchInsightData(ndays, 'matrix').subscribe(
       matrix => {
         console.log('matrix: ', matrix);
         each(matrix, (value, key) => {
@@ -267,3 +267,4 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     });
   }
 }
+

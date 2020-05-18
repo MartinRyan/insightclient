@@ -4,20 +4,8 @@ import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
 import { format, subDays, isBefore } from 'date-fns';
-import {Runner} from './../../models/runner';
+import {Runner} from './../../../models/runner';
 
-export interface TableItem {
-  id: string;
-  name: string;
-  // minus7: object;
-  minus6: object;
-  minus5: object;
-  minus4: object;
-  minus3: object;
-  minus2: object;
-  minus1: object;
-  now: object;
-}
 
 
 /**
@@ -103,7 +91,6 @@ export class RunnersDataSource extends DataSource<Runner> {
 
   getDates() {
     const n = new Date();
-    // const nowminus7 = format(subDays(n, 7), 'ddMMM');
     const nowminus6 = format(subDays(n, 6), 'ddMMM');
     const nowminus5 = format(subDays(n, 5), 'ddMMM');
     const nowminus4 = format(subDays(n, 4), 'ddMMM');

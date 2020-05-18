@@ -46,13 +46,15 @@ import { SettingsService } from './services/settings/settings.service';
 import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RunnersComponent } from './components/runners/runners.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DetailComponent } from './components/detail/detail.component';
 import { HeatMapAllModule } from '@syncfusion/ej2-angular-heatmap';
 import { HeatmapComponent } from './components/heatmap/heatmap.component';
 import "hammerjs";
 import { MatrixComponent } from './components/matrix/matrix.component';
+import { RunnerMatrixComponent } from './components/runners/runner-matrix/runner-matrix.component';
+import { RunnerHeatmapComponent } from './components/runners/runner-heatmap/runner-heatmap.component';
+import { RunnerGridComponent } from './components/runners/runner-grid/runner-grid.component';
 
 
 @NgModule({
@@ -68,10 +70,12 @@ import { MatrixComponent } from './components/matrix/matrix.component';
     DashboardComponent,
     DateAgoPipe,
     SecondsToTimePipe,
-    RunnersComponent,
     DetailComponent,
     HeatmapComponent,
-    MatrixComponent
+    MatrixComponent,
+    RunnerMatrixComponent,
+    RunnerHeatmapComponent,
+    RunnerGridComponent
   ],
   imports: [
     BrowserModule,

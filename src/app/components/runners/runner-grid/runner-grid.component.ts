@@ -7,9 +7,9 @@ import { SvgIconRegistryService } from 'angular-svg-icon';
 import { each, isEmpty } from 'lodash';
 import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { InsightService } from './../../services/insight-api/insight.service';
-import { NotificationService } from './../../services/notification/notification.service';
-import { SettingsService } from './../../services/settings/settings.service';
+import { InsightService } from './../../../services/insight-api/insight.service';
+import { NotificationService } from './../../../services/notification/notification.service';
+import { SettingsService } from './../../../services/settings/settings.service';
 
 export class Group {
   level = 0;
@@ -22,11 +22,11 @@ export class Group {
 }
 
 @Component({
-  selector: 'app-matrix',
-  templateUrl: './matrix.component.html',
-  styleUrls: ['./matrix.component.styl']
+  selector: 'app-runner-grid',
+  templateUrl: './runner-grid.component.html',
+  styleUrls: ['./runner-grid.component.styl']
 })
-export class MatrixComponent implements OnInit {
+export class RunnerGridComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatTable, { static: false }) table: MatTable<any>;
@@ -99,7 +99,7 @@ export class MatrixComponent implements OnInit {
     let mdata: any = [];
     let allrunners: any = [];
 
-    this.insightService.fetchInsightData(ndays, 'table').subscribe(
+    this.insightService.fetchInsightData(ndays, 'grid').subscribe(
       matrix => {
         each(matrix, (value, key) => {
           let datestring;
@@ -146,7 +146,7 @@ export class MatrixComponent implements OnInit {
         this.dataSource.data = this.addGroups(this.matrixdata, this.groupByColumns);
         this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
         this.dataSource.filter = performance.now().toString();
-        this.paginator._changePageSize(this.paginator.pageSize);
+        // this.paginator._changePageSize(this.paginator.pageSize);
       },
       err => {
         this.isLoading = false;
