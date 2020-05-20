@@ -30,7 +30,7 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
   displayedColumns = [
     'id',
     'name',
-    // 'minus6',
+    'minus6',
     'minus5',
     'minus4',
     'minus3',
@@ -39,7 +39,7 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
     'now'
   ];
 
-  // nowminus6: any;
+  nowminus6: any;
   nowminus5: any;
   nowminus4: any;
   nowminus3: any;
@@ -99,6 +99,8 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
     let idcount = 0;
     let rowobj = {};
     let rowgroup = [];
+    let name;
+    let colname;
 
     this.insightService.fetchInsightData(ndays, 'matrix').subscribe(
       matrix => {
@@ -118,21 +120,28 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
               runners.push(v);
               for (const run of runners) {
                 each(run, (val, ke) => {
-                  const name = val[0];
-                  let colname;
-                  nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
-                  runnerobj = {
-                    'column': colname,
-                    'id': Number(idcount),
-                    'date': datestring,
-                    'active': String(val[2]),
-                    'uptime': String(val[1]),
-                    'description': val[0],
-                    'ip_address': val[5],
-                    'is_shared': val[6],
-                    'name': String(val[0]),
-                    'online': String(val[3]),
-                    'status': String(val[4])
+                  if(!isEmpty(val)) {
+                    name = val[0];
+                    nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
+                    runnerobj = {
+                      'column': colname,
+                      'id': Number(idcount),
+                      'date': datestring,
+                      'active': String(val[2]),
+                      'uptime': String(val[1]),
+                      'description': val[0],
+                      'ip_address': val[5],
+                      'is_shared': val[6],
+                      'name': String(val[0]),
+                      'online': String(val[3]),
+                      'status': String(val[4])
+                    }
+                  } else {
+                    console.log('empty runner')
+                    name = '';
+                    colname;
+                    nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
+                    runnerobj = {};
                   }
                   allrunners.push(runnerobj);
                 })
@@ -145,6 +154,7 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
           );
         });
         sorted_runners = this.groupby(allrunners, 'name');
+        console.log('sorted_runners -> \n', sorted_runners);
         for (let i = 0; i < nrunners; i++) {
           each(sorted_runners, (prop, obj) => {
             i++
@@ -187,7 +197,7 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
 
   getDates() {
     const now = new Date();
-    // this.nowminus6 = format(subDays(now, 6), 'dd MMM');
+    this.nowminus6 = format(subDays(now, 6), 'dd MMM');
     this.nowminus5 = format(subDays(now, 5), 'dd MMM');
     this.nowminus4 = format(subDays(now, 4), 'dd MMM');
     this.nowminus3 = format(subDays(now, 3), 'dd MMM');

@@ -40,7 +40,7 @@ export class RunnerGridComponent implements OnInit {
   settingsService: SettingsService;
   isLoading = false;
   matrixdata: any[];
-  ndays = 7;
+  ndays = 32;
 
   constructor(
     protected iservice: InsightService,
@@ -103,7 +103,6 @@ export class RunnerGridComponent implements OnInit {
       matrix => {
         each(matrix, (value, key) => {
           let datestring;
-          console.log('');
           each(value, (v, k) => {
             let count
             count++
@@ -140,7 +139,7 @@ export class RunnerGridComponent implements OnInit {
           }
           daydata = [];
         });
-        console.log('ALL RUNNERS ]-> \n', allrunners);
+        console.log('grid data]-> \n', allrunners);
         this.matrixdata = allrunners;
         this.dataSource = new MatTableDataSource(this.matrixdata);
         this.dataSource.data = this.addGroups(this.matrixdata, this.groupByColumns);

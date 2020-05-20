@@ -196,7 +196,6 @@ export class RunnerHeatmapComponent implements OnInit {
       uptimes => {
         let datestring;
         each(uptimes, (value, key) => {
-          console.log('');
           each(value, (v, k) => {
             if (k === '_id') {
               const idobj = Object(v);
@@ -219,10 +218,11 @@ export class RunnerHeatmapComponent implements OnInit {
                 'date': datestring
               }
               celldata.push(d);
-              console.log('heatmap runner -> ', d);
+              // console.log('heatmap runner -> ', d);
             })
           }
         });
+        console.log('heatmap celldata -> ', celldata);
         this.heatmapData = celldata;
         celldata = [];
       },
