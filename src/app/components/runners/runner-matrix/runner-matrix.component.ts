@@ -93,11 +93,11 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
     this.dataSource = new RunnersDataSource();
     // const ndays = Number(this.settingsService.settings.timeRangeRunners);
     const ndays = 7 // for testing
-    this.fetchRunnersPrevious(ndays);
+    this.fetchMatrix(ndays);
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        this.fetchRunnersPrevious(ndays);
+        this.fetchMatrix(ndays);
       }, this.updateInterval);
     });
   }
@@ -108,7 +108,7 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
     // this.table.dataSource = this.dataSource;
   }
 
-  private fetchRunners(ndays: number): any {
+  private fetchMatrix(ndays: number): any {
     let runners: any = [];
     let runnerobj: any = {};
     let allrunners: any = [];
@@ -124,9 +124,13 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
     let rowobj = {};
     let rowgroup = [];
 
-    this.insightService.fetchInsightData(ndays, 'runners').subscribe(
+    this.insightService.fetchInsightData(ndays, 'matrix').subscribe(
       matrix => {
         each(matrix, (value, key) => {
+          console.log('matrix: ', matrix);
+          console.log('');
+          console.log('matrix: ', JSON.stringify(matrix));
+          console.log('');
           idcount++
           index++
           nameid++
@@ -141,7 +145,6 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
               runners.push(v);
               for (const run of runners) {
                 each(run, (val, ke) => {
-                  const name = val.name
                   let colname;
                   nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
                   runnerobj = {
@@ -168,6 +171,8 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
           );
         });
         sorted_runners = this.groupby(allrunners, 'name');
+        console.log('sorted_runners ]-> \n', sorted_runners);
+        console.log('sorted_runners ]-> \n', JSON.stringify(sorted_runners));
         for (let i = 0; i < nrunners; i++) {
           each(sorted_runners, (prop, obj) => {
             i++
@@ -177,10 +182,13 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
               'name': obj,
               runner
             }
+            console.log('runnergroup ]-> \n', runnergroup);
+            console.log('runnergroup ]-> \n', JSON.stringify(runnergroup));
             matrixdata.push(runnergroup);
           })
         }
         console.log('matrixdata ]-> \n', matrixdata);
+        console.log('matrixdata ]-> \n', JSON.stringify(matrixdata));
         this.matrixdata = matrixdata;
         this.table.dataSource = matrixdata;
       },
@@ -361,7 +369,7 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
     let runnergroup: any = {};
     let sorted_runners: any = [];
 
-    this.insightService.fetchInsightData(ndays, 'runners').subscribe(
+    this.insightService.fetchInsightData(ndays, 'matrix').subscribe(
       matrix => {
         each(matrix, (value, key) => {
           let datestring;
