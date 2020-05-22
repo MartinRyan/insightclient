@@ -66,7 +66,8 @@ export class TableComponent implements AfterViewInit, OnInit {
   }
 
   showData(data) {
-    console.log('showData value ', data);
+    console.log('table data ', data);
+    console.log('table data ', JSON.stringify(data));
     return data;
  }
 

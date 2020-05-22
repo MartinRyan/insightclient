@@ -92,7 +92,7 @@ export class RunnersComponent implements AfterViewInit, OnInit {
     let rowobj = {};
     let rowgroup = [];
 
-    this.insightService.fetchInsightData(ndays, 'runners').subscribe(
+    this.insightService.fetchInsightData(ndays, 'matrix').subscribe(
       matrix => {
         each(matrix, (value, key) => {
           idcount++
@@ -116,14 +116,14 @@ export class RunnersComponent implements AfterViewInit, OnInit {
                     'column': colname,
                     'id': Number(idcount),
                     'date': datestring,
-                    'active': String(val[2]),
-                    'uptime': String(val[1]),
-                    'description': val[0],
-                    'ip_address': val[5],
-                    'is_shared': val[6],
-                    'name': String(val[0]),
-                    'online': String(val[3]),
-                    'status': String(val[4])
+                    'active': val.active,
+                    'uptime': val.uptime,
+                    'description': val.description,
+                    'ip_address': val.ip_address,
+                    'is_shared': val.is_shared,
+                    'name': val.name,
+                    'online': val.online,
+                    'status': val.status
                   }
                   allrunners.push(runnerobj);
                 })
