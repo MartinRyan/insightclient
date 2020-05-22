@@ -94,7 +94,7 @@ export class RunnerGridComponent implements OnInit {
   private fetchMatrixData(ndays: number): any {
     let runners: any = [];
     let daydata: any = [];
-    let runnerObject: any = {};
+    let runnerobj: any = {};
     let dayObject: any = {};
     let mdata: any = [];
     let allrunners: any = [];
@@ -122,19 +122,19 @@ export class RunnerGridComponent implements OnInit {
             each(r, (value, key) => {
               index++
               let colname = ['minus' + index];
-              runnerObject = {
+              runnerobj = {
                 'id': index,
                 'date': datestring,
-                'active': String(value[2]),
-                'uptime': String(value[1]),
-                'description': value[0],
-                'ip_address': value[5],
-                'is_shared': value[6],
-                'name': String(value[0]),
-                'online': String(value[3]),
-                'status': String(value[4])
+                'active': value.active,
+                'uptime': value.uptime,
+                'description': value.description,
+                'ip_address': value.ip_address,
+                'is_shared': value.is_shared,
+                'name': value.name,
+                'online': value.online,
+                'status': value.status
               }
-              allrunners.push(runnerObject);
+              allrunners.push(runnerobj);
             })
           }
           daydata = [];

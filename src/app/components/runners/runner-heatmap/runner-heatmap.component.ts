@@ -1,7 +1,7 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { SvgIconRegistryService } from 'angular-svg-icon';
 import { each } from 'lodash';
-// import { Memoize } from 'lodash-decorators/memoize';
+import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
@@ -83,110 +83,19 @@ export class RunnerHeatmapComponent implements OnInit {
 
   ngOnInit() {
     // this.timeRangeRunners = Number(this.settingsService.settings.timeRangeRunners);
-    this.timeRangeRunners = 30 // for testing
+    this.timeRangeRunners = 93
     console.log('ngOnInit uptimes range: ', this.timeRangeRunners, ' days');
-    this.fetchUptimesRangeDays(this.timeRangeRunners);
+    this.fetchMatrixData(this.timeRangeRunners);
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        this.fetchUptimesRangeDays(this.timeRangeRunners);
+        this.fetchMatrixData(this.timeRangeRunners);
       }, this.updateInterval);
     });
   }
 
-  private fetchMatrixData(ndays: number): any {
-    let runners: any = [];
-    let daydata: any = [];
-    let runnerobj: any = {};
-    let mdata: any = [];
-    let allrunners: any = [];
-    let matrixdata: any = [];
-    let nrunners: Number = 0;
-    let runnergroup: any = {};
-    let sorted_runners: any = [];
-
-    this.insightService.fetchInsightData(ndays, 'runners').subscribe(
-      matrix => {
-        each(matrix, (value, key) => {
-          let datestring;
-          let index;
-          each(value, (v, k) => {
-            let count;
-            count++
-            if (k === '_id') {
-              const idobj = Object(v);
-              const idtstring = idobj.$date;
-              datestring = this.timestampToDate(idtstring);
-            }
-            if (k === 'runners') {
-              runners = [];
-              runners.push(v);
-            }
-            if (k === 'nrunners') {
-              nrunners = Number(v[0]);
-            }
-            for (const r of runners) {
-              index = 0;
-              each(r, (val, ke) => {
-                index++
-                // let colname = ['minus' + index];
-                runnerobj = {
-                  'id': index,
-                  'date': datestring,
-                  'active': String(val[2]),
-                  'uptime': String(val[1]),
-                  'description': val[0],
-                  'ip_address': val[5],
-                  'is_shared': val[6],
-                  'name': String(val[0]),
-                  'online': String(val[3]),
-                  'status': String(val[4])
-                }
-                allrunners.push(runnerobj);
-              })
-            }
-          }
-          );
-        });
-        sorted_runners = this.groupby(allrunners, 'name');
-        for (let i = 0; i < nrunners; i++) {
-          each(sorted_runners, (prop, obj) => {
-            i++
-            runnergroup = {
-              'id': i,
-              'name': obj,
-              ['minus' + i]:
-                prop
-            }
-            console.log('runnergroup: ->', runnergroup);
-            matrixdata.push(runnergroup);
-          })
-        }
-        console.log('matrixdata ]-> \n', matrixdata);
-        this.heatmapData = matrixdata;
-      },
-      err => {
-        this.isLoading = false;
-        this.spinner.hide();
-        this.notificationService.activeNotification.next({
-          message: err.message
-        });
-      }
-    );
-  }
-
-  groupby = (array, key) => {
-    return array.reduce((result, currentValue) => {
-      (result[currentValue[key]] = result[currentValue[key]] || []).push(
-        currentValue
-      );
-      return result;
-    }, {});
-  };
-
-
-  // @Memoize
-  private fetchUptimesRangeDays(ndays: number) {
+  @Memoize
+  private fetchMatrixData(ndays: number) {
     this.isLoading = true;
     this.spinner.show();
     let runners = [];
@@ -211,14 +120,12 @@ export class RunnerHeatmapComponent implements OnInit {
           for (const r of runners) {
             const dayd = {};
             each(r, (value, key) => {
-              const d =
-              {
-                'runner': value[0],
-                'uptime': value[1],
+              const d = {
+                'runner': value.name,
+                'uptime': value.uptime,
                 'date': datestring
               }
               celldata.push(d);
-              // console.log('heatmap runner -> ', d);
             })
           }
         });
