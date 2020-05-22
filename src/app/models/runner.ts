@@ -11,12 +11,12 @@ export interface Runner {
     minus1: object;
     // minus0: object;
     now: object;
-    // status: string;
-    // active: string;
-    // description: string;
-    // ip_address: string;
-    // is_shared: string;
-    // online: string;
+    status: string;
+    active: boolean;
+    description: string;
+    ip_address: string;
+    is_shared: boolean;
+    online: boolean;
     // uptimes: Array<number>;
-    // uptime: number;
+    uptime: number;
 }

@@ -36,7 +36,7 @@ export class RunnersDataSource extends DataSource<Runner> {
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<Runner[]> {
-    this.getDates();
+    // this.getDates();
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     const dataMutations = [
@@ -89,16 +89,16 @@ export class RunnersDataSource extends DataSource<Runner> {
     });
   }
 
-  getDates() {
-    const n = new Date();
-    const nowminus6 = format(subDays(n, 6), 'ddMMM');
-    const nowminus5 = format(subDays(n, 5), 'ddMMM');
-    const nowminus4 = format(subDays(n, 4), 'ddMMM');
-    const nowminus3 = format(subDays(n, 3), 'ddMMM');
-    const nowminus2 = format(subDays(n, 2), 'ddMMM');
-    const nowminus1 = format(subDays(n, 1), 'ddMMM');
-    const now = format(n, 'ddMMM');
-  }
+//   getDates() {
+//     const n = new Date();
+//     const nowminus6 = format(subDays(n, 6), 'ddMMM');
+//     const nowminus5 = format(subDays(n, 5), 'ddMMM');
+//     const nowminus4 = format(subDays(n, 4), 'ddMMM');
+//     const nowminus3 = format(subDays(n, 3), 'ddMMM');
+//     const nowminus2 = format(subDays(n, 2), 'ddMMM');
+//     const nowminus1 = format(subDays(n, 1), 'ddMMM');
+//     const now = format(n, 'ddMMM');
+//   }
 }
 
 /** Simple sort comparator for example ID/Name columns (for client-side sorting). */

@@ -19,6 +19,8 @@
       "dom",
       "esnext.asynciterable"
     ]
+    // "resolveJsonModule": true,
+    // "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

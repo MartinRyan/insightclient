@@ -8,30 +8,12 @@ import { format, subDays } from 'date-fns';
 import { each, isEmpty, keyBy } from 'lodash';
 import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
-// import { Runner } from './../../../models/runner';
+import { Runner } from './../../../models/runner';
 import { RunnersDataSource } from './../../../models/runners-data-source.model';
 import { InsightService } from './../../../services/insight-api/insight.service';
 import { NotificationService } from './../../../services/notification/notification.service';
 import { SettingsService } from './../../../services/settings/settings.service';
 
-export interface Runner {
-  id: number;
-  name: string;
-  minus6: object;
-  minus5: object;
-  minus4: object;
-  minus3: object;
-  minus2: object;
-  minus1: object;
-  now: object;
-  status: string;
-  active: boolean;
-  description: string;
-  ip_address: string;
-  is_shared: boolean;
-  online: string;
-  uptime: number;
-}
 
 @Component({
   selector: 'app-runner-matrix',
@@ -90,7 +72,7 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.getDates();
-    this.dataSource = new RunnersDataSource();
+    // this.dataSource = new RunnersDataSource();
     // const ndays = Number(this.settingsService.settings.timeRangeRunners);
     const ndays = 7 // for testing
     this.fetchMatrix(ndays);
@@ -126,6 +108,7 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
 
     this.insightService.fetchInsightData(ndays, 'matrix').subscribe(
       matrix => {
+        if(!isEmpty(matrix)) {
         each(matrix, (value, key) => {
           console.log('matrix: ', matrix);
           console.log('');
@@ -190,154 +173,9 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
         console.log('matrixdata ]-> \n', matrixdata);
         console.log('matrixdata ]-> \n', JSON.stringify(matrixdata));
         this.matrixdata = matrixdata;
+        this.dataSource = new RunnersDataSource();
         this.table.dataSource = matrixdata;
-      },
-      err => {
-        this.isLoading = false;
-        this.spinner.hide();
-        this.notificationService.activeNotification.next({
-          message: err.message
-        });
       }
-    );
-  }
-
-
-  private fetchRunnersPrevious(ndays: number): any {
-    let runners: any = [];
-    let runnerobj: any = {};
-    let allrunners: any = [];
-    let matrixdata: any = [];
-    let nrunners: number = 0;
-    let runnergroup: any = {};
-    let sorted_runners: any = [];
-    let spliced_runners: any = [];
-    let datestring: string;
-    let index = 0;
-    let nameid = -1;
-    let idcount = 0;
-    let rowobj = {};
-    let rowgroup = [];
-    let name;
-    let colname;
-    let emptyobj;
-    let number_empty;
-
-    this.insightService.fetchInsightData(ndays, 'matrix').subscribe(
-      matrix => {
-        console.log('matrix: ', matrix);
-        each(matrix, (value, key) => {
-          idcount++
-          index++
-          nameid++
-          each(value, (v, k) => {
-            if (k === '_id') {
-              const idobj = Object(v);
-              const idtstring = idobj.$date;
-              datestring = this.timestampToDate(idtstring);
-            }
-            if (k === 'runners') {
-              runners = [];
-              runners.push(v);
-              number_empty = nrunners - runners.length;
-              // if (runners.length < nrunners) {
-              //   console.log('empty runner');
-              //   const number_empty = nrunners - runners.length;
-              //   console.log('empty to replace = ', number_empty);
-                
-                // for(let i=0; i < number_empty; i++) {
-                //   let emptyobj = {
-                //     'name': 'empty'
-                //   };
-                //   runners.push(emptyobj);
-                // }
-              // }
-              for (const run of runners) {
-                each(run, (val, ke) => {
-                  // if(number_empty = 0) { 
-                  // name = val.name;
-                  nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
-                  runnerobj = {
-                    'column': colname,
-                    'id': Number(idcount),
-                    'date': datestring,
-                    'active': val.active,
-                    'uptime': val.uptime,
-                    'description': val.description,
-                    'ip_address': val.ip_address,
-                    'is_shared': val.is_shared,
-                    'name': val.name,
-                    'online': val.online,
-                    'status': val.status
-                  }
-                // } else {
-                //   console.log('empty runner');
-                //   nameid == 0 ? colname = 'now' : colname = ['minus' + nameid];
-                //     let active;
-                //     let uptime;
-                //     let description;
-                //     let ip_address;
-                //     let is_shared;
-                //     let name;
-                //     let online;
-                //     let status;
-
-                //     !isEmpty(val.active) ? active = val.active: active = '';
-                //     !isEmpty(val.uptime) ? uptime = val.uptime: uptime = '';
-                //     !isEmpty(val.description) ? description = val.description: description = '';
-                //     !isEmpty(val.ip_address) ? ip_address = val.ip_address: is_shared = '';
-                //     !isEmpty(val.is_shared) ? is_shared = val.is_shared: active = '';
-                //     !isEmpty(val.name) ? name = val.name: name = '';
-                //     !isEmpty(val.online) ? online = val.online: online = '';
-                //     !isEmpty(val.status) ? status = val.status: status = '';
-
-                //   runnerobj = {
-                //     'column': colname,
-                //     'id': Number(idcount),
-                //     'date': datestring,
-                //     'active': active,
-                //     'uptime': uptime,
-                //     'description': description,
-                //     'ip_address': ip_address,
-                //     'is_shared': is_shared,
-                //     'name': name,
-                //     'online': online,
-                //     'status': status
-                //   }
-                //   for (let i=0; i < number_empty; i++) {
-                    
-                //     console.log('replacement object \n',runnerobj);
-                //     runners.push(runnerobj);
-                //   }
-                // }
-                  allrunners.push(runnerobj);
-                })
-              }
-            }
-            if (k === 'nrunners') {
-              nrunners = Number(v[0]);
-            }
-          }
-          );
-        });
-        sorted_runners = this.groupby(allrunners, 'name');
-        for (let i = 0; i < nrunners; i++) {
-          each(sorted_runners, (prop, obj) => {
-            i++
-            const runner = keyBy(prop, 'column');
-            runnergroup = {
-              'id': i,
-              'name': obj,
-              runner
-            }
-            matrixdata.push(runnergroup);
-          })
-        }
-        console.log('matrixdata ]-> \n', matrixdata);
-        console.log('matrixdata ]-> \n', JSON.stringify(matrixdata));
-        this.matrixdata = matrixdata;
-        this.table.dataSource = matrixdata;
-        // this.table.dataSource = this.RUNNER_DATA;
       },
       err => {
         this.isLoading = false;
@@ -524,6 +362,7 @@ export class RunnerMatrixComponent implements AfterViewInit, OnInit {
     }
     return style;
   }
+
   ngOnDestroy() {
     this.clearSubscriptions();
   }

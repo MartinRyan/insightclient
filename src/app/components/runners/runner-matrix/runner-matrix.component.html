@@ -3,18 +3,18 @@
     <table mat-table class='full-width-table' matSort aria-label='Elements'>
   
       <!-- id Column -->
-      <ng-container matColumnDef='id'>
+      <!-- <ng-container matColumnDef='id'>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>id</th>
-        <td mat-cell *matCellDef='let row'>{{row.id}}</td>
+        <td mat-cell *matCellDef='let row'>{{row?.id}}</td>
       </ng-container>
-  
+   -->
       <!-- Name Column -->
-      <ng-container matColumnDef='name'>
+      <!-- <ng-container matColumnDef='name'>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>name</th>
         <button mat-icon-button>
         </button>
-        <td mat-cell *matCellDef='let row'>{{row.name}}</td>
-      </ng-container>
+        <td mat-cell *matCellDef='let row'>{{row?.name}}</td>
+      </ng-container> -->
   
       <!-- NowMinusSix Column -->
       <ng-container matColumnDef='minus6'>
@@ -32,15 +32,8 @@
           uptime: {{row.runner.minus6.uptime}}
           "
             matTooltipPosition="before"
-            [ngClass]="{
-              'online': 'mat-mini-fab material-icons color_orange',
-              'offline': 'mat-mini-fab material-icons color_red',
-              'paused': 'mat-mini-fab material-icons color_blue',
-              'active': 'mat-mini-fab material-icons color_green',
-              '': 'mat-mini-fab material-icons color_grey'}
-              [row.runner.minus6.status]"
             (click)='showData(row.runner.minus6)'>
-            <mat-icon>{{ getIcon(row.runner.minus6.status)}}</mat-icon>
+            <mat-icon>{{ getIcon(row.runner.minus6?.status)}}</mat-icon>
           </button>
         </td>
       </ng-container>
@@ -62,15 +55,8 @@
           uptime: {{row.runner.minus5.uptime}}
           "
             matTooltipPosition="before"
-            [ngClass]="{
-              'online': 'mat-mini-fab material-icons color_orange',
-              'offline': 'mat-mini-fab material-icons color_red',
-              'paused': 'mat-mini-fab material-icons color_blue',
-              'active': 'mat-mini-fab material-icons color_green',
-              '': 'mat-mini-fab material-icons color_grey'}
-              [row.runner.minus5.status]"
             (click)='showData(row.runner.minus5)'>
-            <mat-icon>{{ getIcon(row.runner.minus5.status)}}</mat-icon>
+            <mat-icon>{{ getIcon(row.runner.minus5?.status)}}</mat-icon>
           </button></td>
       </ng-container>
   
@@ -86,19 +72,12 @@
           description: {{row.runner.minus4.description}} 
           ip_address: {{row.runner.minus4.ip_address}} 
           is_shared: {{row.runner.minus4.is_shared}} 
-          status: {{row.runner.minus4.status}}
+          status: {{row.runner.minus4?.status}}
           uptime: {{row.runner.minus4.uptime}}
           "
             matTooltipPosition="before"
-            [ngClass]="{
-              'online': 'mat-mini-fab material-icons color_orange',
-              'offline': 'mat-mini-fab material-icons color_red',
-              'paused': 'mat-mini-fab material-icons color_blue',
-              'active': 'mat-mini-fab material-icons color_green',
-              '': 'mat-mini-fab material-icons color_grey'}
-              [row.runner.minus4.status]"
             (click)='showData(row.runner.minus4)'>
-            <mat-icon>{{ getIcon(row.runner.minus4.status)}}</mat-icon>
+            <mat-icon>{{ getIcon(row.runner.minus4?.status)}}</mat-icon>
           </button></td>
       </ng-container>
   
@@ -118,15 +97,8 @@
           uptime: {{row.runner.minus3.uptime}}
           "
             matTooltipPosition="before"
-            [ngClass]="{
-              'online': 'mat-mini-fab material-icons color_orange',
-              'offline': 'mat-mini-fab material-icons color_red',
-              'paused': 'mat-mini-fab material-icons color_blue',
-              'active': 'mat-mini-fab material-icons color_green',
-              '': 'mat-mini-fab material-icons color_grey'}
-              [row.runner.minus3.status]"
             (click)='showData(row.runner.minus3)'>
-            <mat-icon>{{ getIcon(row.runner.minus3.status)}}</mat-icon>
+            <mat-icon>{{ getIcon(row.runner.minus3?.status)}}</mat-icon>
           </button></td>
       </ng-container>
   
@@ -146,15 +118,8 @@
           uptime: {{row.runner.minus2.uptime}}
           "
             matTooltipPosition="before"
-            [ngClass]="{
-              'online': 'mat-mini-fab material-icons color_orange',
-              'offline': 'mat-mini-fab material-icons color_red',
-              'paused': 'mat-mini-fab material-icons color_blue',
-              'active': 'mat-mini-fab material-icons color_green',
-              '': 'mat-mini-fab material-icons color_grey'}
-              [row.runner.minus2.status]"
             (click)='showData(row.runner.minus2)'>
-            <mat-icon>{{ getIcon(row.runner.minus2.status)}}</mat-icon>
+            <mat-icon>{{ getIcon(row.runner.minus2?.status)}}</mat-icon>
           </button></td>
       </ng-container>
   
@@ -174,18 +139,11 @@
           uptime: {{row.runner.minus1.uptime}}
           "
             matTooltipPosition="before"
-            [ngClass]="{
-              'online': 'mat-mini-fab material-icons color_orange',
-              'offline': 'mat-mini-fab material-icons color_red',
-              'paused': 'mat-mini-fab material-icons color_blue',
-              'active': 'mat-mini-fab material-icons color_green',
-              '': 'mat-mini-fab material-icons color_grey'}
-              [row.runner.minus1.status]"
             (click)='showData(row.runner.minus1)'>
-            <mat-icon>{{ getIcon(row.runner.minus1.status)}}</mat-icon>
+            <mat-icon>{{ getIcon(row.runner.minus1?.status)}}</mat-icon>
           </button></td>
       </ng-container>
-  
+
       <ng-container matColumnDef='now'>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{now}}</th>
         <td mat-cell *matCellDef='let row'>
@@ -201,18 +159,10 @@
             "
             matTooltipPosition="before"
             matTooltipClass='runners-tooltip'
-            [ngClass]="{
-              'online': 'mat-mini-fab material-icons color_orange',
-              'offline': 'mat-mini-fab material-icons color_red',
-              'paused': 'mat-mini-fab material-icons color_blue',
-              'active': 'mat-mini-fab material-icons color_green',
-              '': 'mat-mini-fab material-icons color_grey'}
-              [row.runner.now.status]"
             (click)='showData(row.runner.now)'>
-            <mat-icon>{{ getIcon(row.runner.now.status)}}</mat-icon>
+            <mat-icon>{{ getIcon(row.runner.now?.status)}}</mat-icon>
           </button></td>
       </ng-container>
-  
   
       <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
       <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
