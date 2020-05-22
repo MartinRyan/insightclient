@@ -55,6 +55,9 @@ import { MatrixComponent } from './components/matrix/matrix.component';
 import { RunnerMatrixComponent } from './components/runners/runner-matrix/runner-matrix.component';
 import { RunnerHeatmapComponent } from './components/runners/runner-heatmap/runner-heatmap.component';
 import { RunnerGridComponent } from './components/runners/runner-grid/runner-grid.component';
+import { MatrixGridComponent } from './components/runners/matrix-grid/matrix-grid.component';
+import { GridModule } from '@syncfusion/ej2-angular-grids';
+import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
 
 
 @NgModule({
@@ -75,7 +78,8 @@ import { RunnerGridComponent } from './components/runners/runner-grid/runner-gri
     MatrixComponent,
     RunnerMatrixComponent,
     RunnerHeatmapComponent,
-    RunnerGridComponent
+    RunnerGridComponent,
+    MatrixGridComponent
   ],
   imports: [
     BrowserModule,
@@ -110,7 +114,8 @@ import { RunnerGridComponent } from './components/runners/runner-grid/runner-gri
     AngularSvgIconModule,
     MessagesModule,
     MessageModule,
-    HeatMapAllModule
+    HeatMapAllModule,
+    GridModule
   ],
   exports: [
     MatTooltipModule
@@ -123,7 +128,11 @@ import { RunnerGridComponent } from './components/runners/runner-grid/runner-gri
     GitlabApiService,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PageService,
+    SortService,
+    FilterService,
+    GroupService
     // { provide: HTTP_INTERCEPTORS, useClass: GitLabApiInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],

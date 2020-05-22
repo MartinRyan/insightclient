@@ -1,0 +1,23 @@
+<!-- <ejs-grid [dataSource]='matrixdata'>
+    <e-columns>
+        <e-column field='id' headerText='id' textAlign='Right' width=90></e-column>
+        <e-column field='name' headerText='name' width=120></e-column>
+        <e-column field='date' headerText='date' textAlign='Right' format='dM' width=90></e-column>
+        <e-column field='active' headerText='active' textAlign='Right' width=90></e-column>
+        <e-column field='uptime' headerText='uptime' textAlign='Right' width=90></e-column>
+        <e-column field='description' headerText='description' textAlign='Right' width=90></e-column>
+        <e-column field='ip_address' headerText='ip_address' textAlign='Right' width=90></e-column>
+        <e-column field='is_shared' headerText='is_shared' textAlign='Right' width=90></e-column>
+        <e-column field='online' headerText='online' textAlign='Right' width=90></e-column>
+        <e-column field='active' headerText='active' textAlign='Right' width=90></e-column>
+        <e-column field='status' headerText='status' textAlign='Right' width=90></e-column>
+    </e-columns>
+</ejs-grid> -->
+<ejs-grid [dataSource]='matrixdata | async' [allowPaging]="true" [pageSettings]='pageSettings'>
+    <e-columns>
+        <e-column field='OrderID' headerText='Order ID' textAlign='Right' width=90></e-column>
+        <e-column field='CustomerID' headerText='Customer ID' width=120></e-column>
+        <e-column field='Freight' headerText='Freight' textAlign='Right' format='C2' width=90></e-column>
+        <e-column field='OrderDate' headerText='Order Date' textAlign='Right' format='yMd' width=120></e-column>
+    </e-columns>
+</ejs-grid>

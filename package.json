@@ -26,6 +26,7 @@
     "@ngxs/logger-plugin": "^3.3.2",
     "@ngxs/schematics": "0.0.1-alpha.5",
     "@ngxs/store": "^3.3.2",
+    "@syncfusion/ej2-angular-grids": "^18.1.53",
     "@syncfusion/ej2-angular-heatmap": "^17.4.51",
     "@types/lodash": "^4.14.145",
     "angular-svg-icon": "^8.0.0",

@@ -9,6 +9,7 @@ import { DetailComponent } from './components/detail/detail.component';
 import { RunnerMatrixComponent } from './components/runners/runner-matrix/runner-matrix.component';
 import { RunnerHeatmapComponent } from './components/runners/runner-heatmap/runner-heatmap.component';
 import { RunnerGridComponent } from './components/runners/runner-grid/runner-grid.component';
+import { MatrixGridComponent } from './components/runners/matrix-grid/matrix-grid.component';
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'heatmap', component: RunnerHeatmapComponent, pathMatch: 'full' },
   { path: 'matrix', component: RunnerMatrixComponent, pathMatch: 'full' },
   { path: 'grid', component: RunnerGridComponent, pathMatch: 'full' },
+  { path: 'runners', component: MatrixGridComponent, pathMatch: 'full' },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
