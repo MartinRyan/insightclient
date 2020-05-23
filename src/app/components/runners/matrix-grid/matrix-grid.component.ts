@@ -95,7 +95,9 @@ export class MatrixGridComponent implements OnInit {
         console.log('runner data -> ', runnerdata);
         console.log('runnerdata: ', JSON.stringify(runnerdata))
         this.dataSource = new MatTableDataSource(runnerdata);
-        this.changeDetectorRefs.detectChanges();
+        if (!this.changeDetectorRefs['destroyed']) {
+          this.changeDetectorRefs.detectChanges();
+      }
       },
       err => {
         this.isLoading = false;
