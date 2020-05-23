@@ -1,13 +1,12 @@
-import { Runner } from './../../../models/runner';
-import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { Component, NgZone, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { SvgIconRegistryService } from 'angular-svg-icon';
 import { each, isEmpty } from 'lodash';
 import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
 import { NotificationService } from './../../../services/notification/notification.service';
 import { SettingsService } from './../../../services/settings/settings.service';
@@ -22,7 +21,7 @@ export class MatrixGridComponent implements OnInit {
   dataSource = new MatTableDataSource();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
+  @ViewChild(MatTable, { static: false }) table: MatTable<Runner>;
   private subscriptions: Array<any> = [];
   public updateInterval = 60000;
   columns: any[];
@@ -38,18 +37,21 @@ export class MatrixGridComponent implements OnInit {
     private notificationService: NotificationService,
     private spinner: NgxSpinnerService,
     private zone: NgZone,
-    private iconReg: SvgIconRegistryService) {
+    private iconReg: SvgIconRegistryService,
+    private changeDetectorRefs: ChangeDetectorRef) {
 
     this.displayedColumns = [
       'id',
-      'date',
+      'status',
       'name',
+      'active',
+      // 'date',
+      'timestamp',
       'description',
       'uptime',
       'ip_address',
       'is_shared',
       'online',
-      'status'
     ];
   }
 
@@ -61,44 +63,24 @@ export class MatrixGridComponent implements OnInit {
         this.fetchData(1);
       }, this.updateInterval);
     });
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   private fetchData(ndays: number) {
     this.isLoading = true;
     this.spinner.show();
-    let runners = [];
     let runnerdata = [];
-    let idtstring;
-    let datestring;
+    let index = 0;
 
     this.insightService.fetchInsightData(ndays, 'today').subscribe(
       data => {
         each(data, (value, key) => {
-          console.log('data: ', JSON.stringify(data));
-          console.log('key -> ', key);
-          console.log('value -> ', value);
-          const dayd = {};
-          // each(value, (v, k) => {
-          // if (k === '_id') {
-          //   const idobj = Object(v);
-          //   console.log('objj: ', idobj);
-          //   const idtstring = idobj.$date;
-          //   console.log('idtstring: ', idtstring);
-          //   // datestring = this.timestampToDate(idtstring);
-          // }
-          // if (k === 'runners') {
-          //   runners = [];
-          //   runners.push(v);
-          //   console.log('runners: ', runners);
-          // }
-          // });
-          // for (const r of runners) {
-          //   const dayd = {};
-          //   each(value, (prop, obj) => {
-          const d = {
-            'id': value.id,
-            'date': this.timestampToDate(value.timestamp.$date),
-            'timestamp': value.timestamp.$date,
+          index++
+          const runner = {
+            'id': index,
+            'date': this.timestampToDate(value.date.$date),
+            'timestamp': this.timestampToDate(value.timestamp.$date),
             'name': value.name,
             'uptime': value.uptime,
             'description': value.description,
@@ -108,17 +90,12 @@ export class MatrixGridComponent implements OnInit {
             'status': value.status,
             'active': value.active
           }
-          //     console.log('runnerdata -> ', runnerdata);
-          runnerdata.push(d as Runner);
-          //   })
-          // }
+          runnerdata.push(runner as Runner);
         });
         console.log('runner data -> ', runnerdata);
         console.log('runnerdata: ', JSON.stringify(runnerdata))
-        // this.matrixdata = runnerdata;
-        // this.dataSource.data = runnerdata;
         this.dataSource = new MatTableDataSource(runnerdata);
-        // this.dataSource.filter = performance.now().toString();
+        this.changeDetectorRefs.detectChanges();
       },
       err => {
         this.isLoading = false;
@@ -131,14 +108,24 @@ export class MatrixGridComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
+  sortData(event: Event) {
+    this.dataSource.sort = this.sort;
+  }
+
+  pageData(event?: PageEvent) {
+    this.dataSource.paginator = this.paginator;
+  }
+
   private timestampToDate(timestamp) {
     const date = new Date(timestamp);
     const datestring = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
       .toISOString()
-      .split('T')[0];
-    const month = datestring.split('-')[1];
-    const day = datestring.split('-')[2];
-    return [day, month].join('-');
+      // .split('T')[0];
+    // const month = datestring.split('-')[1];
+    // const day = datestring.split('-')[2];
+    // return [day, month].join('-');
+    return datestring
   }
 
   @Memoize
@@ -157,6 +144,30 @@ export class MatrixGridComponent implements OnInit {
     }
     return icon;
   }
+
+  getStyle(value) {
+    let style = '';
+    if (isEmpty(value)) {
+      style = 'mat-mini-fab material-icons color_grey';
+    } else if (value === 'active') {
+      style = 'mat-mini-fab material-icons color_green';
+    } else if (value === 'online') {
+      style = 'mat-mini-fab material-icons color_orange';
+    } else if (value === 'paused') {
+      style = 'mat-mini-fab material-icons color_blue';
+    } else if (value === 'offline') {
+      style = 'mat-mini-fab material-icons color_red';
+    } else {
+      style = 'mat-mini-fab material-icons color_grey';
+    }
+    return style;
+  }
+
+  showData(data) {
+    console.log('showData value ', data);
+    return data;
+  }
+
 
   ngOnDestroy() {
     this.clearSubscriptions();

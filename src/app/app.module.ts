@@ -30,13 +30,11 @@ import {MessageModule} from 'primeng/message';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ExpansionComponent } from './components/expansion/expansion.component';
 import { MergeRequestsComponent } from './components/merge-requests/merge-requests.component';
 import { NavComponent } from './components/nav/nav.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { PipelinesComponent } from './components/pipelines/pipelines.component';
 import { SettingsComponent } from './components/settings/settings.component';
-import { TableComponent } from './components/table/table.component';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { GitLabApiInterceptor } from './services/gitlab-api/gitlab-api.interceptor';
 import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
@@ -48,9 +46,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DetailComponent } from './components/detail/detail.component';
 import { HeatMapAllModule } from '@syncfusion/ej2-angular-heatmap';
-import { HeatmapComponent } from './components/heatmap/heatmap.component';
 import "hammerjs";
-import { MatrixComponent } from './components/matrix/matrix.component';
 import { RunnerMatrixComponent } from './components/runners/runner-matrix/runner-matrix.component';
 import { RunnerHeatmapComponent } from './components/runners/runner-heatmap/runner-heatmap.component';
 import { RunnerGridComponent } from './components/runners/runner-grid/runner-grid.component';
@@ -61,8 +57,6 @@ import { MatrixGridComponent } from './components/runners/matrix-grid/matrix-gri
   declarations: [
     AppComponent,
     NavComponent,
-    ExpansionComponent,
-    TableComponent,
     SettingsComponent,
     NotificationComponent,
     PipelinesComponent,
@@ -71,8 +65,6 @@ import { MatrixGridComponent } from './components/runners/matrix-grid/matrix-gri
     DateAgoPipe,
     SecondsToTimePipe,
     DetailComponent,
-    HeatmapComponent,
-    MatrixComponent,
     RunnerMatrixComponent,
     RunnerHeatmapComponent,
     RunnerGridComponent,

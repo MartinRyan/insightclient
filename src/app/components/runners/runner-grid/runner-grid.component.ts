@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { SvgIconRegistryService } from 'angular-svg-icon';
@@ -85,6 +85,7 @@ export class RunnerGridComponent implements OnInit {
         this.fetchMatrixData(this.ndays);
       }, this.updateInterval);
     });
+    this.dataSource.paginator = this.paginator;
   }
 
   ngAfterViewInit() {
@@ -268,6 +269,10 @@ export class RunnerGridComponent implements OnInit {
 
   isGroup(index, item): boolean {
     return item.level;
+  }
+
+  pageData(event?: PageEvent) {
+    this.dataSource.paginator = this.paginator;
   }
 
   private timestampToDate(timestamp) {

@@ -1,5 +1,5 @@
 export interface Runner {
-    id: string;
+    id: number;
     name: string;
     date: any;
     timestamp: any;
