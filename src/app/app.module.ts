@@ -37,7 +37,6 @@ import { NotificationComponent } from './components/notification/notification.co
 import { PipelinesComponent } from './components/pipelines/pipelines.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { TableComponent } from './components/table/table.component';
-import { GraphQLModule } from './graphql.module';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { GitLabApiInterceptor } from './services/gitlab-api/gitlab-api.interceptor';
 import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
@@ -55,6 +54,7 @@ import { MatrixComponent } from './components/matrix/matrix.component';
 import { RunnerMatrixComponent } from './components/runners/runner-matrix/runner-matrix.component';
 import { RunnerHeatmapComponent } from './components/runners/runner-heatmap/runner-heatmap.component';
 import { RunnerGridComponent } from './components/runners/runner-grid/runner-grid.component';
+import { MatrixGridComponent } from './components/runners/matrix-grid/matrix-grid.component';
 
 
 @NgModule({
@@ -75,7 +75,8 @@ import { RunnerGridComponent } from './components/runners/runner-grid/runner-gri
     MatrixComponent,
     RunnerMatrixComponent,
     RunnerHeatmapComponent,
-    RunnerGridComponent
+    RunnerGridComponent,
+    MatrixGridComponent
   ],
   imports: [
     BrowserModule,
@@ -102,7 +103,6 @@ import { RunnerGridComponent } from './components/runners/runner-grid/runner-gri
     MatSnackBarModule,
     MatSortModule,
     MatTooltipModule,
-    GraphQLModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
