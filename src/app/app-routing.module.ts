@@ -12,7 +12,7 @@ import { GridComponent } from './components/runners/grid/grid.component';
 const routes: Routes = [
   { path: 'settings', component: SettingsComponent, pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
-  { path: 'detail', component: DetailComponent, pathMatch: 'full' },
+  // { path: 'detail', component: DetailComponent, pathMatch: 'full' },
   { path: 'heatmap', component: HeatmapComponent, pathMatch: 'full' },
   { path: 'matrix', component: MatrixComponent, pathMatch: 'full' },
   { path: 'grid', component: GridComponent, pathMatch: 'full' },

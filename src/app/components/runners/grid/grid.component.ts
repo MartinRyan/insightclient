@@ -81,6 +81,7 @@ export class GridComponent implements OnInit {
       matrix => {
         each(matrix, (value, key) => {
           let datestring;
+          let index = 0;
           each(value, (v, k) => {
             let count
             count++
@@ -96,10 +97,8 @@ export class GridComponent implements OnInit {
           }
           );
           for (const r of runners) {
-            let index = 0;
             each(r, (value, key) => {
               index++
-              let colname = ['minus' + index];
               runnerobj = {
                 'id': index,
                 'date': datestring,

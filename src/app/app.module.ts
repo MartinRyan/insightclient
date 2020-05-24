@@ -47,10 +47,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DetailComponent } from './components/detail/detail.component';
 import { HeatMapAllModule } from '@syncfusion/ej2-angular-heatmap';
 import "hammerjs";
-import { RunnerMatrixComponent } from './components/runners/runner-matrix/runner-matrix.component';
-import { RunnerHeatmapComponent } from './components/runners/runner-heatmap/runner-heatmap.component';
-import { RunnerGridComponent } from './components/runners/runner-grid/runner-grid.component';
-import { MatrixGridComponent } from './components/runners/matrix-grid/matrix-grid.component';
 import { GridComponent } from './components/runners/grid/grid.component';
 import { HeatmapComponent } from './components/runners/heatmap/heatmap.component';
 import { MatrixComponent } from './components/runners/matrix/matrix.component';
@@ -68,10 +64,6 @@ import { MatrixComponent } from './components/runners/matrix/matrix.component';
     DateAgoPipe,
     SecondsToTimePipe,
     DetailComponent,
-    RunnerMatrixComponent,
-    RunnerHeatmapComponent,
-    RunnerGridComponent,
-    MatrixGridComponent,
     GridComponent,
     HeatmapComponent,
     MatrixComponent
