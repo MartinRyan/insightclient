@@ -1,1 +1,90 @@
-<p>grid works!</p>
+<mat-card>
+  <mat-label>
+    <h3 class="title">runner grid</h3>
+  </mat-label>
+</mat-card>
+
+<mat-form-field>
+  <mat-label>filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="enter filter term">
+</mat-form-field>
+
+<td class="wrapper">
+  <mat-paginator (page)="pageData($event)" [length]="matrixdata?.length" [pageSize]="50"
+    [pageSizeOptions]="[5, 10, 15, 20, 25, 50, 100, 200]" showFirstLastButtons>
+  </mat-paginator>
+</td>
+
+<table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" class="mat-elevation-z8"
+  aria-label='Runners'>
+
+  <!-- Id Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> id </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.id}} </td>
+  </ng-container>
+
+  <!-- Date Column -->
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> date </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.date}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> name </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.name}} </td>
+  </ng-container>
+
+  <!-- Status Column -->
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> status </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.status}} </td>
+  </ng-container>
+
+  <!-- Active Column -->
+  <ng-container matColumnDef="active">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> active </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.active}} </td>
+  </ng-container>
+
+  <!-- Timestamp Column -->
+  <ng-container matColumnDef="timestamp">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> timestamp </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.timestamp}} </td>
+  </ng-container>
+
+  <!-- Online Column -->
+  <ng-container matColumnDef="online">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> online </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.online}} </td>
+  </ng-container>
+
+  <!-- Description Column -->
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> description </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.description}} </td>
+  </ng-container>
+
+  <!-- Uptime Column -->
+  <ng-container matColumnDef="uptime">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> uptime </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.uptime}} </td>
+  </ng-container>
+
+  <!-- IP Address Column -->
+  <ng-container matColumnDef="ip_address">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> ip_address </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.ip_address}} </td>
+  </ng-container>
+
+  <!-- IS Shared Column -->
+  <ng-container matColumnDef="is_shared">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> is_shared </th>
+    <td mat-cell *matCellDef="let matrixdata"> {{matrixdata.is_shared}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>

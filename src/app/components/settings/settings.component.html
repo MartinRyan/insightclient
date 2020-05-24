@@ -25,7 +25,7 @@
       </div>
 
       <div class="field">
-        <h4>select time range</h4>
+        <h4>pipelines time range</h4>
         <mat-form-field>
           <mat-label>number of days</mat-label>
           <mat-select optional #selectedRange [formControl]="timeRangeSelectControl"
@@ -53,7 +53,7 @@
       </div> -->
 
       <div class="field">
-        <h4>select namespace</h4>
+        <h4>pipelines namespace</h4>
         <mat-form-field>
           <mat-label>select namespace</mat-label>
           <mat-select optional #selected [formControl]="namespaceSelectControl"
@@ -67,7 +67,7 @@
       </div>
 
       <div class="field" *ngIf="subgroups">
-        <h4>select subgroup</h4>
+        <h4>pipelines subgroup</h4>
         <mat-form-field>
           <mat-label>select subgroup</mat-label>
           <mat-select optional #group [formControl]="subgroupSelectControl"
@@ -81,12 +81,22 @@
       </div>
 
       <div class="field">
-        <h4>input namespace</h4>
+        <h4>input pipelines namespace</h4>
         <mat-form-field>
           <mat-label>input namespace</mat-label>
           <input matInput formControlName="namespace" name="namespace" optional>
         </mat-form-field>
       </div>
+
+      <div class="field">
+        <h4>runners grid day range</h4>
+        <mat-form-field>
+          <mat-label>runner grid day range</mat-label>
+          <input matInput placeholder="runner grid day range" formControlName="numberOfDaysGrid"
+            name="numberOfDaysGrid">
+        </mat-form-field>
+      </div>
+
     </mat-card-content>
     <mat-card-actions>
       <div class="field">
@@ -96,4 +106,5 @@
       </div>
     </mat-card-actions>
   </form>
+
 </mat-card>

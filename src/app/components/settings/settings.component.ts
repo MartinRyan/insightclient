@@ -44,6 +44,7 @@ export class SettingsComponent implements OnInit {
   namespaceControl = new FormControl('');
   subgroupSelectControl = new FormControl('');
   perPageSelectControl = new FormControl('');
+  numberOfDaysGridControl = new FormControl('');
   public notification: {
     message: string;
     level?: 'is-danger' | 'is-warning' | 'is-success';
@@ -58,6 +59,7 @@ export class SettingsComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   config = new MatSnackBarConfig();
+  numberOfDaysGrid: number;
 
   constructor(
     private fb: FormBuilder,
@@ -132,7 +134,8 @@ export class SettingsComponent implements OnInit {
       isCrossProject: [
         !!savedConfig ? savedConfig.isCrossProject : false,
         Validators.required
-      ]
+      ],
+      numberOfDaysGrid: !!savedConfig ? savedConfig.numberOfDaysGrid : '',
     });
   }
 
@@ -194,6 +197,11 @@ export class SettingsComponent implements OnInit {
     this.settingsService.settings = this.settingsForm.value;
     this.fetchSubgroupsyGroupID(namespaceObject.id);
     this.hide();
+  }
+
+  setNumberOfDaysGrid(nDays) {
+    this.settingsForm.value.numberOfDaysGrid = nDays;
+    this.settingsService.settings.numberOfDaysGrid = nDays;
   }
 
   onSubmit() {
