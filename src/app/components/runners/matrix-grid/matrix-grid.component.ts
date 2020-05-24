@@ -132,6 +132,7 @@ export class MatrixGridComponent implements OnInit {
 
   @Memoize
   getIcon(value) {
+    console.log('GET ICON value --> ', value );
     let icon = '';
     if (value === 'active') {
       icon = 'done_outline';
@@ -169,6 +170,11 @@ export class MatrixGridComponent implements OnInit {
     console.log('showData value ', data);
     return data;
   }
+
+  getDetails(event: Event) {
+    console.log('getDetails event ->', event);
+    // this.router.navigateByUrl('/details');
+  };
 
 
   ngOnDestroy() {

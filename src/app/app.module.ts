@@ -51,6 +51,9 @@ import { RunnerMatrixComponent } from './components/runners/runner-matrix/runner
 import { RunnerHeatmapComponent } from './components/runners/runner-heatmap/runner-heatmap.component';
 import { RunnerGridComponent } from './components/runners/runner-grid/runner-grid.component';
 import { MatrixGridComponent } from './components/runners/matrix-grid/matrix-grid.component';
+import { GridComponent } from './components/runners/grid/grid.component';
+import { HeatmapComponent } from './components/runners/heatmap/heatmap.component';
+import { MatrixComponent } from './components/runners/matrix/matrix.component';
 
 
 @NgModule({
@@ -68,7 +71,10 @@ import { MatrixGridComponent } from './components/runners/matrix-grid/matrix-gri
     RunnerMatrixComponent,
     RunnerHeatmapComponent,
     RunnerGridComponent,
-    MatrixGridComponent
+    MatrixGridComponent,
+    GridComponent,
+    HeatmapComponent,
+    MatrixComponent
   ],
   imports: [
     BrowserModule,
