@@ -4,16 +4,18 @@
   </mat-label>
 </mat-card>
 
+<div class="grid-container mat-elevation-z8">
+  <div class="filterInput">
 <mat-form-field>
-  <mat-label>filter</mat-label>
+  <mat-label> filter</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="enter filter term">
 </mat-form-field>
+</div>
 
-<td class="wrapper">
-  <mat-paginator (page)="pageData($event)" [length]="matrixdata?.length" [pageSize]="50"
-    [pageSizeOptions]="[5, 10, 15, 20, 25, 50, 100, 200]" showFirstLastButtons>
-  </mat-paginator>
-</td>
+<mat-paginator #paginator [length]="pageLength" [pageSize]="30"
+[pageSizeOptions]="[5, 10, 15, 20, 25, 50, 100, 200]" (page)="pageEvent = $event; onPaginateChange($event)"
+showFirstLastButtons>
+</mat-paginator>
 
 <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" class="mat-elevation-z8"
   aria-label='Runners'>
@@ -34,11 +36,12 @@
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> status </th>
     <td mat-cell *matCellDef="let matrixdata">
-      <button mat-mini-fab color='primary' matTooltip="status: {{matrixdata.status}}" [ngClass]="{
-              'status: online': 'mat-mini-fab material-icons color_orange',
-              'status: offline': 'mat-mini-fab material-icons color_red',
-              'status: paused': 'mat-mini-fab material-icons color_blue',
-              'status: active': 'mat-mini-fab material-icons color_green',
+      <button mat-mini-fab color='primary' matTooltip="status: {{matrixdata.status}}" 
+      [ngClass]="{
+              'online': 'mat-mini-fab material-icons color_orange',
+              'offline': 'mat-mini-fab material-icons color_red',
+              'paused': 'mat-mini-fab material-icons color_blue',
+              'active': 'pulse-button',
               '': 'mat-mini-fab material-icons color_grey'}
               [matrixdata]" (click)="getDetails(matrixdata)">
         <mat-icon>{{ getIcon(matrixdata.status)}}</mat-icon>
@@ -91,3 +94,4 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
 </table>
+</div>

@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, NgZone, OnInit, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -16,7 +16,7 @@ import { SettingsService } from './../../../services/settings/settings.service';
   templateUrl: './matrix.component.html',
   styleUrls: ['./matrix.component.styl']
 })
-export class MatrixComponent implements OnInit {
+export class MatrixComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -29,6 +29,8 @@ export class MatrixComponent implements OnInit {
   isLoading = false;
   matrixdata: Runner[];
   ndays = 1;
+  public pageLength: number;
+  pageEvent: PageEvent;
 
   constructor(
     private insightService: InsightService,
@@ -64,6 +66,10 @@ export class MatrixComponent implements OnInit {
     });
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   private fetchData(ndays: number) {
@@ -112,8 +118,13 @@ export class MatrixComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  pageData(event?: PageEvent) {
+  onPaginateChange(event?: PageEvent) {
+    console.log('paginate event: ', event);
+    this.pageLength = this.matrixdata.length;
     this.dataSource.paginator = this.paginator;
+    if (!this.changeDetectorRefs['destroyed']) {
+      this.changeDetectorRefs.detectChanges();
+    };
   }
 
   private timestampToDate(timestamp) {

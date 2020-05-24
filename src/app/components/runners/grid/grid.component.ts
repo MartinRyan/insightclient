@@ -27,7 +27,9 @@ export class GridComponent implements OnInit {
   groupByColumns: string[] = [];
   isLoading = false;
   matrixdata: Runner[];
-  ndays = 100;
+  ndays: number; // this is number of days per runner
+  public pageLength: number;
+  pageEvent: PageEvent;
 
   constructor(
     private insightService: InsightService,
@@ -53,7 +55,8 @@ export class GridComponent implements OnInit {
 
   ngOnInit() {
     Number(this.settingsService.settings.numberOfDaysGrid) > 0 ?
-    this.ndays = Number(this.settingsService.settings.numberOfDaysGrid) : this.ndays = 100;
+    // this is number of days per runner
+    this.ndays = Number(this.settingsService.settings.numberOfDaysGrid) : this.ndays = 5;
     this.fetchData(this.ndays);
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
@@ -65,9 +68,12 @@ export class GridComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
   private fetchData(ndays: number): any {
     let runners: any = [];
-    let daydata: any = [];
     let runnerobj: any = {};
     let allrunners: any = [];
 
@@ -108,10 +114,11 @@ export class GridComponent implements OnInit {
               }
               allrunners.push(runnerobj);
             })
+            this.pageLength = allrunners.length;
           }
-          daydata = [];
         });
         this.matrixdata = allrunners;
+        console.log('this.matrixdata ]]: ', this.matrixdata );
         this.dataSource = new MatTableDataSource(this.matrixdata);
         if (!this.changeDetectorRefs['destroyed']) {
           this.changeDetectorRefs.detectChanges();
@@ -133,8 +140,13 @@ export class GridComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  pageData(event?: PageEvent) {
+  onPaginateChange(event?: PageEvent) {
+    console.log('paginate event: ', event);
+    this.pageLength = this.matrixdata.length;
     this.dataSource.paginator = this.paginator;
+    if (!this.changeDetectorRefs['destroyed']) {
+      this.changeDetectorRefs.detectChanges();
+    };
   }
 
   private timestampToDate(timestamp) {

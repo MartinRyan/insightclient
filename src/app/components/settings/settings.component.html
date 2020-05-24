@@ -89,11 +89,20 @@
       </div>
 
       <div class="field">
-        <h4>runners grid day range</h4>
+        <h4>runners grid number of days</h4>
         <mat-form-field>
-          <mat-label>runner grid day range</mat-label>
-          <input matInput placeholder="runner grid day range" formControlName="numberOfDaysGrid"
+          <mat-label>number of days per runner</mat-label>
+          <input matInput placeholder="number of days" formControlName="numberOfDaysGrid"
             name="numberOfDaysGrid">
+        </mat-form-field>
+      </div>
+
+      <div class="field">
+        <h4>heatmap number of days</h4>
+        <mat-form-field>
+          <mat-label>number of days to display</mat-label>
+          <input matInput placeholder="number of previous days runners" formControlName="numberOfDaysHeatmap"
+            name="numberOfDaysHeatmap">
         </mat-form-field>
       </div>
 

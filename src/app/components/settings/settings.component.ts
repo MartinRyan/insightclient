@@ -60,6 +60,7 @@ export class SettingsComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   config = new MatSnackBarConfig();
   numberOfDaysGrid: number;
+  numberOfDaysHeatmap: number;
 
   constructor(
     private fb: FormBuilder,
@@ -72,7 +73,6 @@ export class SettingsComponent implements OnInit {
     const pipelines$ = notificationService.pipeLinesNotification$.subscribe(
       pipelines => {
         this.subscriptions.push(pipelines$);
-        console.log('settingsComponent pipelines: ', pipelines);
         this.pipelines = pipelines;
         this.announced = true;
         this.confirmed = false;
@@ -82,7 +82,6 @@ export class SettingsComponent implements OnInit {
     const mergerequests$ = notificationService.mergeReqNotification$.subscribe(
       mergerequests => {
         this.subscriptions.push(mergerequests$);
-        console.log('settingsComponent mergerequests: ', mergerequests);
         this.mergerequests = mergerequests;
         this.announced = true;
         this.confirmed = false;
@@ -136,6 +135,7 @@ export class SettingsComponent implements OnInit {
         Validators.required
       ],
       numberOfDaysGrid: !!savedConfig ? savedConfig.numberOfDaysGrid : '',
+      numberOfDaysHeatmap: !!savedConfig ? savedConfig.numberOfDaysHeatmap : ''
     });
   }
 
@@ -202,6 +202,11 @@ export class SettingsComponent implements OnInit {
   setNumberOfDaysGrid(nDays) {
     this.settingsForm.value.numberOfDaysGrid = nDays;
     this.settingsService.settings.numberOfDaysGrid = nDays;
+  }
+
+  setNumberOfDaysHeatmap(nDays) {
+    this.settingsForm.value.numberOfDaysHeatmap = nDays;
+    this.settingsService.settings.numberOfDaysHeatmap = nDays;
   }
 
   onSubmit() {

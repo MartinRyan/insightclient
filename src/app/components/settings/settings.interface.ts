@@ -11,4 +11,5 @@ export interface Settings {
   intervalP: string;
   intervalR: string;
   numberOfDaysGrid: number;
+  numberOfDaysHeatmap: number;
 }

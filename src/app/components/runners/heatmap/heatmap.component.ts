@@ -62,12 +62,12 @@ export class HeatmapComponent implements OnInit {
   };
 
   public isLoading = false;
-  public timeRangeRunners: number;
   private subscriptions: Array<any> = [];
   public updateInterval = 60000;
   public uptimesLive: Array<Runner> = [];
   public rlabels: Array<String> = [];
   matrixdata: any[];
+  ndays = 100;
 
 
   constructor(
@@ -79,14 +79,13 @@ export class HeatmapComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.timeRangeRunners = Number(this.settingsService.settings.timeRangeRunners);
-    this.timeRangeRunners = 93
-    console.log('ngOnInit uptimes range: ', this.timeRangeRunners, ' days');
-    this.fetchMatrixData(this.timeRangeRunners);
+    Number(this.settingsService.settings.numberOfDaysHeatmap) > 0 ?
+    this.ndays = Number(this.settingsService.settings.numberOfDaysHeatmap) : this.ndays = 30;
+    this.fetchMatrixData(this.ndays);
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
         this.clearSubscriptions();
-        this.fetchMatrixData(this.timeRangeRunners);
+        this.fetchMatrixData(this.ndays);
       }, this.updateInterval);
     });
   }

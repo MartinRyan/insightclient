@@ -38,7 +38,6 @@ export class InsightService {
 
   mutateData(data): Observable<Runner[]> {
     // return this.RUNNER_DATA as Observable<Runner[]>; // testing only
-    console.log('data: => ', data);
     // return data as Observable<Runner[]>;
     return data as Observable<any[]>;
   }
