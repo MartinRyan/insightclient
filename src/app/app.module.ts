@@ -30,14 +30,11 @@ import {MessageModule} from 'primeng/message';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ExpansionComponent } from './components/expansion/expansion.component';
 import { MergeRequestsComponent } from './components/merge-requests/merge-requests.component';
 import { NavComponent } from './components/nav/nav.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { PipelinesComponent } from './components/pipelines/pipelines.component';
 import { SettingsComponent } from './components/settings/settings.component';
-import { TableComponent } from './components/table/table.component';
-import { GraphQLModule } from './graphql.module';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { GitLabApiInterceptor } from './services/gitlab-api/gitlab-api.interceptor';
 import { GitlabApiService } from './services/gitlab-api/gitlab-api.service';
@@ -46,19 +43,19 @@ import { SettingsService } from './services/settings/settings.service';
 import { SecondsToTimePipe } from './pipes/seconds-to-time.pipe';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RunnersComponent } from './components/runners/runners.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DetailComponent } from './components/detail/detail.component';
 import { HeatMapAllModule } from '@syncfusion/ej2-angular-heatmap';
-import { HeatmapComponent } from './components/heatmap/heatmap.component';
+import "hammerjs";
+import { GridComponent } from './components/runners/grid/grid.component';
+import { HeatmapComponent } from './components/runners/heatmap/heatmap.component';
+import { MatrixComponent } from './components/runners/matrix/matrix.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
-    ExpansionComponent,
-    TableComponent,
     SettingsComponent,
     NotificationComponent,
     PipelinesComponent,
@@ -66,9 +63,10 @@ import { HeatmapComponent } from './components/heatmap/heatmap.component';
     DashboardComponent,
     DateAgoPipe,
     SecondsToTimePipe,
-    RunnersComponent,
     DetailComponent,
-    HeatmapComponent
+    GridComponent,
+    HeatmapComponent,
+    MatrixComponent
   ],
   imports: [
     BrowserModule,
@@ -95,7 +93,6 @@ import { HeatmapComponent } from './components/heatmap/heatmap.component';
     MatSnackBarModule,
     MatSortModule,
     MatTooltipModule,
-    GraphQLModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -116,8 +113,8 @@ import { HeatmapComponent } from './components/heatmap/heatmap.component';
     GitlabApiService,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule,
-    { provide: HTTP_INTERCEPTORS, useClass: GitLabApiInterceptor, multi: true }
+    ReactiveFormsModule
+    // { provide: HTTP_INTERCEPTORS, useClass: GitLabApiInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

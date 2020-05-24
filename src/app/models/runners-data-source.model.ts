@@ -6,35 +6,17 @@ import { merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { RunnersService } from '../services/gitlab-api/runners.service';
-
-export interface RunnerItem {
-  id: string;
-  name: string;
-  minus7: object;
-  minus6: object;
-  minus5: object;
-  minus4: object;
-  minus3: object;
-  minus2: object;
-  minus1: object;
-  now: object;
-  status: string;
-  active: string;
-  description: string;
-  ip_address: string;
-  is_shared: string;
-  online: string;
-}
+import {Runner} from './../models/runner';
 
 
 export class RunnersDataSource extends DataSource<any> {
-  data: RunnerItem[];
+  data: Runner[];
 
-  constructor(private runnersService: RunnersService) {
+  constructor(private runnersService: RunnersService = null) {
     super();
   }
 
-  connect(): Observable<RunnerItem[]> {
+  connect(): Observable<Runner[]> {
     this.getDates();
     return this.runnersService.fetchRunners();
   }
@@ -44,7 +26,7 @@ export class RunnersDataSource extends DataSource<any> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  // connect(): Observable<RunnerItem[]> {
+  // connect(): Observable<Runner[]> {
   //   this.getDates();
   //   // Combine everything that affects the rendered data into one update
   //   // stream for the data-table to consume.

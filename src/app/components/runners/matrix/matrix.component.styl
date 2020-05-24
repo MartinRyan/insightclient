@@ -1,0 +1,112 @@
+/* Structure */
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-card-header-text {
+  font-size: 1.4rem
+  color: #aaa
+  opacity: 0.9
+  margin-top: 1em
+  margin-left: 1em
+}
+
+.filterInput {
+  margin-left: 1em;
+  width: 170px;
+}
+
+::ng-deep .mat-form-field {
+    .mat-input-element {
+        color: slategray;
+    }
+    .mat-form-field-label {
+        color: slategray;
+    }
+    .mat-form-field-underline {
+        background-color: slategray;
+    }
+    .mat-form-field-ripple {
+        background-color: slategray;
+    }
+    .mat-form-field-required-marker {
+        color: slategray;
+    }
+}
+
+::ng-deep .mat-form-field.mat-focused {
+    .mat-form-field-label {
+        color: #8254E6 ;
+    }
+    .mat-form-field-ripple {
+        background-color: #8254E6;
+    }
+    .mat-form-field-required-marker {
+        color: #8254E6;
+    }
+    .mat-input-element {
+        color: #8254E6;
+        margin-left: 1em;
+    }
+}
+
+.pulse-button {
+  position: relative;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  background: #8254E6;
+  cursor: pointer;
+  box-shadow: 0 0 0 0 rgba(#8254E6, .5);
+  -webkit-animation: pulse 1.5s infinite;
+}
+.pulse-button:hover {
+  -webkit-animation: none;
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    @include transform(scale(.9));
+  }
+  70% {
+    @include transform(scale(1));
+    box-shadow: 0 0 0 50px rgba(#8254E6, 0);
+  }
+    100% {
+    @include transform(scale(.9));
+    box-shadow: 0 0 0 0 rgba(#8254E6, 0);
+  }
+}
+
+.pulse-button-offline {
+  position: relative;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  background: #FF543D;
+  cursor: pointer;
+  box-shadow: 0 0 0 0 rgba(#FF543D, .5);
+  -webkit-animation: pulse 1.5s infinite;
+}
+.pulse-button-offline:hover {
+  -webkit-animation: none;
+}
+
+@-webkit-keyframes pulse-offline {
+  0% {
+    @include transform(scale(.9));
+  }
+  70% {
+    @include transform(scale(1));
+    box-shadow: 0 0 0 50px rgba(#FF543D, 0);
+  }
+    100% {
+    @include transform(scale(.9));
+    box-shadow: 0 0 0 0 rgba(#FF543D, 0);
+  }
+}

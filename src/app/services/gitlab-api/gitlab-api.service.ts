@@ -10,6 +10,10 @@ import { SettingsService } from './../settings/settings.service';
   providedIn: 'root'
 })
 export class GitlabApiService {
+
+gitlabUrl = this.settingsService.settings.gitlabAddress;
+gitlabApi = '/api/v4/';
+
   constructor(
     private http: HttpClient,
     private notificationService: NotificationService,
@@ -18,7 +22,7 @@ export class GitlabApiService {
 
   get mergeRequests() {
     return this.http
-      .get<any[]>(`merge_requests?state=opened&scope=all&per_page=30`)
+      .get<any[]>(`${this.gitlabUrl}${this.gitlabApi}merge_requests?state=opened&scope=all&per_page=30`)
       .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
@@ -29,7 +33,7 @@ export class GitlabApiService {
   }
 
   get namespaces() {
-    return this.http.get<any[]>(`namespaces`).pipe(
+    return this.http.get<any[]>(`${this.gitlabUrl}${this.gitlabApi}namespaces`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch name spaces'))
@@ -39,7 +43,7 @@ export class GitlabApiService {
   }
 
   subgroupsByGroupID(id: any) {
-    return this.http.get<any[]>(`groups/${id}/subgroups`).pipe(
+    return this.http.get<any[]>(`${this.gitlabUrl}${this.gitlabApi}groups/${id}/subgroups`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch subgroups'))
@@ -49,7 +53,7 @@ export class GitlabApiService {
   }
 
   projectByID(id: any) {
-    return this.http.get<any>(`projects/${id}`).pipe(
+    return this.http.get<any>(`${this.gitlabUrl}${this.gitlabApi}projects/${id}`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch groups'))
@@ -63,7 +67,7 @@ export class GitlabApiService {
       this.http
         .get<any[]>(
           // tslint:disable-next-line: max-line-length
-          `projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
+          `${this.gitlabUrl}${this.gitlabApi}projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
           // `projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at`
         )
         // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
@@ -91,7 +95,7 @@ export class GitlabApiService {
       this.http
         // .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=100`)
         .get<any[]>(
-          `projects?&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
+          `${this.gitlabUrl}${this.gitlabApi}projects?&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
         )
         // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
         .pipe(
@@ -112,7 +116,7 @@ export class GitlabApiService {
   projectsByNamespace(name: string) {
     return this.http
       .get<any[]>(
-        `projects?search=${name}&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
+        `${this.gitlabUrl}${this.gitlabApi}projects?search=${name}&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
         // `projects?search=${name}&order_by=last_activity_at`
       )
       .pipe(
@@ -130,7 +134,7 @@ export class GitlabApiService {
   }
 
   projectsByGroupID(id: any) {
-    return this.http.get<any[]>(`groups/${id}/projects`).pipe(
+    return this.http.get<any[]>(`${this.gitlabUrl}${this.gitlabApi}groups/${id}/projects`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch projects'))
@@ -142,7 +146,7 @@ export class GitlabApiService {
   projectsByGroupName(name: any) {
     return this.http
       .get<any[]>(
-        `groups?search=${name}/projects&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
+        `${this.gitlabUrl}${this.gitlabApi}groups?search=${name}/projects&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
         // `groups?search=${name}/projects&order_by=last_activity_at`
       )
       .pipe(
@@ -157,7 +161,7 @@ export class GitlabApiService {
   fetchPipelines(projectId: string) {
     return this.http
       .get<any[]>(
-        `projects/${projectId}/pipelines?page=1&per_page=${this.settingsService.settings.perPage}`
+        `${this.gitlabUrl}${this.gitlabApi}projects/${projectId}/pipelines?page=1&per_page=${this.settingsService.settings.perPage}`
         )
       .pipe(
         retryWhen(err => {
@@ -171,7 +175,7 @@ export class GitlabApiService {
   fetchPipelinesAll() {
     return this.http
       .get<any[]>(
-        `projects/pipelines?per_page=${this.settingsService.settings.perPage}`
+        `${this.gitlabUrl}${this.gitlabApi}projects/pipelines?per_page=${this.settingsService.settings.perPage}`
       )
       .pipe(
         retryWhen(err => {
@@ -185,7 +189,7 @@ export class GitlabApiService {
   fetchLastPipelineByRef(projectId: string, ref: string) {
     return (
       this.http
-        .get<any>(`projects/${projectId}/pipelines?ref=${ref}&per_page=1`)
+        .get<any>(`${this.gitlabUrl}${this.gitlabApi}projects/${projectId}/pipelines?ref=${ref}&per_page=1`)
         // .pipe(map(resp => resp[0].status))
         .pipe(
           retryWhen(err => {
@@ -202,7 +206,7 @@ export class GitlabApiService {
 
   fetchPipeline(projectId: string, pipelineId: string) {
     return this.http
-      .get<any>(`projects/${projectId}/pipelines/${pipelineId}`)
+      .get<any>(`${this.gitlabUrl}${this.gitlabApi}projects/${projectId}/pipelines/${pipelineId}`)
       .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
@@ -213,7 +217,7 @@ export class GitlabApiService {
   }
 
   fetchPipelineB(pipelineId: string) {
-    return this.http.get<any>(`projects/pipelines/${pipelineId}`).pipe(
+    return this.http.get<any>(`${this.gitlabUrl}${this.gitlabApi}projects/pipelines/${pipelineId}`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch pipeline'))
@@ -223,7 +227,7 @@ export class GitlabApiService {
   }
 
   fetchProject(id: string) {
-    return this.http.get<any>(`projects/${id}`).pipe(
+    return this.http.get<any>(`${this.gitlabUrl}${this.gitlabApi}projects/${id}`).pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch project'))
@@ -235,7 +239,7 @@ export class GitlabApiService {
   fetchRunnersById(projectID: string) {
     return this.http
       .get<any[]>(
-        `runners/${projectID}`
+        `${this.gitlabUrl}${this.gitlabApi}runners/${projectID}`
       )
       .pipe(
         retryWhen(err => {

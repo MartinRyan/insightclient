@@ -44,6 +44,7 @@ export class SettingsComponent implements OnInit {
   namespaceControl = new FormControl('');
   subgroupSelectControl = new FormControl('');
   perPageSelectControl = new FormControl('');
+  numberOfDaysGridControl = new FormControl('');
   public notification: {
     message: string;
     level?: 'is-danger' | 'is-warning' | 'is-success';
@@ -58,6 +59,8 @@ export class SettingsComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   config = new MatSnackBarConfig();
+  numberOfDaysGrid: number;
+  numberOfDaysHeatmap: number;
 
   constructor(
     private fb: FormBuilder,
@@ -70,7 +73,6 @@ export class SettingsComponent implements OnInit {
     const pipelines$ = notificationService.pipeLinesNotification$.subscribe(
       pipelines => {
         this.subscriptions.push(pipelines$);
-        console.log('settingsComponent pipelines: ', pipelines);
         this.pipelines = pipelines;
         this.announced = true;
         this.confirmed = false;
@@ -80,7 +82,6 @@ export class SettingsComponent implements OnInit {
     const mergerequests$ = notificationService.mergeReqNotification$.subscribe(
       mergerequests => {
         this.subscriptions.push(mergerequests$);
-        console.log('settingsComponent mergerequests: ', mergerequests);
         this.mergerequests = mergerequests;
         this.announced = true;
         this.confirmed = false;
@@ -132,7 +133,9 @@ export class SettingsComponent implements OnInit {
       isCrossProject: [
         !!savedConfig ? savedConfig.isCrossProject : false,
         Validators.required
-      ]
+      ],
+      numberOfDaysGrid: !!savedConfig ? savedConfig.numberOfDaysGrid : '',
+      numberOfDaysHeatmap: !!savedConfig ? savedConfig.numberOfDaysHeatmap : ''
     });
   }
 
@@ -194,6 +197,16 @@ export class SettingsComponent implements OnInit {
     this.settingsService.settings = this.settingsForm.value;
     this.fetchSubgroupsyGroupID(namespaceObject.id);
     this.hide();
+  }
+
+  setNumberOfDaysGrid(nDays) {
+    this.settingsForm.value.numberOfDaysGrid = nDays;
+    this.settingsService.settings.numberOfDaysGrid = nDays;
+  }
+
+  setNumberOfDaysHeatmap(nDays) {
+    this.settingsForm.value.numberOfDaysHeatmap = nDays;
+    this.settingsService.settings.numberOfDaysHeatmap = nDays;
   }
 
   onSubmit() {

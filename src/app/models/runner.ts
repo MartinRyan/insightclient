@@ -1,12 +1,13 @@
 export interface Runner {
-  id: string;
-  name: string;
-  minus7: object;
-  minus6: object;
-  minus5: object;
-  minus4: object;
-  minus3: object;
-  minus2: object;
-  minus1: object;
-  now: object;
+    id: number;
+    name: string;
+    date: any;
+    timestamp: any;
+    status: string;
+    active: boolean;
+    description: string;
+    ip_address: string;
+    is_shared: boolean;
+    online: boolean;
+    uptime: number;
 }

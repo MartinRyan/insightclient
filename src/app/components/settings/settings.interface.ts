@@ -10,4 +10,6 @@ export interface Settings {
   intervalMR: string;
   intervalP: string;
   intervalR: string;
+  numberOfDaysGrid: number;
+  numberOfDaysHeatmap: number;
 }
