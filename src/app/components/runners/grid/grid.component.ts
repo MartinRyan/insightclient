@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -6,6 +6,7 @@ import { SvgIconRegistryService } from 'angular-svg-icon';
 import { each, isEmpty } from 'lodash';
 import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { interval, Subscription } from 'rxjs';
 import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
 import { SettingsService } from './../../../services/settings/settings.service';
@@ -20,16 +21,18 @@ export class GridComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatTable, { static: false }) table: MatTable<Runner>;
-  private subscriptions: Array<any> = [];
   public updateInterval = 60000;
   columns: any[];
   displayedColumns: string[];
   groupByColumns: string[] = [];
   isLoading = false;
   matrixdata: Runner[];
-  ndays: number; // this is number of days per runner
+  ndays: number;
   public pageLength: number;
   pageEvent: PageEvent;
+  subscription: Subscription;
+  polling: boolean;
+  pollingStatus;
 
   constructor(
     private insightService: InsightService,
@@ -54,18 +57,7 @@ export class GridComponent implements OnInit {
   }
 
   ngOnInit() {
-    Number(this.settingsService.settings.numberOfDaysGrid) > 0 ?
-    // this is number of days per runner
-    this.ndays = Number(this.settingsService.settings.numberOfDaysGrid) : this.ndays = 5;
-    this.fetchData(this.ndays);
-    this.zone.runOutsideAngular(() => {
-      setInterval(() => {
-        this.clearSubscriptions();
-        this.fetchData(this.ndays);
-      }, this.updateInterval);
-    });
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.startPolling();
   }
 
   ngAfterViewInit() {
@@ -76,16 +68,18 @@ export class GridComponent implements OnInit {
     let runners: any = [];
     let runnerobj: any = {};
     let allrunners: any = [];
+    let index = 0;
 
     this.insightService.fetchInsightData(ndays, 'grid').subscribe(
       matrix => {
         each(matrix, (value, key) => {
           let datestring;
-          let index = 0;
+          
           each(value, (v, k) => {
             let count
             count++
             if (k === '_id') {
+              index++
               const idobj = Object(v);
               const idtstring = idobj.$date;
               datestring = this.timestampToDate(idtstring);
@@ -98,7 +92,6 @@ export class GridComponent implements OnInit {
           );
           for (const r of runners) {
             each(r, (value, key) => {
-              index++
               runnerobj = {
                 'id': index,
                 'date': datestring,
@@ -117,7 +110,7 @@ export class GridComponent implements OnInit {
           }
         });
         this.matrixdata = allrunners;
-        console.log('this.matrixdata ]]: ', this.matrixdata );
+        // console.log('this.matrixdata ]]: ', this.matrixdata );
         this.dataSource = new MatTableDataSource(this.matrixdata);
         if (!this.changeDetectorRefs['destroyed']) {
           this.changeDetectorRefs.detectChanges();
@@ -203,14 +196,40 @@ export class GridComponent implements OnInit {
     // this.router.navigateByUrl('/details');
   };
 
-
-  ngOnDestroy() {
-    this.clearSubscriptions();
+  startPolling() {
+    this.polling = true;
+    this.pollingStatus = 'started';
+    const source = interval(this.updateInterval);
+    // this is number of days per runner
+    Number(this.settingsService.settings.numberOfDaysGrid) > 0 ?
+    this.ndays = Number(this.settingsService.settings.numberOfDaysGrid) : this.ndays = 5;
+    this.fetchData(this.ndays)
+    this.subscription = source.subscribe(val => this.fetchData(this.ndays));
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
-  private clearSubscriptions() {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
+  stopPolling() {
+    this.polling = false;
+    this.pollingStatus = 'stopped';
+    this.subscription.unsubscribe();
+  }
+
+  toggleData() {
+    this.polling == true ? this.stopPolling() : this.startPolling();
+  }
+
+  getPollingIcon() {
+    let icon = '';
+    if (this.polling === true) {
+      icon = 'toggle_on';
+    } else if (this.polling === false) {
+      icon = 'toggle_off';
+    } 
+    return icon;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

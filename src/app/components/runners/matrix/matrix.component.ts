@@ -10,6 +10,7 @@ import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
 import { NotificationService } from './../../../services/notification/notification.service';
 import { SettingsService } from './../../../services/settings/settings.service';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-matrix',
@@ -31,6 +32,7 @@ export class MatrixComponent implements OnInit, AfterViewInit {
   ndays = 1;
   public pageLength: number;
   pageEvent: PageEvent;
+  subscription: Subscription;
 
   constructor(
     private insightService: InsightService,
@@ -57,13 +59,9 @@ export class MatrixComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.fetchData(1);
-    this.zone.runOutsideAngular(() => {
-      setInterval(() => {
-        this.clearSubscriptions();
-        this.fetchData(1);
-      }, this.updateInterval);
-    });
+    const source = interval(this.updateInterval);
+    this.fetchData(this.ndays)
+    this.subscription = source.subscribe(val => this.fetchData(this.ndays));
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -184,14 +182,7 @@ export class MatrixComponent implements OnInit, AfterViewInit {
     // this.router.navigateByUrl('/details');
   };
 
-
   ngOnDestroy() {
-    this.clearSubscriptions();
-  }
-
-  private clearSubscriptions() {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
+    this.subscription.unsubscribe();
   }
 }

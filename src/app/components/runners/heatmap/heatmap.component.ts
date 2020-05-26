@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
 import { SettingsService } from './../../../services/settings/settings.service';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-heatmap',
@@ -67,7 +68,8 @@ export class HeatmapComponent implements OnInit {
   public uptimesLive: Array<Runner> = [];
   public rlabels: Array<String> = [];
   matrixdata: any[];
-  ndays = 100;
+  ndays = 30;
+  subscription: Subscription;
 
 
   constructor(
@@ -79,19 +81,14 @@ export class HeatmapComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    const source = interval(this.updateInterval);
     Number(this.settingsService.settings.numberOfDaysHeatmap) > 0 ?
     this.ndays = Number(this.settingsService.settings.numberOfDaysHeatmap) : this.ndays = 30;
-    this.fetchMatrixData(this.ndays);
-    this.zone.runOutsideAngular(() => {
-      setInterval(() => {
-        this.clearSubscriptions();
-        this.fetchMatrixData(this.ndays);
-      }, this.updateInterval);
-    });
+    this.fetchData(this.ndays)
+    this.subscription = source.subscribe(val => this.fetchData(this.ndays));
   }
 
-  @Memoize
-  private fetchMatrixData(ndays: number) {
+  private fetchData(ndays: number) {
     this.isLoading = true;
     this.spinner.show();
     let runners = [];
@@ -146,12 +143,6 @@ export class HeatmapComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.clearSubscriptions();
-  }
-
-  private clearSubscriptions() {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
+    this.subscription.unsubscribe();
   }
 }
