@@ -11,15 +11,20 @@ import { isEmpty } from 'lodash';
   providedIn: 'root'
 })
 export class GitlabApiService {
-
-gitlabUrl = 'https://hpc-gitlab.bom.gov.au';
+gitlabUrl = '';
 gitlabApi = '/api/v4/';
 
   constructor(
     private http: HttpClient,
     private notificationService: NotificationService,
     private settingsService: SettingsService
-  ) {}
+  ) {
+    if (!isEmpty(this.settingsService.settings) && !isEmpty(this.settingsService.settings.gitlabAddress)) {
+      this.gitlabUrl = this.settingsService.settings.gitlabAddress;
+    } else {
+      this.gitlabUrl = 'https://hpc-gitlab.bom.gov.au';
+    }
+  }
 
   get mergeRequests() {
     return this.http
