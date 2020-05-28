@@ -1,12 +1,13 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { SvgIconRegistryService } from 'angular-svg-icon';
-import { each } from 'lodash';
+import { each, isEmpty } from 'lodash';
 import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
 import { SettingsService } from './../../../services/settings/settings.service';
 import { interval, Subscription } from 'rxjs';
+import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-heatmap',
@@ -81,11 +82,9 @@ export class HeatmapComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const source = interval(this.updateInterval);
     Number(this.settingsService.settings.numberOfDaysHeatmap) > 0 ?
-    this.ndays = Number(this.settingsService.settings.numberOfDaysHeatmap) : this.ndays = 30;
-    this.fetchData(this.ndays)
-    this.subscription = source.subscribe(val => this.fetchData(this.ndays));
+      this.ndays = Number(this.settingsService.settings.numberOfDaysHeatmap) : this.ndays = 30;
+    this.subscription = interval(this.updateInterval).pipe(startWith(0)).subscribe(val => this.fetchData(this.ndays));
   }
 
   private fetchData(ndays: number) {
@@ -94,42 +93,44 @@ export class HeatmapComponent implements OnInit {
     let runners = [];
     let celldata = [];
 
-    this.insightService.fetchInsightData(ndays, 'heatmap').subscribe(
-      uptimes => {
-        let datestring;
-        each(uptimes, (value, key) => {
-          each(value, (v, k) => {
-            if (k === '_id') {
-              const idobj = Object(v);
-              const idtstring = idobj.$date;
-              datestring = this.timestampToDate(idtstring);
-            }
-            if (k === 'runners') {
-              runners = [];
-              runners.push(v)
-            }
-          }
-          );
-          for (const r of runners) {
-            const dayd = {};
-            each(r, (value, key) => {
-              const d = {
-                'runner': value.name,
-                'uptime': value.uptime,
-                'date': datestring
+    if (!isEmpty(this.insightService) && !isEmpty(this.subscription)) {
+      this.insightService.fetchInsightData(ndays, 'heatmap').subscribe(
+        uptimes => {
+          let datestring;
+          each(uptimes, (value, key) => {
+            each(value, (v, k) => {
+              if (k === '_id') {
+                const idobj = Object(v);
+                const idtstring = idobj.$date;
+                datestring = this.timestampToDate(idtstring);
               }
-              celldata.push(d);
-            })
-          }
-        });
-        this.heatmapData = celldata;
-        celldata = [];
-      },
-      err => {
-        this.isLoading = false;
-        this.spinner.hide();
-      }
-    );
+              if (k === 'runners') {
+                runners = [];
+                runners.push(v)
+              }
+            }
+            );
+            for (const r of runners) {
+              const dayd = {};
+              each(r, (value, key) => {
+                const d = {
+                  'runner': value.name,
+                  'uptime': value.uptime,
+                  'date': datestring
+                }
+                celldata.push(d);
+              })
+            }
+          });
+          this.heatmapData = celldata;
+          celldata = [];
+        },
+        err => {
+          this.isLoading = false;
+          this.spinner.hide();
+        }
+      );
+    }
   }
 
   private timestampToDate(timestamp) {
@@ -143,6 +144,8 @@ export class HeatmapComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (!isEmpty(this.subscription)) {
+      this.subscription.unsubscribe()
+    }
   }
 }

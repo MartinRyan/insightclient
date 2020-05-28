@@ -10,6 +10,7 @@ import { interval, Subscription } from 'rxjs';
 import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
 import { SettingsService } from './../../../services/settings/settings.service';
+import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-grid',
@@ -70,57 +71,59 @@ export class GridComponent implements OnInit {
     let allrunners: any = [];
     let index = 0;
 
-    this.insightService.fetchInsightData(ndays, 'grid').subscribe(
-      matrix => {
-        each(matrix, (value, key) => {
-          let datestring;
-          
-          each(value, (v, k) => {
-            let count
-            count++
-            if (k === '_id') {
-              index++
-              const idobj = Object(v);
-              const idtstring = idobj.$date;
-              datestring = this.timestampToDate(idtstring);
-            }
-            if (k === 'runners') {
-              runners = [];
-              runners.push(v);
-            }
-          }
-          );
-          for (const r of runners) {
-            each(r, (value, key) => {
-              runnerobj = {
-                'id': index,
-                'date': datestring,
-                'active': value.active,
-                'uptime': value.uptime,
-                'description': value.description,
-                'ip_address': value.ip_address,
-                'is_shared': value.is_shared,
-                'name': value.name,
-                'online': value.online,
-                'status': value.status
+    if (!isEmpty(this.insightService) && !isEmpty(this.subscription)) {
+      this.insightService.fetchInsightData(ndays, 'grid').subscribe(
+        matrix => {
+          each(matrix, (value, key) => {
+            let datestring;
+
+            each(value, (v, k) => {
+              let count
+              count++
+              if (k === '_id') {
+                index++
+                const idobj = Object(v);
+                const idtstring = idobj.$date;
+                datestring = this.timestampToDate(idtstring);
               }
-              allrunners.push(runnerobj);
-            })
-            this.pageLength = allrunners.length;
-          }
-        });
-        this.matrixdata = allrunners;
-        // console.log('this.matrixdata ]]: ', this.matrixdata );
-        this.dataSource = new MatTableDataSource(this.matrixdata);
-        if (!this.changeDetectorRefs['destroyed']) {
-          this.changeDetectorRefs.detectChanges();
-        };
-      },
-      err => {
-        this.isLoading = false;
-        this.spinner.hide();
-      }
-    );
+              if (k === 'runners') {
+                runners = [];
+                runners.push(v);
+              }
+            }
+            );
+            for (const r of runners) {
+              each(r, (value, key) => {
+                runnerobj = {
+                  'id': index,
+                  'date': datestring,
+                  'active': value.active,
+                  'uptime': value.uptime,
+                  'description': value.description,
+                  'ip_address': value.ip_address,
+                  'is_shared': value.is_shared,
+                  'name': value.name,
+                  'online': value.online,
+                  'status': value.status
+                }
+                allrunners.push(runnerobj);
+              })
+              this.pageLength = allrunners.length;
+            }
+          });
+          this.matrixdata = allrunners;
+          // console.log('this.matrixdata ]]: ', this.matrixdata );
+          this.dataSource = new MatTableDataSource(this.matrixdata);
+          if (!this.changeDetectorRefs['destroyed']) {
+            this.changeDetectorRefs.detectChanges();
+          };
+        },
+        err => {
+          this.isLoading = false;
+          this.spinner.hide();
+        }
+      );
+    }
   }
 
   applyFilter(event: Event) {
@@ -199,12 +202,9 @@ export class GridComponent implements OnInit {
   startPolling() {
     this.polling = true;
     this.pollingStatus = 'started';
-    const source = interval(this.updateInterval);
-    // this is number of days per runner
     Number(this.settingsService.settings.numberOfDaysGrid) > 0 ?
-    this.ndays = Number(this.settingsService.settings.numberOfDaysGrid) : this.ndays = 5;
-    this.fetchData(this.ndays)
-    this.subscription = source.subscribe(val => this.fetchData(this.ndays));
+      this.ndays = Number(this.settingsService.settings.numberOfDaysGrid) : this.ndays = 5;
+    this.subscription = interval(this.updateInterval).pipe(startWith(0)).subscribe(val => this.fetchData(this.ndays));
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -225,11 +225,13 @@ export class GridComponent implements OnInit {
       icon = 'toggle_on';
     } else if (this.polling === false) {
       icon = 'toggle_off';
-    } 
+    }
     return icon;
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (!isEmpty(this.subscription)) {
+      this.subscription.unsubscribe()
+    }
   }
 }
