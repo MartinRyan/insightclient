@@ -8,7 +8,6 @@ import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
-import { NotificationService } from './../../../services/notification/notification.service';
 import { SettingsService } from './../../../services/settings/settings.service';
 import { interval, Subscription } from 'rxjs';
 
@@ -34,10 +33,10 @@ export class MatrixComponent implements OnInit, AfterViewInit {
   pageEvent: PageEvent;
   subscription: Subscription;
 
+
   constructor(
     private insightService: InsightService,
     private settingsService: SettingsService,
-    private notificationService: NotificationService,
     private spinner: NgxSpinnerService,
     private zone: NgZone,
     private iconReg: SvgIconRegistryService,
@@ -129,16 +128,11 @@ export class MatrixComponent implements OnInit, AfterViewInit {
     const date = new Date(timestamp);
     const datestring = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
       .toISOString()
-      // .split('T')[0];
-    // const month = datestring.split('-')[1];
-    // const day = datestring.split('-')[2];
-    // return [day, month].join('-');
     return datestring
   }
 
   @Memoize
   getIcon(value) {
-    console.log('GET ICON value --> ', value );
     let icon = '';
     if (value === 'active') {
       icon = 'done_outline';
