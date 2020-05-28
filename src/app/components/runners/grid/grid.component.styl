@@ -1,11 +1,11 @@
 /* Structure */
 table {
-  width: 100%;
+  width: 100%
 }
 
 .mat-form-field {
-  font-size: 14px;
-  width: 100%;
+  font-size: 14px
+  width: 100%
 }
 
 .mat-card-header-text {
@@ -16,42 +16,102 @@ table {
   margin-left: 1em
 }
 
-
 .filterInput {
-  margin-left: 1em;
-  width: 170px;
+  margin-left: 1em
+  width: 170px
 }
 
 ::ng-deep .mat-form-field {
     .mat-input-element {
-        color: slategray;
+        color: slategray
     }
     .mat-form-field-label {
-        color: slategray;
+        color: slategray
     }
     .mat-form-field-underline {
-        background-color: slategray;
+        background-color: slategray
     }
     .mat-form-field-ripple {
-        background-color: slategray;
+        background-color: slategray
     }
     .mat-form-field-required-marker {
-        color: slategray;
+        color: slategray
     }
 }
 
 ::ng-deep .mat-form-field.mat-focused {
     .mat-form-field-label {
-        color: #8254E6 ;
+        color: #8254E6 
     }
     .mat-form-field-ripple {
-        background-color: #8254E6;
+        background-color: #8254E6
     }
     .mat-form-field-required-marker {
-        color: #8254E6;
+        color: #8254E6
     }
     .mat-input-element {
-        color: #8254E6;
-        margin-left: 1em;
+        color: #8254E6
+        margin-left: 1em
     }
+}
+
+.toggleHolder {
+  float: left
+  display: relative
+  margin-left: 1em
+}
+
+.mat-icon-button {
+   width: 20px !important
+   height: 20px !important
+   line-height: 20px !important
+
+   .mat-icon {
+      width: 16px !important
+      height: 16px !important
+      line-height: 16px !important
+   }
+   .material-icons {
+      font-size: 16px !important
+   }
+}
+
+.pulse-button-toggle {
+  color: white
+  border: none
+  border-radius: 50%
+  background: #8254E6
+  cursor: pointer
+  box-shadow: 0 0 0 0 rgba(#8254E6, .5)
+  -webkit-animation: pulse 2s infinite
+}
+.pulse-button-toggle:hover {
+  -webkit-animation: none
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    @include transform(scale(.9))
+  }
+  70% {
+    @include transform(scale(1))
+    box-shadow: 0 0 0 50px rgba(#8254E6, 0)
+  }
+    100% {
+    @include transform(scale(.9))
+    box-shadow: 0 0 0 0 rgba(#8254E6, 0)
+  }
+}
+
+.pulse-button-toggle-offline {
+  position: relative
+  color: white
+  border: none
+  border-radius: 50%
+  background: #FF543D
+  cursor: pointer
+  box-shadow: 0 0 0 0 rgba(#FF543D, .5)
+}
+.pulse-button-toggle-offline:hover {
+  -webkit-animation: none
 }

@@ -5,13 +5,14 @@ import { delay, map, retryWhen, take } from 'rxjs/operators';
 
 import { NotificationService } from './../notification/notification.service';
 import { SettingsService } from './../settings/settings.service';
+import { isEmpty } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GitlabApiService {
 
-gitlabUrl = this.settingsService.settings.gitlabAddress;
+gitlabUrl = 'https://hpc-gitlab.bom.gov.au';
 gitlabApi = '/api/v4/';
 
   constructor(

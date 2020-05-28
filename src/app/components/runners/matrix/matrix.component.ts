@@ -8,8 +8,8 @@ import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
-import { NotificationService } from './../../../services/notification/notification.service';
 import { SettingsService } from './../../../services/settings/settings.service';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-matrix',
@@ -31,11 +31,12 @@ export class MatrixComponent implements OnInit, AfterViewInit {
   ndays = 1;
   public pageLength: number;
   pageEvent: PageEvent;
+  subscription: Subscription;
+
 
   constructor(
     private insightService: InsightService,
     private settingsService: SettingsService,
-    private notificationService: NotificationService,
     private spinner: NgxSpinnerService,
     private zone: NgZone,
     private iconReg: SvgIconRegistryService,
@@ -57,13 +58,9 @@ export class MatrixComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.fetchData(1);
-    this.zone.runOutsideAngular(() => {
-      setInterval(() => {
-        this.clearSubscriptions();
-        this.fetchData(1);
-      }, this.updateInterval);
-    });
+    const source = interval(this.updateInterval);
+    this.fetchData(this.ndays)
+    this.subscription = source.subscribe(val => this.fetchData(this.ndays));
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -131,16 +128,11 @@ export class MatrixComponent implements OnInit, AfterViewInit {
     const date = new Date(timestamp);
     const datestring = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
       .toISOString()
-      // .split('T')[0];
-    // const month = datestring.split('-')[1];
-    // const day = datestring.split('-')[2];
-    // return [day, month].join('-');
     return datestring
   }
 
   @Memoize
   getIcon(value) {
-    console.log('GET ICON value --> ', value );
     let icon = '';
     if (value === 'active') {
       icon = 'done_outline';
@@ -184,14 +176,7 @@ export class MatrixComponent implements OnInit, AfterViewInit {
     // this.router.navigateByUrl('/details');
   };
 
-
   ngOnDestroy() {
-    this.clearSubscriptions();
-  }
-
-  private clearSubscriptions() {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
+    this.subscription.unsubscribe();
   }
 }
