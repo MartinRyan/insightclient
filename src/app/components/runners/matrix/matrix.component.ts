@@ -10,6 +10,7 @@ import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
 import { SettingsService } from './../../../services/settings/settings.service';
 import { interval, Subscription } from 'rxjs';
+import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-matrix',
@@ -58,9 +59,7 @@ export class MatrixComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    const source = interval(this.updateInterval);
-    this.fetchData(this.ndays)
-    this.subscription = source.subscribe(val => this.fetchData(this.ndays));
+    this.startPolling();
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -75,35 +74,41 @@ export class MatrixComponent implements OnInit, AfterViewInit {
     let runnerdata = [];
     let index = 0;
 
-    this.insightService.fetchInsightData(ndays, 'today').subscribe(
-      data => {
-        each(data, (value, key) => {
-          index++
-          const runner = {
-            'id': index,
-            'date': this.timestampToDate(value.date.$date),
-            'timestamp': this.timestampToDate(value.timestamp.$date),
-            'name': value.name,
-            'uptime': value.uptime,
-            'description': value.description,
-            'ip_address': value.ip_address,
-            'is_shared': value.is_shared,
-            'online': value.online,
-            'status': value.status,
-            'active': value.active
+    if (!isEmpty(this.insightService) && !isEmpty(this.subscription)) {
+      this.insightService.fetchInsightData(ndays, 'today').subscribe(
+        data => {
+          each(data, (value, key) => {
+            index++
+            const runner = {
+              'id': index,
+              'date': this.timestampToDate(value.date.$date),
+              'timestamp': this.timestampToDate(value.timestamp.$date),
+              'name': value.name,
+              'uptime': value.uptime,
+              'description': value.description,
+              'ip_address': value.ip_address,
+              'is_shared': value.is_shared,
+              'online': value.online,
+              'status': value.status,
+              'active': value.active
+            }
+            runnerdata.push(runner as Runner);
+          });
+          this.dataSource = new MatTableDataSource(runnerdata);
+          if (!this.changeDetectorRefs['destroyed']) {
+            this.changeDetectorRefs.detectChanges();
           }
-          runnerdata.push(runner as Runner);
-        });
-        this.dataSource = new MatTableDataSource(runnerdata);
-        if (!this.changeDetectorRefs['destroyed']) {
-          this.changeDetectorRefs.detectChanges();
-      }
-      },
-      err => {
-        this.isLoading = false;
-        this.spinner.hide();
-      }
-    );
+        },
+        err => {
+          this.isLoading = false;
+          this.spinner.hide();
+        }
+      );
+    }
+  }
+
+  startPolling() {
+    this.subscription = interval(this.updateInterval).pipe(startWith(0)).subscribe(val => this.fetchData(this.ndays));
   }
 
   applyFilter(event: Event) {
@@ -177,6 +182,8 @@ export class MatrixComponent implements OnInit, AfterViewInit {
   };
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (!isEmpty(this.subscription)) {
+      this.subscription.unsubscribe()
+    }
   }
 }

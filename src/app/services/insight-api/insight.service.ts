@@ -11,7 +11,6 @@ import { isEmpty } from 'lodash';
   providedIn: 'root'
 })
 export class InsightService {
-  // insighturl = this.settingsService.settings.insighturl;
   insighturl = 'http://localhost:8888'
   insightapi = '/api/v1/';
   httpOptions = {};
