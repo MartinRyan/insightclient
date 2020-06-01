@@ -6,11 +6,10 @@ import { SvgIconRegistryService } from 'angular-svg-icon';
 import { each, isEmpty } from 'lodash';
 import { Memoize } from 'lodash-decorators/memoize';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { interval, Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
 import { SettingsService } from './../../../services/settings/settings.service';
-import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-grid',
@@ -204,7 +203,7 @@ export class GridComponent implements OnInit {
     this.pollingStatus = 'started';
     Number(this.settingsService.settings.numberOfDaysGrid) > 0 ?
       this.ndays = Number(this.settingsService.settings.numberOfDaysGrid) : this.ndays = 5;
-    this.subscription = interval(this.updateInterval).pipe(startWith(0)).subscribe(val => this.fetchData(this.ndays));
+    this.subscription = timer(0, this.updateInterval).subscribe(val => this.fetchData(this.ndays));
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }

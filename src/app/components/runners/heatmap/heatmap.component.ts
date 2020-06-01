@@ -6,7 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Runner } from './../../../models/runner';
 import { InsightService } from './../../../services/insight-api/insight.service';
 import { SettingsService } from './../../../services/settings/settings.service';
-import { interval, Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 
 @Component({
@@ -84,7 +84,7 @@ export class HeatmapComponent implements OnInit {
   ngOnInit() {
     Number(this.settingsService.settings.numberOfDaysHeatmap) > 0 ?
       this.ndays = Number(this.settingsService.settings.numberOfDaysHeatmap) : this.ndays = 30;
-    this.subscription = interval(this.updateInterval).pipe(startWith(0)).subscribe(val => this.fetchData(this.ndays));
+    this.subscription = timer(0, this.updateInterval).subscribe(val => this.fetchData(this.ndays));
   }
 
   private fetchData(ndays: number) {
