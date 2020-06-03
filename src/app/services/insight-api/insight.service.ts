@@ -6,12 +6,13 @@ import { delay, retryWhen, take } from 'rxjs/operators';
 import { Runner } from './../../models/runner';
 import { SettingsService } from './../settings/settings.service';
 import { isEmpty } from 'lodash';
+import { environment } from './../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InsightService {
-  insighturl = 'http://localhost:8888'
+  insighturl = environment.insightApiHost;
   insightapi = '/api/v1/';
   httpOptions = {};
 

@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  insightApiHost: 'http://kafka-dev1.bom.gov.au:8888'
 };
 
 /*
