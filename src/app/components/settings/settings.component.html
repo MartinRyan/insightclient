@@ -10,12 +10,6 @@
           <input matInput placeholder="gitlab location" formControlName="gitlabAddress" name="gitlabAddress" required>
         </mat-form-field>
       </div>
-      <!-- <div class="field">
-        <mat-radio-group aria-label="is cross project" formControlName="isCrossProject" name="isCrossProject">
-          <mat-radio-button class="field" value="true">is cross project</mat-radio-button>
-          <mat-radio-button class="field" value="false">single project</mat-radio-button>
-        </mat-radio-group>
-      </div> -->
       <div class="field">
         <mat-form-field>
           <mat-label>accessToken</mat-label>
@@ -37,20 +31,6 @@
         </mat-form-field>
         <p *ngIf="selectedRange.value">You selected: {{selectedRange.value}}</p>
       </div>
-
-      <!-- <div class="field">
-        <h4>pipelines per page</h4>
-        <mat-form-field>
-          <mat-label>pipelines per page</mat-label>
-          <mat-select optional #selectedPerPage [formControl]="perPageSelectControl"
-            (selectionChange)="setPerPage(selectedPerPage.value)">
-            <mat-option *ngFor="let perPage of perpageArray" [value]="perPage">
-              {{ perPage }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <p *ngIf="selectedPerPage.value">You selected: {{selectedPerPage.value}}</p>
-      </div> -->
 
       <div class="field">
         <h4>pipelines namespace</h4>

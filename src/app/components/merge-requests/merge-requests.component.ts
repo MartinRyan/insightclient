@@ -34,7 +34,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (!isEmpty(this.settingsService.settings) && (this.settingsService.settings.isCrossProject === 'true')) {
+    if (!isEmpty(this.settingsService.settings)) {
       this.fetchNamespaces();
       this.zone.runOutsideAngular(() => {
         setInterval(() => {

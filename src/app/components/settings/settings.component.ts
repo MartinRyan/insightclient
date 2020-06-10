@@ -130,10 +130,6 @@ export class SettingsComponent implements OnInit {
       perPage: !!savedConfig ? savedConfig.perPage : '',
       namespace: !!savedConfig ? savedConfig.namespace : '',
       subgroup: !!savedConfig ? savedConfig.subgroup : '',
-      isCrossProject: [
-        !!savedConfig ? savedConfig.isCrossProject : false,
-        Validators.required
-      ],
       numberOfDaysGrid: !!savedConfig ? savedConfig.numberOfDaysGrid : '',
       numberOfDaysHeatmap: !!savedConfig ? savedConfig.numberOfDaysHeatmap : ''
     });

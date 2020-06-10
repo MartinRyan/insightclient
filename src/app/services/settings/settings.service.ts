@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Settings } from './../../components/settings/settings.interface';
+import { isEmpty } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -8,16 +9,32 @@ import { Settings } from './../../components/settings/settings.interface';
 export class SettingsService {
   private savedSettings: Settings = null;
   public isVisible = this.settings === null;
+  private defaults = {
+    accessToken: "",
+    gitlabAddress: "https://scs-repos-stage.bom.gov.au",
+    namespace: "",
+    numberOfDaysGrid: 5,
+    numberOfDaysHeatmap: 100,
+    perPage: "",
+    subgroup: "",
+    timeRange: "2",
+    intervalMR: "",
+    intervalP: "",
+    intervalR: ""
+  };
 
   set settings(settings: Settings) {
     this.savedSettings = settings;
     console.log('settings service settings: ', settings);
-    localStorage.setItem('gitlab_settings', JSON.stringify(settings));
+    localStorage.setItem('insight_settings', JSON.stringify(settings));
   }
 
   get settings(): Settings {
-    if (this.savedSettings === null) {
-      this.savedSettings = JSON.parse(localStorage.getItem('gitlab_settings'));
+   if (localStorage.getItem('insight_settings') !== null) {
+      this.savedSettings = JSON.parse(localStorage.getItem('insight_settings'));
+    }
+    else {
+      this.savedSettings = this.defaults;
     }
     return this.savedSettings;
   }
