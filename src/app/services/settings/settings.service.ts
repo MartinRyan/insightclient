@@ -17,7 +17,7 @@ export class SettingsService {
     numberOfDaysHeatmap: 100,
     perPage: "",
     subgroup: "",
-    timeRange: 7,
+    timeRange: "2",
     intervalMR: "",
     intervalP: "",
     intervalR: ""

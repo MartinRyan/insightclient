@@ -1,5 +1,5 @@
 export interface Settings {
-  timeRange: number;
+  timeRange: string;
   accessToken: string;
   gitlabAddress?: string;
   namespace?: any;
