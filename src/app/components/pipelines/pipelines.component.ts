@@ -91,15 +91,6 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.perPage = Number(this.settingsService.settings.perPage);
     console.log('this.timeRangeDays: ', this.timeRangeDays);
     console.log('this.perPage: ', this.perPage);
-    if (!isEmpty(this.settingsService.settings.isCrossProject) && (this.settingsService.settings.isCrossProject === 'true')) {
-      this.fetchNamespaces();
-      this.zone.runOutsideAngular(() => {
-        setInterval(() => {
-          this.clearSubscriptions();
-          this.fetchNamespaces();
-        }, this.updateInterval);
-      });
-    } else {
       this.fetchdata();
       this.zone.runOutsideAngular(() => {
         setInterval(() => {
@@ -107,7 +98,6 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
           this.fetchdata();
         }, this.updateInterval);
       });
-    }
   }
 
   ngAfterViewInit() { }

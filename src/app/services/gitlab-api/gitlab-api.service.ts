@@ -6,12 +6,13 @@ import { delay, map, retryWhen, take } from 'rxjs/operators';
 import { NotificationService } from './../notification/notification.service';
 import { SettingsService } from './../settings/settings.service';
 import { isEmpty } from 'lodash';
+import { environment } from './../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GitlabApiService {
-gitlabUrl = '';
+gitlabUrl = environment.gitlabUrl;
 gitlabApi = '/api/v4/';
 
   constructor(
@@ -21,9 +22,7 @@ gitlabApi = '/api/v4/';
   ) {
     if (!isEmpty(this.settingsService.settings) && !isEmpty(this.settingsService.settings.gitlabAddress)) {
       this.gitlabUrl = this.settingsService.settings.gitlabAddress;
-    } else {
-      this.gitlabUrl = 'https://hpc-gitlab.bom.gov.au';
-    }
+    } 
   }
 
   get mergeRequests() {
