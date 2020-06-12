@@ -15,12 +15,9 @@ export class SettingsService {
     namespace: "",
     numberOfDaysGrid: 5,
     numberOfDaysHeatmap: 100,
-    perPage: "",
+    perPage: 100,
     subgroup: "",
-    timeRange: "2",
-    intervalMR: "",
-    intervalP: "",
-    intervalR: ""
+    timeRange: 2
   };
 
   set settings(settings: Settings) {

@@ -141,8 +141,8 @@ export class SettingsComponent implements OnInit {
   }
 
   setPerPage(value) {
-    this.settingsForm.value.perPage = value;
-    this.settingsService.settings.perPage = value;
+    this.settingsForm.value.perPage = String(value);
+    this.settingsService.settings.perPage = Number(value);
   }
 
   private fetchNamespaces() {

@@ -49,7 +49,7 @@ export class HeatmapComponent implements OnInit {
     isJsonData: true,
     adaptorType: 'Cell',
     xDataMapping: 'date',
-    yDataMapping: 'runner',
+    yDataMapping: 'description',
     valueMapping: 'uptime'
   };
 
@@ -115,6 +115,7 @@ export class HeatmapComponent implements OnInit {
               each(r, (value, key) => {
                 const d = {
                   'runner': value.name,
+                  'description': value.description,
                   'uptime': value.uptime,
                   'date': datestring
                 }

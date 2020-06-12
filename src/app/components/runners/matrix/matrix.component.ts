@@ -33,6 +33,8 @@ export class MatrixComponent implements OnInit, AfterViewInit {
   public pageLength: number;
   pageEvent: PageEvent;
   subscription: Subscription;
+  iservice: InsightService;
+  sservice: SettingsService;
 
 
   constructor(
@@ -56,6 +58,8 @@ export class MatrixComponent implements OnInit, AfterViewInit {
       'is_shared',
       'online',
     ];
+    this.iservice = insightService;
+    this.sservice = settingsService;
   }
 
   ngOnInit() {
@@ -73,9 +77,8 @@ export class MatrixComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     let runnerdata = [];
     let index = 0;
-
-    if (!isEmpty(this.insightService) && !isEmpty(this.subscription)) {
-      this.insightService.fetchInsightData(ndays, 'today').subscribe(
+    if (!isEmpty(this.iservice) && !isEmpty(this.subscription)) {
+      this.iservice.fetchInsightData(ndays, 'today').subscribe(
         data => {
           each(data, (value, key) => {
             index++
@@ -121,7 +124,6 @@ export class MatrixComponent implements OnInit, AfterViewInit {
   }
 
   onPaginateChange(event?: PageEvent) {
-    console.log('paginate event: ', event);
     this.pageLength = this.matrixdata.length;
     this.dataSource.paginator = this.paginator;
     if (!this.changeDetectorRefs['destroyed']) {
@@ -172,12 +174,10 @@ export class MatrixComponent implements OnInit, AfterViewInit {
   }
 
   showData(data) {
-    console.log('showData value ', data);
     return data;
   }
 
   getDetails(event: Event) {
-    console.log('getDetails event ->', event);
     // this.router.navigateByUrl('/details');
   };
 

@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpEvent, HttpRequest, HttpHandler } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { concat, throwError } from 'rxjs';
+import { concat, throwError, Observable } from 'rxjs';
 import { delay, map, retryWhen, take } from 'rxjs/operators';
 
 import { NotificationService } from './../notification/notification.service';
@@ -14,20 +14,45 @@ import { environment } from './../../../environments/environment';
 export class GitlabApiService {
 gitlabUrl = environment.gitlabUrl;
 gitlabApi = '/api/v4/';
+httpOptions;
+perPage: number;
+sservice: SettingsService;
 
   constructor(
     private http: HttpClient,
     private notificationService: NotificationService,
-    private settingsService: SettingsService
-  ) {
-    if (!isEmpty(this.settingsService.settings) && !isEmpty(this.settingsService.settings.gitlabAddress)) {
-      this.gitlabUrl = this.settingsService.settings.gitlabAddress;
-    } 
+    private settingsService: SettingsService ) {
+      this.sservice = settingsService;
+    if (!isEmpty(this.sservice.settings) && !isEmpty(this.sservice.settings.gitlabAddress)) {
+      this.gitlabUrl = this.sservice.settings.gitlabAddress;
+      this.perPage = this.sservice.settings.perPage;
+    }
+    !isEmpty(this.sservice.settings.perPage) ? this.perPage = this.sservice.settings.perPage : this.perPage = 100;
+  }
+
+  
+apiRequest(req: string): any {
+    const gitlabUrl = this.sservice.settings.gitlabAddress;
+    const apiReq =  `${gitlabUrl}/api/v4/${req}`
+    return apiReq;
+  }
+
+apiHeaders(): HttpHeaders {
+    const headers = new HttpHeaders()
+      .set('Access-Control-Allow-Origin', 'all')
+      .set('Private-Token', this.sservice.settings.accessToken);
+    return headers;
   }
 
   get mergeRequests() {
+    const apiReq = this.apiRequest('merge_requests?state=opened&scope=all&per_page=30');
+    console.log('mergeRequests apiReq -> ', apiReq);
+    console.log('mergeRequests headers -> ', this.apiHeaders());
     return this.http
-      .get<any[]>(`${this.gitlabUrl}${this.gitlabApi}merge_requests?state=opened&scope=all&per_page=30`)
+      // .get<any[]>(apiReq, {headers: new HttpHeaders()
+      // .set('Access-Control-Allow-Origin', 'all' )
+      // .set('Private-Token', this.sservice.settings.accessToken)})
+      .get<any[]>(apiReq, {headers: this.apiHeaders()})
       .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
@@ -38,7 +63,15 @@ gitlabApi = '/api/v4/';
   }
 
   get namespaces() {
-    return this.http.get<any[]>(`${this.gitlabUrl}${this.gitlabApi}namespaces`).pipe(
+    const apiReq = this.apiRequest('namespaces')
+    console.log('namespaces apiReq -> ', apiReq);
+    // return this.http.get<any[]>(`${this.gitlabUrl}${this.gitlabApi}namespaces`).pipe(
+    return this.http
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch name spaces'))
@@ -48,7 +81,16 @@ gitlabApi = '/api/v4/';
   }
 
   subgroupsByGroupID(id: any) {
-    return this.http.get<any[]>(`${this.gitlabUrl}${this.gitlabApi}groups/${id}/subgroups`).pipe(
+    const construct = `groups/${id}/subgroups`;
+    const apiReq = this.apiRequest(construct);
+    console.log('subgroupsByGroupID apiReq -> ', apiReq);
+    // return this.http.get<any[]>(`${this.gitlabUrl}${this.gitlabApi}groups/${id}/subgroups`).pipe(
+    return this.http
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch subgroups'))
@@ -58,7 +100,15 @@ gitlabApi = '/api/v4/';
   }
 
   projectByID(id: any) {
-    return this.http.get<any>(`${this.gitlabUrl}${this.gitlabApi}projects/${id}`).pipe(
+    const construct = `projects/${id}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('projectByID apiReq -> ', apiReq);
+    return this.http
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch groups'))
@@ -68,20 +118,22 @@ gitlabApi = '/api/v4/';
   }
 
   get projects() {
-    return (
+    !isEmpty(this.sservice.settings.perPage) ? this.perPage = this.sservice.settings.perPage : this.perPage = 100;
+    const construct = `projects?search=${this.sservice.settings.namespace}&order_by=last_activity_at&per_page=${this.perPage}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('projects apiReq -> ', apiReq);
+    return ( 
       this.http
-        .get<any[]>(
-          // tslint:disable-next-line: max-line-length
-          `${this.gitlabUrl}${this.gitlabApi}projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
-          // `projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at`
-        )
-        // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
-        .pipe(
+      // .get<any[]>(apiReq, {headers: new HttpHeaders()
+      //   .set('Access-Control-Allow-Origin', 'all' )
+      //   .set('Private-Token', this.sservice.settings.accessToken)})
+      .get<any[]>(apiReq, {headers: this.apiHeaders()})
+      .pipe(
           map(projects => {
             return projects.filter(
               project =>
                 project.namespace.name ===
-                this.settingsService.settings.namespace
+                this.sservice.settings.namespace
             );
           })
         )
@@ -96,14 +148,17 @@ gitlabApi = '/api/v4/';
   }
 
   get projectsAll() {
-    return (
+    !isEmpty(this.sservice.settings.perPage) ? this.perPage = this.sservice.settings.perPage : this.perPage = 100;
+    const construct = `projects?&order_by=last_activity_at&per_page=${this.perPage}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('projectsAll apiReq -> ', apiReq);
+    return ( 
       this.http
-        // .get<any[]>(`projects?search=${this.settingsService.settings.namespace}&order_by=last_activity_at&per_page=100`)
-        .get<any[]>(
-          `${this.gitlabUrl}${this.gitlabApi}projects?&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
-        )
-        // .get<any[]>('projects?owned=true&order_by=last_activity_at&per_page=100')
-        .pipe(
+      // .get<any[]>(apiReq, {headers: new HttpHeaders()
+      //   .set('Access-Control-Allow-Origin', 'all' )
+      //   .set('Private-Token', this.sservice.settings.accessToken)})
+      .get<any[]>(apiReq, {headers: this.apiHeaders()})
+      .pipe(
           map(projects => {
             return projects.filter(project => project.length > 0);
           })
@@ -119,12 +174,16 @@ gitlabApi = '/api/v4/';
   }
 
   projectsByNamespace(name: string) {
+    !isEmpty(this.sservice.settings.perPage) ? this.perPage = this.sservice.settings.perPage : this.perPage = 100;
+    const construct = `projects?search=${name}&order_by=last_activity_at&per_page=${this.perPage}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('projectsByNamespace apiReq -> ', apiReq);
     return this.http
-      .get<any[]>(
-        `${this.gitlabUrl}${this.gitlabApi}projects?search=${name}&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
-        // `projects?search=${name}&order_by=last_activity_at`
-      )
-      .pipe(
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
         map(projects => {
           return projects.filter(project => project.namespace.name === name);
         })
@@ -139,7 +198,15 @@ gitlabApi = '/api/v4/';
   }
 
   projectsByGroupID(id: any) {
-    return this.http.get<any[]>(`${this.gitlabUrl}${this.gitlabApi}groups/${id}/projects`).pipe(
+    const construct = `groups/${id}/projects`;
+    const apiReq = this.apiRequest(construct);
+    console.log('projectsByGroupID apiReq -> ', apiReq);
+    return this.http
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch projects'))
@@ -149,12 +216,16 @@ gitlabApi = '/api/v4/';
   }
 
   projectsByGroupName(name: any) {
+    !isEmpty(this.sservice.settings.perPage) ? this.perPage = this.sservice.settings.perPage : this.perPage = 100;
+    const construct = `groups?search=${name}/projects&order_by=last_activity_at&per_page=${this.perPage}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('projectsByGroupName apiReq -> ', apiReq);
     return this.http
-      .get<any[]>(
-        `${this.gitlabUrl}${this.gitlabApi}groups?search=${name}/projects&order_by=last_activity_at&per_page=${this.settingsService.settings.perPage}`
-        // `groups?search=${name}/projects&order_by=last_activity_at`
-      )
-      .pipe(
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
             concat(o, throwError('Retries exceeded - fetch projects'))
@@ -164,11 +235,16 @@ gitlabApi = '/api/v4/';
   }
 
   fetchPipelines(projectId: string) {
+    !isEmpty(this.sservice.settings.perPage) ? this.perPage = this.sservice.settings.perPage : this.perPage = 100;
+    const construct = `projects/${projectId}/pipelines?page=1&per_page=${this.perPage}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('projectsByGroupName apiReq -> ', apiReq);
     return this.http
-      .get<any[]>(
-        `${this.gitlabUrl}${this.gitlabApi}projects/${projectId}/pipelines?page=1&per_page=${this.settingsService.settings.perPage}`
-        )
-      .pipe(
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
             concat(o, throwError('Retries exceeded -  fetch pipelines'))
@@ -178,11 +254,16 @@ gitlabApi = '/api/v4/';
   }
 
   fetchPipelinesAll() {
+    !isEmpty(this.sservice.settings.perPage) ? this.perPage = this.sservice.settings.perPage : this.perPage = 100;
+    const construct = `projects/pipelines?per_page=${this.perPage}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('fetchPipelinesAll apiReq -> ', apiReq);
     return this.http
-      .get<any[]>(
-        `${this.gitlabUrl}${this.gitlabApi}projects/pipelines?per_page=${this.settingsService.settings.perPage}`
-      )
-      .pipe(
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
             concat(o, throwError('Retries exceeded -  fetch pipelines'))
@@ -192,11 +273,16 @@ gitlabApi = '/api/v4/';
   }
 
   fetchLastPipelineByRef(projectId: string, ref: string) {
+    const construct = `projects/${projectId}/pipelines?ref=${ref}&per_page=1`;
+    const apiReq = this.apiRequest(construct);
+    console.log('fetchLastPipelineByRef apiReq -> ', apiReq);
     return (
       this.http
-        .get<any>(`${this.gitlabUrl}${this.gitlabApi}projects/${projectId}/pipelines?ref=${ref}&per_page=1`)
-        // .pipe(map(resp => resp[0].status))
-        .pipe(
+      // .get<any[]>(apiReq, {headers: new HttpHeaders()
+      //   .set('Access-Control-Allow-Origin', 'all' )
+      //   .set('Private-Token', this.sservice.settings.accessToken)})
+      .get<any[]>(apiReq, {headers: this.apiHeaders()})
+      .pipe(
           retryWhen(err => {
             return err.pipe(delay(5000), take(1), o =>
               concat(
@@ -210,9 +296,15 @@ gitlabApi = '/api/v4/';
   }
 
   fetchPipeline(projectId: string, pipelineId: string) {
+    const construct = `projects/${projectId}/pipelines/${pipelineId}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('fetchPipeline apiReq -> ', apiReq);
     return this.http
-      .get<any>(`${this.gitlabUrl}${this.gitlabApi}projects/${projectId}/pipelines/${pipelineId}`)
-      .pipe(
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
             concat(o, throwError('Retries exceeded - fetch pipeline'))
@@ -222,7 +314,15 @@ gitlabApi = '/api/v4/';
   }
 
   fetchPipelineB(pipelineId: string) {
-    return this.http.get<any>(`${this.gitlabUrl}${this.gitlabApi}projects/pipelines/${pipelineId}`).pipe(
+    const construct = `projects/pipelines/${pipelineId}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('fetchPipeline apiReq -> ', apiReq);
+    return this.http
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch pipeline'))
@@ -232,7 +332,15 @@ gitlabApi = '/api/v4/';
   }
 
   fetchProject(id: string) {
-    return this.http.get<any>(`${this.gitlabUrl}${this.gitlabApi}projects/${id}`).pipe(
+    const construct = `projects/${id}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('fetchPipeline apiReq -> ', apiReq);
+    return this.http
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
       retryWhen(err => {
         return err.pipe(delay(5000), take(1), o =>
           concat(o, throwError('Retries exceeded - fetch project'))
@@ -242,11 +350,15 @@ gitlabApi = '/api/v4/';
   }
 
   fetchRunnersById(projectID: string) {
+    const construct = `runners/${projectID}`;
+    const apiReq = this.apiRequest(construct);
+    console.log('fetchPipeline apiReq -> ', apiReq);
     return this.http
-      .get<any[]>(
-        `${this.gitlabUrl}${this.gitlabApi}runners/${projectID}`
-      )
-      .pipe(
+    // .get<any[]>(apiReq, {headers: new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'all' )
+    //   .set('Private-Token', this.sservice.settings.accessToken)})
+    .get<any[]>(apiReq, {headers: this.apiHeaders()})
+    .pipe(
         retryWhen(err => {
           return err.pipe(delay(5000), take(1), o =>
             concat(o, throwError('Retries exceeded -  fetch runners by id: '))
