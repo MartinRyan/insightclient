@@ -71,6 +71,8 @@ export class HeatmapComponent implements OnInit {
   matrixdata: any[];
   ndays = 30;
   subscription: Subscription;
+  iservice: InsightService;
+  sservice: SettingsService;
 
 
   constructor(
@@ -78,12 +80,14 @@ export class HeatmapComponent implements OnInit {
     private settingsService: SettingsService,
     private spinner: NgxSpinnerService,
     private zone: NgZone,
-    private iconReg: SvgIconRegistryService
-  ) { }
+    private iconReg: SvgIconRegistryService ) { 
+    this.iservice = insightService;
+    this.sservice = settingsService;
+  }
 
   ngOnInit() {
-    Number(this.settingsService.settings.numberOfDaysHeatmap) > 0 ?
-      this.ndays = Number(this.settingsService.settings.numberOfDaysHeatmap) : this.ndays = 30;
+    Number(this.sservice.settings.numberOfDaysHeatmap) > 0 ?
+      this.ndays = Number(this.sservice.settings.numberOfDaysHeatmap) : this.ndays = 30;
     this.subscription = timer(0, this.updateInterval).subscribe(val => this.fetchData(this.ndays));
   }
 
@@ -93,8 +97,8 @@ export class HeatmapComponent implements OnInit {
     let runners = [];
     let celldata = [];
 
-    if (!isEmpty(this.insightService) && !isEmpty(this.subscription)) {
-      this.insightService.fetchInsightData(ndays, 'heatmap').subscribe(
+    if (!isEmpty(this.iservice) && !isEmpty(this.subscription)) {
+      this.iservice.fetchInsightData(ndays, 'heatmap').subscribe(
         uptimes => {
           let datestring;
           each(uptimes, (value, key) => {

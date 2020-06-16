@@ -84,7 +84,6 @@ export class GridComponent implements OnInit {
               let count
               count++
               if (k === '_id') {
-                index++
                 const idobj = Object(v);
                 const idtstring = idobj.$date;
                 datestring = this.timestampToDate(idtstring);
@@ -97,6 +96,7 @@ export class GridComponent implements OnInit {
             );
             for (const r of runners) {
               each(r, (value, key) => {
+                index++
                 runnerobj = {
                   'id': index,
                   'date': datestring,
