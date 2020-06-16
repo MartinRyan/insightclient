@@ -33,6 +33,20 @@
       </div>
 
       <div class="field">
+        <h4>pipelines per page</h4>
+        <mat-form-field>
+          <mat-label>number of pipelines</mat-label>
+          <mat-select optional #selectedPerPage [formControl]="perPageSelectControl"
+            (selectionChange)="setPerPage(selectedPerPage.value)">
+            <mat-option *ngFor="let perPage of perPageArray" [value]="perPage" name="perPage">
+              {{ perPage }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="selectedPerPage.value">You selected: {{selectedPerPage.value}}</p>
+      </div>
+
+      <div class="field">
         <h4>pipelines namespace</h4>
         <mat-form-field>
           <mat-label>select namespace</mat-label>

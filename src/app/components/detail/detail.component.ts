@@ -23,7 +23,6 @@ export class DetailComponent implements OnInit {
 
   ngOnInit() {
     this.uptimes = this.fetchUptime();
-    console.log('uptimes: ', this.uptimes);
     this.incidents = this.fetchIncidents();
   }
 

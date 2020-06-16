@@ -33,6 +33,8 @@ export class GridComponent implements OnInit {
   subscription: Subscription;
   polling: boolean;
   pollingStatus;
+  iservice: InsightService;
+  sservice: SettingsService;
 
   constructor(
     private insightService: InsightService,
@@ -45,7 +47,7 @@ export class GridComponent implements OnInit {
     this.displayedColumns = [
       'id',
       'status',
-      'name',
+      // 'name',
       'active',
       'date',
       'description',
@@ -54,6 +56,8 @@ export class GridComponent implements OnInit {
       'is_shared',
       'online',
     ];
+    this.iservice = insightService;
+    this.sservice = settingsService;
   }
 
   ngOnInit() {
@@ -70,8 +74,8 @@ export class GridComponent implements OnInit {
     let allrunners: any = [];
     let index = 0;
 
-    if (!isEmpty(this.insightService) && !isEmpty(this.subscription)) {
-      this.insightService.fetchInsightData(ndays, 'grid').subscribe(
+    if (!isEmpty(this.iservice) && !isEmpty(this.subscription)) {
+      this.iservice.fetchInsightData(ndays, 'grid').subscribe(
         matrix => {
           each(matrix, (value, key) => {
             let datestring;
@@ -111,7 +115,6 @@ export class GridComponent implements OnInit {
             }
           });
           this.matrixdata = allrunners;
-          // console.log('this.matrixdata ]]: ', this.matrixdata );
           this.dataSource = new MatTableDataSource(this.matrixdata);
           if (!this.changeDetectorRefs['destroyed']) {
             this.changeDetectorRefs.detectChanges();
@@ -135,7 +138,6 @@ export class GridComponent implements OnInit {
   }
 
   onPaginateChange(event?: PageEvent) {
-    console.log('paginate event: ', event);
     this.pageLength = this.matrixdata.length;
     this.dataSource.paginator = this.paginator;
     if (!this.changeDetectorRefs['destroyed']) {
@@ -189,20 +191,21 @@ export class GridComponent implements OnInit {
   }
 
   showData(data) {
-    console.log('showData value ', data);
     return data;
   }
 
   getDetails(event: Event) {
-    console.log('getDetails event ->', event);
     // this.router.navigateByUrl('/details');
   };
 
   startPolling() {
     this.polling = true;
     this.pollingStatus = 'started';
-    Number(this.settingsService.settings.numberOfDaysGrid) > 0 ?
-      this.ndays = Number(this.settingsService.settings.numberOfDaysGrid) : this.ndays = 5;
+    if (!isEmpty(this.sservice.settings) && (!isEmpty(this.sservice.settings.numberOfDaysGrid))) {
+      this.ndays = Number(this.sservice.settings.numberOfDaysGrid)
+    } else {
+      this.ndays = 1
+    }
     this.subscription = timer(0, this.updateInterval).subscribe(val => this.fetchData(this.ndays));
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

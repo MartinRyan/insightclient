@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Settings } from './../../components/settings/settings.interface';
 import { isEmpty } from 'lodash';
+import { environment } from './../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,16 +12,13 @@ export class SettingsService {
   public isVisible = this.settings === null;
   private defaults = {
     accessToken: "",
-    gitlabAddress: "https://scs-repos-stage.bom.gov.au",
+    gitlabAddress: environment.gitlabUrl,
     namespace: "",
     numberOfDaysGrid: 5,
     numberOfDaysHeatmap: 100,
-    perPage: "",
+    perPage: 100,
     subgroup: "",
-    timeRange: "2",
-    intervalMR: "",
-    intervalP: "",
-    intervalR: ""
+    timeRange: 2
   };
 
   set settings(settings: Settings) {

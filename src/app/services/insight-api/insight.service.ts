@@ -23,6 +23,7 @@ export class InsightService {
   }
 
   fetchInsightData(ndays: number, handler: string) {
+    console.log('fetchInsightData ndays:', ndays, ' handler: ', handler);
     if (!isEmpty(this.settingsService.settings.accessToken)) {
       this.httpOptions = {
         headers: new HttpHeaders({
@@ -42,6 +43,7 @@ export class InsightService {
   }
 
   mutateData(data): Observable<Runner[]> {
+    console.log('fetchInsightData mutateData data \n ', data);
     // return data as Observable<Runner[]>;
     return data as Observable<any[]>;
   }

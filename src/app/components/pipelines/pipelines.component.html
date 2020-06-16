@@ -3,6 +3,14 @@
     <ngx-spinner bdColor="#ccc" size="medium" color="#fff" type="square-loader" bdOpacity=0.1 [fullScreen]="true">
     </ngx-spinner>
   </div>
+  <div class="toggleHolder">
+    <button mat-icon-button color='primary' (click)="toggleData()" label="toggle data" [ngClass]="{
+        'started': 'pulse-button-toggle',
+        'stopped': 'pulse-button-toggle-offline'}
+        [pollingStatus]" matTooltip="{{getPollingIcon()}}" aria-label="toggle data" name="toggleDatBtn">
+      <mat-icon>{{ getPollingIcon()}}</mat-icon>
+    </button>
+  </div>
   <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="20px" fxLayoutAlign="flex-start">
     <mat-card class="pipeline-card" [style.background-color]="setStatusColour(pipeline)" fxFlex="0 1 calc(20% - 32px)"
       *ngFor="let pipeline of pipelines">

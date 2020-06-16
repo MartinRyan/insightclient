@@ -13,6 +13,12 @@ import { NotificationService } from './../../services/notification/notification.
 import { SettingsService } from './../../services/settings/settings.service';
 import { Memoize } from 'lodash-decorators/memoize';
 
+export interface project {
+    id: string;
+    name:string;
+    [key:string]: string;
+}
+
 
 @Component({
   selector: 'app-merge-requests',
@@ -80,7 +86,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
                 ) {
                   const lastPipeline$ = this.api
                     .fetchLastPipelineByRef(
-                      project.id,
+                      project['id'],
                       mergeRequest.source_branch
                     )
                     .subscribe(lastPipeline => {
@@ -196,7 +202,7 @@ export class MergeRequestsComponent implements OnInit, OnDestroy {
                 this.subscriptions.push(project$);
                 const lastPipeline$ = this.api
                   .fetchLastPipelineByRef(
-                    project.id,
+                    project['id'],
                     mergeRequest.source_branch
                   )
                   .subscribe(lastPipeline => {

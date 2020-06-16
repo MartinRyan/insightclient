@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { SvgIconRegistryService } from 'angular-svg-icon';
-import { compareDesc, differenceInDays, differenceInWeeks, parseISO } from 'date-fns';
+import { compareDesc, differenceInDays, parseISO } from 'date-fns';
 import { isEmpty, uniqBy } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -8,6 +8,7 @@ import { GitlabApiService } from './../../services/gitlab-api/gitlab-api.service
 import { NotificationService } from './../../services/notification/notification.service';
 import { SettingsService } from './../../services/settings/settings.service';
 import { Memoize } from 'lodash-decorators/memoize';
+import { Subscription, timer } from 'rxjs';
 
 
 @Component({
@@ -19,18 +20,20 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   public pipelines: Array<any>;
   public namespaces: Array<any>;
   public namespaceNames: Array<string>;
-  private projects: any[];
   public isLoading = false;
   private subscriptions: Array<any> = [];
   public iconbase = '/assets/sprite_icons/';
   public ext = '.svg';
-  private pipecheck: any;
-  private debouncer: any;
-  private pipes: any[];
   public timeRangeDays: number;
-  public perPage: number;
+  public perPage: number = 100;
   public timeRangeWeeks = 100;
   public updateInterval = 62000;
+  sservice: SettingsService;
+  subscription: Subscription;
+  polling: boolean;
+  pollingStatus;
+  ndays: number;
+  timeRange: number;
 
   public STATUSES = Object.freeze({
     success: {
@@ -84,31 +87,30 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     private spinner: NgxSpinnerService,
     private zone: NgZone,
     private iconReg: SvgIconRegistryService
-  ) { }
+  ) { 
+    this.sservice = settingsService;
+  }
 
   ngOnInit() {
-    this.timeRangeDays = Number(this.settingsService.settings.timeRange);
-    this.perPage = Number(this.settingsService.settings.perPage);
-    console.log('this.timeRangeDays: ', this.timeRangeDays);
-    console.log('this.perPage: ', this.perPage);
-      this.fetchdata();
-      this.zone.runOutsideAngular(() => {
-        setInterval(() => {
-          this.clearSubscriptions();
-          this.fetchdata();
-        }, this.updateInterval);
-      });
+    if (!isEmpty(this.sservice.settings) && (!isEmpty(this.sservice.settings.perPage))) {
+      this.perPage = Number(this.sservice.settings.perPage)
+    } else {
+      this.perPage = 100
+    }
+    this.startPolling();
   }
 
   ngAfterViewInit() { }
 
   ngOnDestroy() {
-    this.clearSubscriptions();
+    if (!isEmpty(this.subscription)) {
+      this.subscription.unsubscribe()
+    }
   }
 
   // entry for single namespace data
   @Memoize
-  private fetchdata() {
+  private fetchdata(ndays) {
     this.isLoading = true;
     this.spinner.show();
     console.log('refreshing pipelines');
@@ -136,7 +138,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
                       this.spinner.hide();
                       this.subscriptions.push(pipeline$);
                       // only add the pipelines that have run in the timeRange - if pipeline volumes are significant
-                      if (differenceInDays(new Date(pipelineDetails[started]), new Date()) >= (-Math.abs(this.timeRangeDays))) {
+                      if (differenceInDays(new Date(pipelineDetails[started]), new Date()) >= (-Math.abs(ndays))) {
                       this.pipelines.push({
                         ...pipelineDetails,
                         ...{ project }
@@ -277,8 +279,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
                   this.isLoading = false;
                   this.spinner.hide();
                   this.subscriptions.push(pipeline$);
-                  // only add the pipelines that have run in the last 5 days
-                  if (differenceInDays(new Date(pipelineDetails[started]), new Date()) >= (this.timeRangeDays * -1)) {
+                  if (differenceInDays(new Date(pipelineDetails[started]), new Date()) >= (this.timeRange * -1)) {
                   this.pipelines.push({
                       ...pipelineDetails,
                       ...{ project }
@@ -313,15 +314,40 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  startPolling() {
+    this.polling = true;
+    this.pollingStatus = 'started';
+    if (!isEmpty(this.sservice.settings) && (!isEmpty(this.sservice.settings.timeRange))) {
+      this.ndays = Number(this.sservice.settings.timeRange)
+    } else {
+      this.ndays = 1;
+    }
+    this.subscription = timer(0, this.updateInterval).subscribe(val => this.fetchdata(this.ndays));
+  }
+
+  stopPolling() {
+    this.polling = false;
+    this.pollingStatus = 'stopped';
+    this.subscription.unsubscribe();
+  }
+
+  toggleData() {
+    this.polling == true ? this.stopPolling() : this.startPolling();
+  }
+
+  getPollingIcon() {
+    let icon = '';
+    if (this.polling === true) {
+      icon = 'toggle_on';
+    } else if (this.polling === false) {
+      icon = 'toggle_off';
+    }
+    return icon;
+  }
+
   public setStatusColour(pipeline: any) {
     const status = pipeline.detailed_status.text;
     const colour = this.STATUSES[status].colour;
     return colour;
-  }
-
-  private clearSubscriptions() {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
   }
 }
