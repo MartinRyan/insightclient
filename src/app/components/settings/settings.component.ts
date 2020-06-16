@@ -27,7 +27,7 @@ export class SettingsComponent implements OnInit {
   public isLoading = false;
   private subscriptions: Array<any> = [];
   public timeRangeDays: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 21, 28, 31, 84, 365];
-  public perpageArray: Array<number> = [2, 4, 6, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 80, 90, 100];
+  public perPageArray: Array<number> = [2, 4, 6, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 80, 90, 100];
   private timeRange: number;
   private perPage = 100;
   public namespaces: Array<any>;

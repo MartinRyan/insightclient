@@ -25,7 +25,6 @@ export class InsightService {
   fetchInsightData(ndays: number, handler: string) {
     console.log('fetchInsightData ndays:', ndays, ' handler: ', handler);
     if (!isEmpty(this.settingsService.settings.accessToken)) {
-      console.log('fetchInsightData token not empty');
       this.httpOptions = {
         headers: new HttpHeaders({
           'Private-Token': this.settingsService.settings.accessToken,

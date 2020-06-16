@@ -49,9 +49,6 @@ apiHeaders(): HttpHeaders {
     console.log('mergeRequests apiReq -> ', apiReq);
     console.log('mergeRequests headers -> ', this.apiHeaders());
     return this.http
-      // .get<any[]>(apiReq, {headers: new HttpHeaders()
-      // .set('Access-Control-Allow-Origin', 'all' )
-      // .set('Private-Token', this.sservice.settings.accessToken)})
       .get<any[]>(apiReq, {headers: this.apiHeaders()})
       .pipe(
         retryWhen(err => {
@@ -65,11 +62,7 @@ apiHeaders(): HttpHeaders {
   get namespaces() {
     const apiReq = this.apiRequest('namespaces')
     console.log('namespaces apiReq -> ', apiReq);
-    // return this.http.get<any[]>(`${this.gitlabUrl}${this.gitlabApi}namespaces`).pipe(
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
       retryWhen(err => {
@@ -84,11 +77,7 @@ apiHeaders(): HttpHeaders {
     const construct = `groups/${id}/subgroups`;
     const apiReq = this.apiRequest(construct);
     console.log('subgroupsByGroupID apiReq -> ', apiReq);
-    // return this.http.get<any[]>(`${this.gitlabUrl}${this.gitlabApi}groups/${id}/subgroups`).pipe(
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
       retryWhen(err => {
@@ -104,9 +93,6 @@ apiHeaders(): HttpHeaders {
     const apiReq = this.apiRequest(construct);
     console.log('projectByID apiReq -> ', apiReq);
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
       retryWhen(err => {
@@ -124,9 +110,6 @@ apiHeaders(): HttpHeaders {
     console.log('projects apiReq -> ', apiReq);
     return ( 
       this.http
-      // .get<any[]>(apiReq, {headers: new HttpHeaders()
-      //   .set('Access-Control-Allow-Origin', 'all' )
-      //   .set('Private-Token', this.sservice.settings.accessToken)})
       .get<any[]>(apiReq, {headers: this.apiHeaders()})
       .pipe(
           map(projects => {
@@ -154,9 +137,6 @@ apiHeaders(): HttpHeaders {
     console.log('projectsAll apiReq -> ', apiReq);
     return ( 
       this.http
-      // .get<any[]>(apiReq, {headers: new HttpHeaders()
-      //   .set('Access-Control-Allow-Origin', 'all' )
-      //   .set('Private-Token', this.sservice.settings.accessToken)})
       .get<any[]>(apiReq, {headers: this.apiHeaders()})
       .pipe(
           map(projects => {
@@ -179,9 +159,6 @@ apiHeaders(): HttpHeaders {
     const apiReq = this.apiRequest(construct);
     console.log('projectsByNamespace apiReq -> ', apiReq);
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
         map(projects => {
@@ -202,9 +179,6 @@ apiHeaders(): HttpHeaders {
     const apiReq = this.apiRequest(construct);
     console.log('projectsByGroupID apiReq -> ', apiReq);
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
       retryWhen(err => {
@@ -221,9 +195,6 @@ apiHeaders(): HttpHeaders {
     const apiReq = this.apiRequest(construct);
     console.log('projectsByGroupName apiReq -> ', apiReq);
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
         retryWhen(err => {
@@ -240,9 +211,6 @@ apiHeaders(): HttpHeaders {
     const apiReq = this.apiRequest(construct);
     console.log('projectsByGroupName apiReq -> ', apiReq);
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
         retryWhen(err => {
@@ -259,9 +227,6 @@ apiHeaders(): HttpHeaders {
     const apiReq = this.apiRequest(construct);
     console.log('fetchPipelinesAll apiReq -> ', apiReq);
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
         retryWhen(err => {
@@ -278,9 +243,6 @@ apiHeaders(): HttpHeaders {
     console.log('fetchLastPipelineByRef apiReq -> ', apiReq);
     return (
       this.http
-      // .get<any[]>(apiReq, {headers: new HttpHeaders()
-      //   .set('Access-Control-Allow-Origin', 'all' )
-      //   .set('Private-Token', this.sservice.settings.accessToken)})
       .get<any[]>(apiReq, {headers: this.apiHeaders()})
       .pipe(
           retryWhen(err => {
@@ -300,9 +262,6 @@ apiHeaders(): HttpHeaders {
     const apiReq = this.apiRequest(construct);
     console.log('fetchPipeline apiReq -> ', apiReq);
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
         retryWhen(err => {
@@ -318,9 +277,6 @@ apiHeaders(): HttpHeaders {
     const apiReq = this.apiRequest(construct);
     console.log('fetchPipeline apiReq -> ', apiReq);
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
       retryWhen(err => {
@@ -336,9 +292,6 @@ apiHeaders(): HttpHeaders {
     const apiReq = this.apiRequest(construct);
     console.log('fetchPipeline apiReq -> ', apiReq);
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
       retryWhen(err => {
@@ -354,9 +307,6 @@ apiHeaders(): HttpHeaders {
     const apiReq = this.apiRequest(construct);
     console.log('fetchPipeline apiReq -> ', apiReq);
     return this.http
-    // .get<any[]>(apiReq, {headers: new HttpHeaders()
-    //   .set('Access-Control-Allow-Origin', 'all' )
-    //   .set('Private-Token', this.sservice.settings.accessToken)})
     .get<any[]>(apiReq, {headers: this.apiHeaders()})
     .pipe(
         retryWhen(err => {

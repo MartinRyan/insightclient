@@ -92,11 +92,6 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    if (!isEmpty(this.sservice.settings) && (!isEmpty(this.sservice.settings.timeRange))) {
-      this.timeRangeDays = Number(this.sservice.settings.timeRange)
-    } else {
-      this.timeRangeDays = 1
-    }
     if (!isEmpty(this.sservice.settings) && (!isEmpty(this.sservice.settings.perPage))) {
       this.perPage = Number(this.sservice.settings.perPage)
     } else {
@@ -284,7 +279,6 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
                   this.isLoading = false;
                   this.spinner.hide();
                   this.subscriptions.push(pipeline$);
-                  // only add the pipelines that have run in the last 5 days
                   if (differenceInDays(new Date(pipelineDetails[started]), new Date()) >= (this.timeRange * -1)) {
                   this.pipelines.push({
                       ...pipelineDetails,
